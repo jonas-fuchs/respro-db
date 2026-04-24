@@ -117,7 +117,7 @@ def parse_pmids(pmid_str: str) -> str:
     for part in raw_parts:
         cleaned = re.sub(r"^PMID:\s*", "", part, flags=re.IGNORECASE)
         norm_parts.append(f"PMID:{cleaned}")
-    return ";".join(norm_parts)
+    return ",".join(norm_parts)
 
 
 def source_website_from_url(source_url: str) -> str:
