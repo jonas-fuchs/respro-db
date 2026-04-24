@@ -109,9 +109,10 @@ def count_pmids(pmid_str: str) -> int:
 
 
 def parse_pmids(pmid_str: str) -> str:
-    """Normalise PMIDs to a semicolon-separated list with PMID: prefix."""
+    """Normalise PMIDs to a comma-separated list with PMID: prefix."""
     if not pmid_str:
         return ""
+    # Source rows may separate PMIDs with commas, semicolons, or whitespace.
     raw_parts = [p.strip() for p in re.split(r"[\s,;]+", pmid_str) if p.strip()]
     norm_parts = []
     for part in raw_parts:
@@ -391,28 +392,26 @@ def extract_rows(wb):
                 )
                 continue
 
-            # UL5/UL52 combinatorial rows:
-            # Gene may be "UL5/UL52", "UL5", or "UL52" when AA has a "/" separator
-            is_combo = ("/" in aa_change and gene_raw in ("UL5", "UL52", "UL5/UL52"))
+            # Slash-separated mutations define a combo rule.
+            # If genes are slash-separated too, members are matched by index.
+            # If only one gene is provided, it applies to all mutation members.
+            parts_aa = [part.strip() for part in aa_change.split("/") if part.strip()]
+            is_dual_allele = bool(re.match(r"^[A-Z]\d+[A-Z]/[A-Z]$", aa_change, re.IGNORECASE))
+            is_combo = len(parts_aa) > 1 and not is_dual_allele
             if is_combo:
-                # Determine gene pair
-                if gene_raw == "UL5/UL52":
-                    parts_gene = ["UL5", "UL52"]
-                elif gene_raw == "UL52":
-                    # AA listed with UL52 first, UL5 second
-                    parts_gene = ["UL52", "UL5"]
+                raw_parts_gene = [part.strip() for part in gene_raw.split("/") if part.strip()]
+                if len(raw_parts_gene) == 1:
+                    parts_gene = raw_parts_gene * len(parts_aa)
                 else:
-                    # gene_raw == "UL5"
-                    parts_gene = ["UL5", "UL52"]
-                parts_aa = [a.strip() for a in aa_change.split("/")]
+                    parts_gene = raw_parts_gene
 
-                # Position column may also be slash-split ("356/222")
+                # Position column may also be slash-split ("356/222").
                 if aa_pos_raw and "/" in str(aa_pos_raw):
-                    parts_pos = [p.strip() for p in str(aa_pos_raw).split("/")]
+                    parts_pos = [part.strip() for part in str(aa_pos_raw).split("/") if part.strip()]
                 else:
-                    parts_pos = [str(aa_pos_raw)] * 2
+                    parts_pos = [str(aa_pos_raw)] * len(parts_aa)
 
-                if len(parts_gene) != 2 or len(parts_aa) != 2:
+                if len(parts_gene) != len(parts_aa) or len(parts_pos) != len(parts_aa):
                     print(
                         f"WARNING: Cannot parse combo row gene='{gene_raw}' "
                         f"aa='{aa_change}' in sheet '{sheet_name}' — skipping.",
@@ -428,7 +427,10 @@ def extract_rows(wb):
                         aa_position=aa_pos_raw,
                         resistance=resistance,
                         pmids=pmids,
-                        details="Expected exactly two gene and mutation members for combo row.",
+                        details=(
+                            "Expected the same number of mutation and position members, and "
+                            "either one gene or one gene per mutation member."
+                        ),
                     )
                     continue
 
@@ -484,7 +486,7 @@ def extract_rows(wb):
                         "comment": comment,
                     })
 
-                if len(member_ids) != 2:
+                if len(member_ids) != len(parts_gene):
                     # Already logged above; remove any partially-added members
                     single_rows = [r for r in single_rows if r.get("group_id") != gid]
                     continue
@@ -493,7 +495,7 @@ def extract_rows(wb):
                 phenotype, clinical_phenotype = determine_phenotypes(
                     resistance, cell_culture, clinical
                 )
-                expr = f"({member_ids[0]} AND {member_ids[1]})"
+                expr = "(" + " AND ".join(member_ids) + ")"
                 formula_rows.append({
                     "group_id": gid,
                     "antiviral": drug.lower(),

@@ -10,5 +10,5 @@
   "description": "HSV-1 and HSV-2 drug resistance mutation database curated from published literature. Covers TK (UL23), DNA Polymerase (UL30), and Helicase-Primase Complex (UL5/UL52) genes. ",
   "maintainer_update": "2025-05-05",
   "license": "CC-BY-4.0",
-  "tsv_checksum": "sha256:36b912a7cf3fbabcf0a79ca490ed6304be5fd9639c253adf736307274d36ba25"
+  "tsv_checksum": "sha256:9822f147e0f2f03dd7d41326ed9069f50d9002f8078a987f3f7a12568c54bb20"
 }
