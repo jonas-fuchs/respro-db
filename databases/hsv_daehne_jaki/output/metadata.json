@@ -8,7 +8,7 @@
   "publication_pmid": "40349973",
   "website": "https://zenodo.org/records/15149867",
   "description": "HSV-1 and HSV-2 drug resistance mutation database curated from published literature. Covers TK (UL23), DNA Polymerase (UL30), and Helicase-Primase Complex (UL5/UL52) genes. ",
-  "maintainer_update": "2026-04-23",
+  "maintainer_update": "2025-05-05",
   "license": "CC-BY-4.0",
-  "tsv_checksum": "sha256:d69486d6fcf8c13eb311fb62a196b91fe12f336a6defee6b4d0f7ba1d519e2d6"
+  "tsv_checksum": "sha256:51d3baa602a5eff824f23354f85c4e03b65d21ca2aa7ea0da241650b0cfb85a1"
 }

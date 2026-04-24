@@ -17,7 +17,6 @@ import sys
 import tempfile
 import urllib.request
 from collections import defaultdict
-from datetime import date
 from pathlib import Path
 
 import openpyxl
@@ -126,6 +125,27 @@ def source_website_from_url(source_url: str) -> str:
     if match:
         return f"https://zenodo.org/records/{match.group(1)}"
     return "https://zenodo.org/records/15149867"
+
+
+def zenodo_record_id_from_url(source_url: str) -> str:
+    match = re.search(r"/records/(\d+)/", source_url)
+    if not match:
+        raise ValueError(f"Could not determine Zenodo record id from source URL: {source_url}")
+    return match.group(1)
+
+
+def zenodo_record_metadata(record_id: str) -> dict:
+    api_url = f"https://zenodo.org/api/records/{record_id}"
+    with urllib.request.urlopen(api_url) as response:
+        return json.load(response)
+
+
+def zenodo_record_update_date(record_metadata: dict) -> str:
+    for key in ("updated", "created"):
+        value = str(record_metadata.get(key, "")).strip()
+        if value:
+            return value.split("T", 1)[0]
+    raise ValueError("Zenodo record metadata did not contain created/updated timestamp")
 
 
 def parse_aa_change(aa_change: str):
@@ -238,41 +258,38 @@ def parse_aa_change(aa_change: str):
 def determine_phenotypes(resistance: str, cell_culture: str, clinical: str):
     """
     Returns (phenotype, clinical_phenotype) according to mapping rules.
-
-    resistance: 'Sensitive', 'Resistant', 'Sensitive/Resistant'
-    cell_culture: 'yes', 'no', …
-    clinical: 'yes', 'no', 'contradiction', …
     """
+
+    def define_phenotype(resistance, cc_cl):
+        if resistance == "sensitive":
+            if cc_cl == "yes":
+                return "sensitive"
+            elif cc_cl == "contradiction":
+                return "resistant"
+            else:
+                return "unknown"
+        if resistance == "resistant":
+            if cc_cl == "yes":
+                return "resistant"
+            elif cc_cl == "contradiction":
+                return "sensitive"
+            else:
+                return "unknown"
+        if resistance == "sensitive/resistant":
+            if cc_cl == "yes":
+                return "contradictory"
+            elif cc_cl == "contradiction":
+                return "contradictory"
+            else:
+                return "unknown"
+        
+        return "unknown"
+
     r = resistance.strip().lower()
     cc = cell_culture.strip().lower()
     cl = clinical.strip().lower()
 
-    if r == "sensitive/resistant":
-        phenotype = "contradictory"
-        if cl == "contradiction":
-            clinical_phenotype = "contradictory"
-        else:
-            clinical_phenotype = ""
-        return phenotype, clinical_phenotype
-
-    if r == "sensitive":
-        phenotype = "sensitive" if cc == "yes" else ""
-        if cl in ("no", "contradiction"):
-            clinical_phenotype = "unknown"
-        else:
-            clinical_phenotype = ""
-        return phenotype, clinical_phenotype
-
-    if r == "resistant":
-        phenotype = ""
-        if cl == "yes":
-            clinical_phenotype = "resistant"
-        else:
-            clinical_phenotype = ""
-        return phenotype, clinical_phenotype
-
-    # Unknown resistance value
-    return "", ""
+    return define_phenotype(r, cc), define_phenotype(r, cl)
 
 
 def tsv_checksum(content: str) -> str:
@@ -722,6 +739,9 @@ def main():
 
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
+    record_id = zenodo_record_id_from_url(args.source_url)
+    record_metadata = zenodo_record_metadata(record_id)
+    maintainer_update = zenodo_record_update_date(record_metadata)
 
     # --- Download ---
     with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as tmp_file:
@@ -770,7 +790,7 @@ def main():
             "HSV-1 and HSV-2 drug resistance mutation database curated from published literature. "
             "Covers TK (UL23), DNA Polymerase (UL30), and Helicase-Primase Complex (UL5/UL52) genes. "
         ),
-        "maintainer_update": str(date.today()),
+        "maintainer_update": maintainer_update,
         "license": "CC-BY-4.0",
         "tsv_checksum": checksum,
     }
