@@ -1,0 +1,565 @@
+# Non-migrated HerpesDRG rows
+# Columns: reason	mutation_id	virus	gene	aa_change	co_gene	co_aa	status	note	details
+
+reason	mutation_id	virus	gene	aa_change	co_gene	co_aa	status	note	details
+co_mutation_context_excluded	303	HCMV	UL27	C415*	UL27	A406V	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	304	HCMV	UL27	R233S	UL97	L337M	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	305	HCMV	UL27	R233S	UL97	V353A	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1772	HCMV	UL27	R233S	UL97	S334G	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1737	HCMV	UL51	A95V	UL56	L257I	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	270	HCMV	UL51	P91S	UL56	S229F	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	271	HCMV	UL51	P91S	UL56	V236M	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	272	HCMV	UL51	P91S	UL56	R369M	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	273	HCMV	UL51	P91S	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	72	HCMV	UL54	A834P	UL54	N408K	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	87	HCMV	UL54	C539R	UL97	H520Q	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	24	HCMV	UL54	D515E	UL54	L516M;I521T	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	556	HCMV	UL54	E303G	UL54	V812L	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	575	HCMV	UL54	E756K	UL54	A594V	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	92	HCMV	UL54	F412C	UL54	L802M	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1727	HCMV	UL54	H600L	UL54	T700A	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	105	HCMV	UL54	K500N	UL54	S585A	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1980	HCMV	UL54	K500N	UL54	S585A	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	93	HCMV	UL54	K513E	UL54	D558E	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	22	HCMV	UL54	K513N	UL54	V812L	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	94	HCMV	UL54	K805Q	UL54	T821I	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	97	HCMV	UL54	L545S	UL54	P829S	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	109	HCMV	UL54	L545S	UL97	M460I	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1982	HCMV	UL54	L545S	UL54	P829S	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	99	HCMV	UL54	N408D	UL54	T552N	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	100	HCMV	UL54	N408D	UL54	L957F	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1979	HCMV	UL54	N408D	UL54	T552N	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1981	HCMV	UL54	N408D	UL54	L957F	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	438	HCMV	UL54	N495K	UL54	Q738R	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	101	HCMV	UL54	T552N	UL54	L957F	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	576	HCMV	UL54	V526L	UL54	A594V	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	577	HCMV	UL54	V526L	UL54	L595F	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	255	HCMV	UL56	C25F	UL56	V231L	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	205	HCMV	UL56	E237D	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	257	HCMV	UL56	E237D	UL56	T244K; F261L	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	265	HCMV	UL56	E237D	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	201	HCMV	UL56	F261L	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	266	HCMV	UL56	F261L	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	219	HCMV	UL56	H637Q	UL56	V639M	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	203	HCMV	UL56	M329T	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	267	HCMV	UL56	M329T	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	197	HCMV	UL56	Q204R	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	268	HCMV	UL56	Q204R	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	260	HCMV	UL56	S229F	UL56	L254F; L257I	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	256	HCMV	UL56	T244K	UL56	F261L	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	258	HCMV	UL56	V236L	UL56	L257I	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	259	HCMV	UL56	V236M	UL56	L257I; M329T	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	214	HCMV	UL89	I334V	UL89	N405D	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1827	HCMV	UL97	A594P	UL97	D605E	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	2036	HCMV	UL97	A594P	UL97	D605E	A	Kinetic slowdown factors from this paper correlate very well with resistance fold changes from others - assuming 1:1 correlation	Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	2021	HCMV	UL97	A594T	UL54	P522S	A	High variation in "WT" reps - take absolute fold changes as a rough ballpark	Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1993	HCMV	UL97	A594V	UL54	E756K	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	313	HCMV	UL97	F342Y	UL97	H411Y	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1958	HCMV	UL97	G343A	UL97	H411Y	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1773	HCMV	UL97	L337M	UL27	R233S	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	2034	HCMV	UL97	M460V	UL97	A594P	A	Kinetic slowdown factors from this paper correlate very well with resistance fold changes from others - assuming 1:1 correlation	Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	289	HCMV	UL97	V353A	UL97	H411L	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	290	HCMV	UL97	V353A	UL97	H411Y	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	2043	HHV6b	U38	T435R	U38	C525S	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	2024	HSV1	UL23	A189V	UL30	L778M	A	paper includes tripple mutants - add later	Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	2026	HSV1	UL23	A189V	UL30	L802F	A	paper includes tripple mutants - add later	Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	2077	HSV1	UL23	C336Y	UL30	H168Y	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	2025	HSV1	UL23	T183P	UL30	L778M	A	paper includes tripple mutants - add later	Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	2027	HSV1	UL23	T183P	UL30	L802F	A	paper includes tripple mutants - add later	Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	2078	HSV1	UL23	T96I	UL30	A991T	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1861	HSV1	UL52	A899T	UL5	K356T	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1232	HSV2	UL30	D912V	TK	28*	A	Only pol conserved was sequenced	Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1252	VZV	ORF28	D668Y	pol	M808V	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1262	VZV	ORF36	C138R	TK	S242F	A		Co-mutation rows are logged conservatively; no formula group emitted.
+co_mutation_context_excluded	1238	VZV	ORF36	Q303*	Pol	A955T	A		Co-mutation rows are logged conservatively; no formula group emitted.
+flagged_note	731	HSV1	UL23	D162N			A	co-occuring 365I later shown to be polymorphc	
+flagged_note	786	HSV1	UL23	L291R			A	Only sequences TK, so any Pol mutations are unnacounted for - co-occuring E36del is polymorphism In later papers	
+flagged_note	1173	HSV2	UL23	R177W			A	co-occuring mutations have been subsequently characterised	
+flagged_note	1187	HSV2	UL23	R221H			A	Cannot be inferred	
+flagged_note	1170	HSV2	UL23	Y133F			A	Cannot be inferred	
+flagged_note	1157	HSV2	UL23	Y53N			A	Cannot be inferred	
+no_antiviral_signal	304	HCMV	UL27	R233S	UL97	L337M	A		
+no_antiviral_signal	305	HCMV	UL27	R233S	UL97	V353A	A		
+no_antiviral_signal	1772	HCMV	UL27	R233S	UL97	S334G	A		
+no_antiviral_signal	1737	HCMV	UL51	A95V	UL56	L257I	A		
+no_antiviral_signal	270	HCMV	UL51	P91S	UL56	S229F	A		
+no_antiviral_signal	271	HCMV	UL51	P91S	UL56	V236M	A		
+no_antiviral_signal	272	HCMV	UL51	P91S	UL56	R369M	A		
+no_antiviral_signal	273	HCMV	UL51	P91S	UL89	D344E	A		
+no_antiviral_signal	72	HCMV	UL54	A834P	UL54	N408K	A		
+no_antiviral_signal	112	HCMV	UL54	A834P			A		
+no_antiviral_signal	86	HCMV	UL54	C539R			A		
+no_antiviral_signal	87	HCMV	UL54	C539R	UL97	H520Q	A		
+no_antiviral_signal	1819	HCMV	UL54	D413A			A		
+no_antiviral_signal	556	HCMV	UL54	E303G	UL54	V812L	A		
+no_antiviral_signal	575	HCMV	UL54	E756K	UL54	A594V	A		
+no_antiviral_signal	92	HCMV	UL54	F412C	UL54	L802M	A		
+no_antiviral_signal	1727	HCMV	UL54	H600L	UL54	T700A	A		
+no_antiviral_signal	105	HCMV	UL54	K500N	UL54	S585A	A		
+no_antiviral_signal	1980	HCMV	UL54	K500N	UL54	S585A	A		
+no_antiviral_signal	93	HCMV	UL54	K513E	UL54	D558E	A		
+no_antiviral_signal	22	HCMV	UL54	K513N	UL54	V812L	A		
+no_antiviral_signal	94	HCMV	UL54	K805Q	UL54	T821I	A		
+no_antiviral_signal	97	HCMV	UL54	L545S	UL54	P829S	A		
+no_antiviral_signal	109	HCMV	UL54	L545S	UL97	M460I	A		
+no_antiviral_signal	1982	HCMV	UL54	L545S	UL54	P829S	A		
+no_antiviral_signal	103	HCMV	UL54	L802M			A		
+no_antiviral_signal	99	HCMV	UL54	N408D	UL54	T552N	A		
+no_antiviral_signal	100	HCMV	UL54	N408D	UL54	L957F	A		
+no_antiviral_signal	1979	HCMV	UL54	N408D	UL54	T552N	A		
+no_antiviral_signal	1981	HCMV	UL54	N408D	UL54	L957F	A		
+no_antiviral_signal	438	HCMV	UL54	N495K	UL54	Q738R	A		
+no_antiviral_signal	101	HCMV	UL54	T552N	UL54	L957F	A		
+no_antiviral_signal	576	HCMV	UL54	V526L	UL54	A594V	A		
+no_antiviral_signal	577	HCMV	UL54	V526L	UL54	L595F	A		
+no_antiviral_signal	255	HCMV	UL56	C25F	UL56	V231L	A		
+no_antiviral_signal	257	HCMV	UL56	E237D	UL56	T244K; F261L	A		
+no_antiviral_signal	260	HCMV	UL56	S229F	UL56	L254F; L257I	A		
+no_antiviral_signal	256	HCMV	UL56	T244K	UL56	F261L	A		
+no_antiviral_signal	258	HCMV	UL56	V236L	UL56	L257I	A		
+no_antiviral_signal	1827	HCMV	UL97	A594P	UL97	D605E	A		
+no_antiviral_signal	2036	HCMV	UL97	A594P	UL97	D605E	A	Kinetic slowdown factors from this paper correlate very well with resistance fold changes from others - assuming 1:1 correlation	
+no_antiviral_signal	2021	HCMV	UL97	A594T	UL54	P522S	A	High variation in "WT" reps - take absolute fold changes as a rough ballpark	
+no_antiviral_signal	1798	HCMV	UL97	C592G			A		
+no_antiviral_signal	548	HCMV	UL97	C603W			A		
+no_antiviral_signal	313	HCMV	UL97	F342Y	UL97	H411Y	A		
+no_antiviral_signal	1958	HCMV	UL97	G343A	UL97	H411Y	A		
+no_antiviral_signal	1773	HCMV	UL97	L337M	UL27	R233S	A		
+no_antiviral_signal	2034	HCMV	UL97	M460V	UL97	A594P	A	Kinetic slowdown factors from this paper correlate very well with resistance fold changes from others - assuming 1:1 correlation	
+no_antiviral_signal	290	HCMV	UL97	V353A	UL97	H411Y	A		
+no_antiviral_signal	1782	HCMV	UL97	V353A			A		
+no_antiviral_signal	2038	HHV6b	U38	H507Y			A		
+no_antiviral_signal	2043	HHV6b	U38	T435R	U38	C525S	A		
+no_antiviral_signal	2024	HSV1	UL23	A189V	UL30	L778M	A	paper includes tripple mutants - add later	
+no_antiviral_signal	2026	HSV1	UL23	A189V	UL30	L802F	A	paper includes tripple mutants - add later	
+no_antiviral_signal	2077	HSV1	UL23	C336Y	UL30	H168Y	A		
+no_antiviral_signal	1408	HSV1	UL23	D228*			A		
+no_antiviral_signal	1404	HSV1	UL23	K62N			A		
+no_antiviral_signal	1405	HSV1	UL23	K62N			A		
+no_antiviral_signal	1426	HSV1	UL23	L208H			A		
+no_antiviral_signal	1599	HSV1	UL23	L340R			A		
+no_antiviral_signal	1429	HSV1	UL23	M121R			A		
+no_antiviral_signal	790	HSV1	UL23	N306*			A		
+no_antiviral_signal	791	HSV1	UL23	N306*			A		
+no_antiviral_signal	792	HSV1	UL23	N306*			A		
+no_antiviral_signal	804	HSV1	UL23	N376*			A		
+no_antiviral_signal	1458	HSV1	UL23	N376H			A		
+no_antiviral_signal	1530	HSV1	UL23	N376H			A		
+no_antiviral_signal	1402	HSV1	UL23	P57H			A		
+no_antiviral_signal	1412	HSV1	UL23	R216C			A		
+no_antiviral_signal	1414	HSV1	UL23	R222C			A		
+no_antiviral_signal	1431	HSV1	UL23	T103P			A		
+no_antiviral_signal	2027	HSV1	UL23	T183P	UL30	L802F	A	paper includes tripple mutants - add later	
+no_antiviral_signal	1410	HSV1	UL23	T201P			A		
+no_antiviral_signal	1423	HSV1	UL23	Y53C			A		
+no_antiviral_signal	1514	HSV1	UL30	A910V			A		
+no_antiviral_signal	1532	HSV1	UL30	F248L			A		
+no_antiviral_signal	1302	HSV1	UL30	S724N			A		
+no_antiviral_signal	1378	HSV1	UL30	S724N			A		
+no_antiviral_signal	1515	HSV1	UL30	V958L			A		
+no_antiviral_signal	1866	HSV1	UL5	K356T			A		
+no_antiviral_signal	1871	HSV1	UL5	K356T			A	my concern with this paper is that they do not cover other important genes eg BAY-Pr1 is 50fold resistance with no ul5 mutations discard all?	
+no_antiviral_signal	1861	HSV1	UL52	A899T	UL5	K356T	A		
+no_antiviral_signal	1862	HSV1	UL52	A899T			A		
+no_antiviral_signal	1355	HSV2	UL23	A157T			A		
+no_antiviral_signal	1191	HSV2	UL23	D229*			A		
+no_antiviral_signal	1193	HSV2	UL23	D229*			A		
+no_antiviral_signal	1197	HSV2	UL23	D229*			A		
+no_antiviral_signal	1354	HSV2	UL23	G150D			A		
+no_antiviral_signal	1349	HSV2	UL23	G25A			A		
+no_antiviral_signal	1350	HSV2	UL23	G39E			A		
+no_antiviral_signal	1159	HSV2	UL23	I54*			A		
+no_antiviral_signal	1358	HSV2	UL23	L342W			A		
+no_antiviral_signal	1180	HSV2	UL23	M183*			A		
+no_antiviral_signal	1182	HSV2	UL23	M183*			A		
+no_antiviral_signal	1183	HSV2	UL23	M183*			A		
+no_antiviral_signal	1356	HSV2	UL23	R221H			A		
+no_antiviral_signal	1357	HSV2	UL23	R248W			A		
+no_antiviral_signal	1352	HSV2	UL23	T131M			A		
+no_antiviral_signal	1409	HSV2	UL23	T131P			A		
+no_antiviral_signal	1353	HSV2	UL23	Y133F			A		
+no_antiviral_signal	1351	HSV2	UL23	Y53N			A		
+no_antiviral_signal	1310	HSV2	UL30	R628C			A		
+no_antiviral_signal	1252	VZV	ORF28	D668Y	pol	M808V	A		
+no_antiviral_signal	1277	VZV	ORF28	M201I			A		
+no_antiviral_signal	1280	VZV	ORF28	S386A			A		
+no_antiviral_signal	1649	VZV	ORF36	L92P			A		
+numeric_only_mutation_not_supported	1625	HHV6b	U38	654			A		
+status_not_active	1394	Adeno	pol	C687S			O	this is not resistance data	
+status_not_active	1387	Adeno	pol	F882I	pol	V180I	O	co-occuring uncharacterised mutations - oringally F740I	
+status_not_active	1397	Adeno	pol	I664M			O	this is not resistance data	
+status_not_active	1396	Adeno	pol	I664V			O	this is not resistance data - Don’t trust this it was not repruceable between cell lines	
+status_not_active	1390	Adeno	pol	L554F	pol	A501E,V817L	O	co-occuring uncharacterised mutations - cannot find refseq homolog	
+status_not_active	1393	Adeno	pol	M689V			O	this is not resistance data	
+status_not_active	1395	Adeno	pol	R665K			O	this is not resistance data	
+status_not_active	1386	Adeno	pol	S1183R	pol	L883S	O	co-occuring uncharacterised mutations S1041R	
+status_not_active	1392	Adeno	pol	T87I	pol	V303I	O	co-occuring uncharacterised mutations	
+status_not_active	1388	Adeno	pol	V180I	pol	F882I	O	co-occuring uncharacterised mutations - and cannot find homolog in the refseq	
+status_not_active	1729	Adeno	pol	V303I	pol	T87I	O	co-occuring uncharacterised mutations	
+status_not_active	1391	Adeno	pol	V817L	pol	A501E, L554F	O	co-occuring uncharacterised mutations	
+status_not_active	531	HCMV	UL54	A1012V			O	Anecdotal	
+status_not_active	535	HCMV	UL54	A1122T			O	Anecdotal	
+status_not_active	542	HCMV	UL54	A1154P			O	Anecdotal	
+status_not_active	485	HCMV	UL54	A15T			O	Anecdotal	
+status_not_active	407	HCMV	UL54	A505T			O	Anecdotal	
+status_not_active	1751	HCMV	UL54	A543V	UL54	M460I	O	co-occurs with M460I which causes GCVr and has not been tested against CDV but given GCVr it is more likely it causes CDVr and A543V is therefore hard to determine	
+status_not_active	496	HCMV	UL54	A626V			O	Anecdotal	
+status_not_active	499	HCMV	UL54	A631G			O	Anecdotal	
+status_not_active	509	HCMV	UL54	A688V			O	Anecdotal	
+status_not_active	511	HCMV	UL54	A693T			O	Anecdotal	
+status_not_active	521	HCMV	UL54	A885S			O	Anecdotal	
+status_not_active	522	HCMV	UL54	A885T			O	Anecdotal	
+status_not_active	410	HCMV	UL54	D1129N			O	Anecdotal	
+status_not_active	481	HCMV	UL54	D515G			O	Ref never shows this	
+status_not_active	517	HCMV	UL54	D870H			O	Anecdotal	
+status_not_active	416	HCMV	UL54	E877K			O	Anecdotal	
+status_not_active	528	HCMV	UL54	E899K			O	Anecdotal	
+status_not_active	504	HCMV	UL54	F669L			O	Anecdotal	
+status_not_active	414	HCMV	UL54	G1031A			O	Anecdotal	
+status_not_active	536	HCMV	UL54	G1133S			O	Anecdotal	
+status_not_active	490	HCMV	UL54	G143S			O	Anecdotal	
+status_not_active	493	HCMV	UL54	G347D			O	Anecdotal	
+status_not_active	498	HCMV	UL54	G629S			O	Anecdotal	
+status_not_active	506	HCMV	UL54	G678S			O	Anecdotal	
+status_not_active	519	HCMV	UL54	G874R			O	Anecdotal	
+status_not_active	489	HCMV	UL54	H142Y			O	Anecdotal	
+status_not_active	491	HCMV	UL54	I341T			O	Anecdotal	
+status_not_active	28	HCMV	UL54	I521T			O	Unable to substantiate review values from their references	
+status_not_active	532	HCMV	UL54	L1020I			O	Anecdotal	
+status_not_active	415	HCMV	UL54	L394F			O	Anecdotal	
+status_not_active	432	HCMV	UL54	L415N			O	Anecdotal	
+status_not_active	406	HCMV	UL54	L501F			O	Anecdotal	
+status_not_active	514	HCMV	UL54	L737M			O	Anecdotal	
+status_not_active	524	HCMV	UL54	L890F			O	Anecdotal	
+status_not_active	501	HCMV	UL54	M640R			O	Anecdotal	
+status_not_active	534	HCMV	UL54	N1116H			O	Anecdotal	
+status_not_active	538	HCMV	UL54	N1147S			O	Anecdotal	
+status_not_active	492	HCMV	UL54	N345S			O	Anecdotal	
+status_not_active	508	HCMV	UL54	N685S			O	Anecdotal	
+status_not_active	527	HCMV	UL54	N898D			O	Anecdotal	
+status_not_active	541	HCMV	UL54	P1153S			O	Anecdotal	
+status_not_active	544	HCMV	UL54	P1162L			O	Anecdotal	
+status_not_active	342	HCMV	UL54	P522S			O	Anecdotal	
+status_not_active	497	HCMV	UL54	P628L			O	Anecdotal	
+status_not_active	523	HCMV	UL54	P887S			O	Anecdotal	
+status_not_active	513	HCMV	UL54	Q697H			O	Anecdotal	
+status_not_active	516	HCMV	UL54	Q868R			O	Anecdotal	
+status_not_active	413	HCMV	UL54	R1030C			O	Anecdotal	
+status_not_active	539	HCMV	UL54	R1149T			O	Anecdotal	
+status_not_active	537	HCMV	UL54	S1146N			O	Anecdotal	
+status_not_active	545	HCMV	UL54	S1235T			O	Anecdotal	
+status_not_active	486	HCMV	UL54	S24L			O	Anecdotal	
+status_not_active	487	HCMV	UL54	S32P			O	Anecdotal	
+status_not_active	495	HCMV	UL54	S464F			O	Anecdotal	
+status_not_active	500	HCMV	UL54	S633F			O	Anecdotal	
+status_not_active	502	HCMV	UL54	S655L			O	Anecdotal	
+status_not_active	503	HCMV	UL54	S663N			O	Anecdotal	
+status_not_active	505	HCMV	UL54	S676G			O	Anecdotal	
+status_not_active	512	HCMV	UL54	S695T			O	Anecdotal	
+status_not_active	433	HCMV	UL54	S734P			O	Anecdotal	
+status_not_active	520	HCMV	UL54	S884Insert T			O	Anecdotal	
+status_not_active	533	HCMV	UL54	T1108A			O	Anecdotal	
+status_not_active	510	HCMV	UL54	T691A			O	Anecdotal	
+status_not_active	418	HCMV	UL54	T892A			O	Anecdotal	
+status_not_active	525	HCMV	UL54	T892I			O	Anecdotal	
+status_not_active	411	HCMV	UL54	V321I			O	Anecdotal	
+status_not_active	494	HCMV	UL54	V355A			O	Anecdotal	
+status_not_active	52	HCMV	UL54	V715M			O	Unable to substantiate review values from their references	
+status_not_active	515	HCMV	UL54	V759M			O	Anecdotal	
+status_not_active	2091	HCMV	UL54	V781I			O	Given resistance factors in other papers I believe the 2 recombinants in this paper have been mixed up	
+status_not_active	518	HCMV	UL54	V873L			O	Anecdotal	
+status_not_active	529	HCMV	UL54	V927M			O	Anecdotal	
+status_not_active	530	HCMV	UL54	V953A			O	Anecdotal	
+status_not_active	488	HCMV	UL54	V95E			O	Anecdotal	
+status_not_active	507	HCMV	UL54	del 681-688			O	Anecdotal	
+status_not_active	540	HCMV	UL54	del1151			O	Anecdotal	
+status_not_active	543	HCMV	UL54	del1156			O	Anecdotal	
+status_not_active	353	HCMV	UL56	A103V			O	Anecdotal	
+status_not_active	363	HCMV	UL56	C325W			O	Anecdotal	
+status_not_active	354	HCMV	UL56	E141*			O	Anecdotal	
+status_not_active	356	HCMV	UL56	E157G			O	Anecdotal	
+status_not_active	347	HCMV	UL56	E237G			O	cannot find key supporting data	
+status_not_active	361	HCMV	UL56	E276G			O	Anecdotal	
+status_not_active	366	HCMV	UL56	E485G			O	Anecdotal	
+status_not_active	350	HCMV	UL56	F41L			O	Anecdotal	
+status_not_active	362	HCMV	UL56	I313V			O	Anecdotal	
+status_not_active	352	HCMV	UL56	I48M			O	Anecdotal	
+status_not_active	367	HCMV	UL56	I535V			O	Anecdotal	
+status_not_active	351	HCMV	UL56	L26P			O	Anecdotal	
+status_not_active	371	HCMV	UL56	L658S			O	Anecdotal	
+status_not_active	375	HCMV	UL56	L750P			O	Anecdotal	
+status_not_active	348	HCMV	UL56	M31I			O	Anecdotal	
+status_not_active	349	HCMV	UL56	M31V			O	Anecdotal	
+status_not_active	370	HCMV	UL56	M641T			O	Anecdotal	
+status_not_active	355	HCMV	UL56	N148D			O	Anecdotal	
+status_not_active	379	HCMV	UL56	P846L			O	Anecdotal	
+status_not_active	357	HCMV	UL56	Q182K			O	Anecdotal	
+status_not_active	358	HCMV	UL56	Q213R			O	Anecdotal	
+status_not_active	378	HCMV	UL56	R816W			O	Anecdotal	
+status_not_active	359	HCMV	UL56	S255L			O	Anecdotal	
+status_not_active	360	HCMV	UL56	S269G			O	Anecdotal	
+status_not_active	364	HCMV	UL56	S378N			O	Anecdotal	
+status_not_active	365	HCMV	UL56	S445N			O	Anecdotal	
+status_not_active	373	HCMV	UL56	S705F			O	Anecdotal	
+status_not_active	377	HCMV	UL56	T775I			O	Anecdotal	
+status_not_active	374	HCMV	UL56	V706A			O	Anecdotal	
+status_not_active	369	HCMV	UL56	Y575C			O	Anecdotal	
+status_not_active	372	HCMV	UL56	Y667H			O	Anecdotal	
+status_not_active	376	HCMV	UL56	Y757H			O	Anecdotal	
+status_not_active	368	HCMV	UL56	del542			O	Anecdotal	
+status_not_active	398	HCMV	UL89	A532T			O	Anecdotal	
+status_not_active	389	HCMV	UL89	D309G			O	Anecdotal	
+status_not_active	383	HCMV	UL89	F124L			O	Anecdotal	
+status_not_active	387	HCMV	UL89	H243R			O	Anecdotal	
+status_not_active	388	HCMV	UL89	H246R			O	Anecdotal	
+status_not_active	399	HCMV	UL89	I572V			O	Anecdotal	
+status_not_active	380	HCMV	UL89	K41E			O	Anecdotal	
+status_not_active	390	HCMV	UL89	L323P			O	Anecdotal	
+status_not_active	395	HCMV	UL89	L458P			O	Anecdotal	
+status_not_active	397	HCMV	UL89	L522P			O	Anecdotal	
+status_not_active	393	HCMV	UL89	M406V			O	Anecdotal	
+status_not_active	394	HCMV	UL89	N426D			O	Anecdotal	
+status_not_active	381	HCMV	UL89	N74S			O	Anecdotal	
+status_not_active	386	HCMV	UL89	P176S			O	Anecdotal	
+status_not_active	400	HCMV	UL89	Q625*			O	Anecdotal	
+status_not_active	382	HCMV	UL89	S102F			O	Anecdotal	
+status_not_active	392	HCMV	UL89	S373G			O	Anecdotal	
+status_not_active	396	HCMV	UL89	S521G			O	Anecdotal	
+status_not_active	384	HCMV	UL89	T132A			O	Anecdotal	
+status_not_active	391	HCMV	UL89	T331A			O	Anecdotal	
+status_not_active	401	HCMV	UL89	T637A			O	Anecdotal	
+status_not_active	385	HCMV	UL89	V146I			O	Anecdotal	
+status_not_active	402	HCMV	UL89	V656A			O	Anecdotal	
+status_not_active	480	HCMV	UL97	A582T			O	Anecdotal	
+status_not_active	409	HCMV	UL97	A590V			O	Anecdotal	
+status_not_active	462	HCMV	UL97	A591V			O	unable to find referred mutation	
+status_not_active	341	HCMV	UL97	A594V			O	Anecdotal	
+status_not_active	1807	HCMV	UL97	A594V			O	large discrepencies between reps	
+status_not_active	2017	HCMV	UL97	A594V			O	Other mutations present but not characterised	
+status_not_active	183	HCMV	UL97	C603R			O	Review value does not match reference ref51 has no useable data ref61 is in here with a different ratio and ref65 has a different ratio too with an unusable datapoint	
+status_not_active	186	HCMV	UL97	C607F			O	Cannot find value 1.9 in references ref72 does no tests ref77 no tests. Following ref trail leads to nowhere concrete	
+status_not_active	306	HCMV	UL97	C670Y			O	Anecdotal	
+status_not_active	149	HCMV	UL97	D456N			O	Review value does not match reference	
+status_not_active	144	HCMV	UL97	D605E			O	Typo?	
+status_not_active	448	HCMV	UL97	D68N			O	occurs with many other mutations unable to establish its solo phenotype	
+status_not_active	479	HCMV	UL97	E227D			O	Anecdotal	
+status_not_active	408	HCMV	UL97	H469Y			O	Anecdotal	
+status_not_active	188	HCMV	UL97	I610T			O	typ0 2.8 should be 2.6?	
+status_not_active	2018	HCMV	UL97	L595S			O	Other mutations present but not characterised	
+status_not_active	412	HCMV	UL97	L609F			O	Anecdotal	
+status_not_active	417	HCMV	UL97	L609F			O	Anecdotal	
+status_not_active	2016	HCMV	UL97	M460V			O	Other mutations present but not characterised	
+status_not_active	449	HCMV	UL97	Q126L			O	occurs with many other mutations unable to establish its solo phenotype	
+status_not_active	474	HCMV	UL97	Q19E			O	Anecdotal	
+status_not_active	477	HCMV	UL97	R112C			O	Anecdotal	
+status_not_active	478	HCMV	UL97	R137C			O	Anecdotal	
+status_not_active	476	HCMV	UL97	S108N			O	Anecdotal	
+status_not_active	475	HCMV	UL97	T95S			O	Anecdotal	
+status_not_active	450	HCMV	UL97	V244I			O	occurs with many other mutations unable to establish its solo phenotype	
+status_not_active	1626	HHV6b	U38	A961V			O	cannot infer	
+status_not_active	1627	HHV6b	U69	M318V			O	cannot infer	
+status_not_active	1568	HSV1	UL23	A136N			O	A is not the tk wt AA have emailed author	
+status_not_active	732	HSV1	UL23	A167V			O	frameshift in tested strain	
+status_not_active	733	HSV1	UL23	A168T			E	ref wrong	
+status_not_active	738	HSV1	UL23	A174P			E	ref wrong	
+status_not_active	1538	HSV1	UL23	A174P	UL30	D1103H	O	only co-occurs with unknown mutation	
+status_not_active	739	HSV1	UL23	A175V			E	ref wrong	
+status_not_active	749	HSV1	UL23	A189V			O	co-occuring unknown L227F	
+status_not_active	1960	HSV1	UL23	A192V			O	Cannot link a mutation to a clear effect	
+status_not_active	722	HSV1	UL23	D116N			O	The mutation is a frameshift causing deletion, which is not possible to reconstruct	
+status_not_active	730	HSV1	UL23	D162A			E	ref wrong	
+status_not_active	1582	HSV1	UL23	D330A			O	methodology is not explicit, were these individually transferred, or simply the experimentalists feeling?	
+status_not_active	1572	HSV1	UL23	E225L			O	co-occurs with known resmut or other unknown mutant	
+status_not_active	1559	HSV1	UL23	E43A			O	methodology is not explicit, were these individually transferred, or simply the experimentalists feeling?	
+status_not_active	709	HSV1	UL23	E83K			O	frameshift in tested strain	
+status_not_active	1959	HSV1	UL23	F289S			O	They did perform a phenotypic assay but it lacks basic detail. Also it is not clear if the mutation or the virus was resistance the wording is too loose.	
+status_not_active	700	HSV1	UL23	G59R			O	co-occuring E83K is also resistance causing	
+status_not_active	1535	HSV1	UL23	I143V			O	only co-occurs with unknown R256W	
+status_not_active	1571	HSV1	UL23	L159R			O	co-occurs with known resmut or other unknown mutant	
+status_not_active	734	HSV1	UL23	L170P			E	ref wrong	
+status_not_active	757	HSV1	UL23	L208F			O	co-occuring resistant mutant	
+status_not_active	767	HSV1	UL23	L227F			O	co-occuring unknown A189V	
+status_not_active	787	HSV1	UL23	L297S	UL23	Q104H	O	co-occurs with resmut	
+status_not_active	1895	HSV1	UL23	L32P			O	this mutations makes no sense perhaps P31L but unsure ALSO many herpesdrgnovel mutations in strain but good repeated evidence mutations together are natural polymorphims	
+status_not_active	1560	HSV1	UL23	L50M			O	methodology is not explicit, were these individually transferred, or simply the experimentalists feeling?	
+status_not_active	1561	HSV1	UL23	L68R			O	methodology is not explicit, were these individually transferred, or simply the experimentalists feeling?	
+status_not_active	727	HSV1	UL23	M128L			O	co-occuring Y80N is unknwon	
+status_not_active	729	HSV1	UL23	P131S			O	co-occurs with resistant mutation	
+status_not_active	1570	HSV1	UL23	P154S			O	co-occurs with known resmut or other unknown mutant	
+status_not_active	736	HSV1	UL23	P173L			O	frameshift in tested strain	
+status_not_active	1446	HSV1	UL23	P173L			O	many co occuring mutations	
+status_not_active	737	HSV1	UL23	P173R			E	ref wrong	
+status_not_active	796	HSV1	UL23	P334+			O	cannot see in paper	
+status_not_active	710	HSV1	UL23	P84L			O	Only occurs with other resistant mutation R163H and deletion	
+status_not_active	711	HSV1	UL23	P84L			E	ref wrong	
+status_not_active	712	HSV1	UL23	P84S			E	ref wrong	
+status_not_active	719	HSV1	UL23	Q104H	UL23	L297S	O	co-occurs with resmut	
+status_not_active	747	HSV1	UL23	Q185R			O	The mutation is a frameshift causing deletion, which is not possible to reconstruct	
+status_not_active	779	HSV1	UL23	Q261R	UL23	A93V	O	co-occurs with resistant mutation	
+status_not_active	706	HSV1	UL23	Q67*			O	ref wrong	
+status_not_active	759	HSV1	UL23	R216C			O		
+status_not_active	761	HSV1	UL23	R216S			O	co-occurs with resistant mutation	
+status_not_active	762	HSV1	UL23	R220C			E	ref wrong	
+status_not_active	763	HSV1	UL23	R220H			O		
+status_not_active	764	HSV1	UL23	R222C			E	ref wrong	
+status_not_active	1490	HSV1	UL23	R222H	UL23	R363C	O	unknwon comut	
+status_not_active	777	HSV1	UL23	R256W			O	Occurs with a resistant mutation	
+status_not_active	1536	HSV1	UL23	R256W			O	only co-occurs with unknown I143V	
+status_not_active	716	HSV1	UL23	R89W			O	co-occuring G200D is subsequently shown to be resistant	
+status_not_active	725	HSV1	UL23	S123R			O	S123R and R123S - return to WT is resistant? Really? Likely pol muts	
+status_not_active	1565	HSV1	UL23	S74L			O	co-occurs with known resmut or other unknown mutant	
+status_not_active	774	HSV1	UL23	T245P			O	co-occuring T354P is unknown	
+status_not_active	797	HSV1	UL23	T354P			O	co-occuring T245P is unknown	
+status_not_active	703	HSV1	UL23	T63A			O	frameshift in tested strain	
+status_not_active	704	HSV1	UL23	T63I			E	ref wrong	
+status_not_active	705	HSV1	UL23	T65N			E	ref wrong	
+status_not_active	715	HSV1	UL23	W88R			O	co-occurs with resistant R220H	
+status_not_active	735	HSV1	UL23	Y172C			E	ref wrong	
+status_not_active	1574	HSV1	UL23	Y248H			O	co-occurs with known resmut or other unknown mutant	
+status_not_active	693	HSV1	UL23	Y53H			O	Only occurs with other resistant mutation R163H	
+status_not_active	708	HSV1	UL23	Y80N			O	M128L is unknown	
+status_not_active	714	HSV1	UL23	Y87H			O	co-occuring R41H (H41R in pub) is subsequently shown to be resistant	
+status_not_active	989	HSV1	UL30	A1168V			O	no data	
+status_not_active	990	HSV1	UL30	A1175D			O	no data	
+status_not_active	851	HSV1	UL30	A229T			O	Cannot be inferred	
+status_not_active	812	HSV1	UL30	A27T			O	Cannot be inferred	
+status_not_active	1542	HSV1	UL30	A566T			O	Cannot be inferred	
+status_not_active	823	HSV1	UL30	A78D			O	Cannot be inferred	
+status_not_active	966	HSV1	UL30	D1103H			O	Cannot be inferred	
+status_not_active	1543	HSV1	UL30	D1103H			O	Cannot be inferred	
+status_not_active	822	HSV1	UL30	D72N			O	Cannot be inferred	
+status_not_active	959	HSV1	UL30	E1084A			O	co-occurs with unknwon mutation phenotype	
+status_not_active	960	HSV1	UL30	E1084K			O	occurs with C336Y known res	
+status_not_active	1010	HSV1	UL30	E545D			O	co-occurs with unknwon mutations	
+status_not_active	1036	HSV1	UL30	E798K			O	co-occurs with resmut	
+status_not_active	1029	HSV1	UL30	F716L			O	co-occurs with unknwon mutations	
+status_not_active	1030	HSV1	UL30	F733C			O	co-occurs with large deletion	
+status_not_active	1484	HSV1	UL30	G355D			O	Occurs only along with a co-resistant mutation	
+status_not_active	1040	HSV1	UL30	G841C			E	ref wrong	
+status_not_active	871	HSV1	UL30	H386Y			O	co-occurs with unknwon mutation phenotype	
+status_not_active	1008	HSV1	UL30	I529M			O	co-occurs with resistant M880T and unknown mutations	
+status_not_active	1048	HSV1	UL30	I922N			E	ref wrong	
+status_not_active	941	HSV1	UL30	I922T			O	co-occurs with resmut	
+status_not_active	829	HSV1	UL30	K104Q			O	no data	
+status_not_active	1009	HSV1	UL30	K532T			O	Cannot be inferred	
+status_not_active	1015	HSV1	UL30	L583V			O	Cannot be inferred	
+status_not_active	1025	HSV1	UL30	L702H			E	ref wrong	
+status_not_active	1026	HSV1	UL30	L702P			O	co-occurs with unknwon mutations	
+status_not_active	1043	HSV1	UL30	M880T			O	co-occurs with unknwon mutations	
+status_not_active	1039	HSV1	UL30	N815S			O	redundant	
+status_not_active	993	HSV1	UL30	P1199L			O	unkown co-mutations	
+status_not_active	1035	HSV1	UL30	P797T			O	infer pol mutation phenotype using virus phenotype assay ignorant of tk genotype	
+status_not_active	957	HSV1	UL30	Q1079K			O	co-occurs with unknwon mutation phenotype	
+status_not_active	1758	HSV1	UL30	R264C			P	lost ref	
+status_not_active	1759	HSV1	UL30	T245M			O	lost ref	
+status_not_active	1020	HSV1	UL30	V621S			O	co-occuring resistant mutant	
+status_not_active	919	HSV1	UL30	V743M			O	Cannot be inferred	
+status_not_active	1018	HSV1	UL30	Y608*			O	cannot see in paper	
+status_not_active	1593	HSV1	UL5	A280T			O	co-occurs with other unknown mutants	
+status_not_active	1594	HSV1	UL5	A575V			O	co-occurs with other unknown mutants	
+status_not_active	1596	HSV1	UL5	A602T			O	methodology is not explicit, were these individually transferred, or simply the experimentalists feeling?	
+status_not_active	1597	HSV1	UL5	D862N			O	co-occurs with other unknown mutants	
+status_not_active	1591	HSV1	UL5	L138V			O	co-occurs with other unknown mutants	
+status_not_active	1590	HSV1	UL5	L49I			O	co-occurs with other unknown mutants	
+status_not_active	1592	HSV1	UL5	S173L			O	co-occurs with other unknown mutants	
+status_not_active	1595	HSV1	UL5	V600A			O	co-occurs with other unknown mutants	
+status_not_active	1131	HSV2	UL23	A19V			O	Cannot be inferred	
+status_not_active	1133	HSV2	UL23	A27T			O	Cannot be inferred	
+status_not_active	1163	HSV2	UL23	A72S			O	Hard to interpret as double mutant is sensetive	
+status_not_active	1210	HSV2	UL23	C336Y			O	C is 337 G is 336 - followup	
+status_not_active	1194	HSV2	UL23	D229*			O	co occurs with unknown mut	
+status_not_active	1196	HSV2	UL23	D229*			O	co occurs with unknown mut	
+status_not_active	1205	HSV2	UL23	D273R			O	three mutations, 1 measure	
+status_not_active	1146	HSV2	UL23	G201D			O	co occurs with unknown mut	
+status_not_active	1325	HSV2	UL23	G39E			O	Ambigious	
+status_not_active	1160	HSV2	UL23	G61W			O	co occurs with unknown mut	
+status_not_active	1161	HSV2	UL23	K62N			O	duplicate	
+status_not_active	1961	HSV2	UL23	L139F			O	Cannot link a mutation to a clear effect	
+status_not_active	1201	HSV2	UL23	L263*			O	co occurs with unknown mut	
+status_not_active	1202	HSV2	UL23	L263*			O	co occurs with unknown mut	
+status_not_active	1166	HSV2	UL23	L98*			O	co occurs with unknown mut	
+status_not_active	1178	HSV2	UL23	M183*			O	co occurs with unknown mut	
+status_not_active	1211	HSV2	UL23	M348*			O	co occurs with unknown mut	
+status_not_active	1214	HSV2	UL23	M348*			O	co occurs with unknown mut	
+status_not_active	1149	HSV2	UL23	N245S			O	Cannot be inferred	
+status_not_active	1204	HSV2	UL23	P272S			O	three mutations, 1 measure	
+status_not_active	1168	HSV2	UL23	Q105P			O	ignores potential pol mutants	
+status_not_active	1203	HSV2	UL23	R271V			O	three mutations, 1 measure	
+status_not_active	1152	HSV2	UL23	R284S			O	Cannot be inferred	
+status_not_active	1155	HSV2	UL23	R34C			O	Cannot be inferred	
+status_not_active	1174	HSV2	UL23	S182D			O	ignores potential pol mutants	
+status_not_active	1175	HSV2	UL23	S182R			O	ignores potential pol mutants	
+status_not_active	1134	HSV2	UL23	S29A			O	Cannot be inferred	
+status_not_active	1162	HSV2	UL23	S66P			O	Hard to interpret as double mutant is sensetive	
+status_not_active	1145	HSV2	UL23	T159I			O	Cannot be inferred	
+status_not_active	1198	HSV2	UL23	Y239*			O	V239 or Y240?	
+status_not_active	1127	HSV2	UL30	A1156T			O	co occurs with unknown mut	
+status_not_active	1077	HSV2	UL30	A232T			O	Cannot be inferred	
+status_not_active	1078	HSV2	UL30	A251V			O	co occurs with unknown mut	
+status_not_active	1222	HSV2	UL30	A724V			O	redundant	
+status_not_active	1233	HSV2	UL30	A915V			O	co occurs with unknown mut	
+status_not_active	1231	HSV2	UL30	D912N			O	does not list all mutations so cant infer backward!	
+status_not_active	1126	HSV2	UL30	E1149G			O	problematic theres never data shown to prove this	
+status_not_active	1217	HSV2	UL30	E250Q			O		
+status_not_active	1219	HSV2	UL30	E678G			O	Copies a susceptible mutant falsely as resistant from here https://aac.asm.org/content/aac/54/11/4833.full.pdf	
+status_not_active	1108	HSV2	UL30	E803K			O	co occurs with unknown mut	
+status_not_active	1083	HSV2	UL30	F336L			O	co occurs with unknown mut	
+status_not_active	1088	HSV2	UL30	G646S			O	co occurs with unknown mut	
+status_not_active	1096	HSV2	UL30	G680D			O	mutations not resolved by sequence & unsure which sequences also / did not have a pol genotype	
+status_not_active	1121	HSV2	UL30	I1026S			O	Cannot be inferred	
+status_not_active	1073	HSV2	UL30	I153T			O	co occurs with unknown mut	
+status_not_active	1080	HSV2	UL30	I291V			O	co occurs with unknown mut	
+status_not_active	1070	HSV2	UL30	L128S			O	co occurs with unknown mut	
+status_not_active	1076	HSV2	UL30	L229M			O	co occurs with unknown mut	
+status_not_active	1118	HSV2	UL30	L995F			O	Cannot be inferred	
+status_not_active	1068	HSV2	UL30	Q64R			O	co occurs with unknown mut	
+status_not_active	1225	HSV2	UL30	Q732R			O	co occurs with unknown mut	
+status_not_active	1069	HSV2	UL30	R101W			O	co occurs with unknown mut	
+status_not_active	1063	HSV2	UL30	R41H			O	Cannot be inferred	
+status_not_active	1087	HSV2	UL30	R628C			O	Only publshed with known resistance mutations, not given is any un-previously identified mutations in pol / tk. So this is problematic	
+status_not_active	1223	HSV2	UL30	S725G			O	redundant	
+status_not_active	1072	HSV2	UL30	T144P			O	co occurs with unknown mut	
+status_not_active	1084	HSV2	UL30	T347M			O	co occurs with unknown mut	
+status_not_active	1066	HSV2	UL30	T53A			O	co occurs with unknown mut	
+status_not_active	1653	VZV	ORF36	K186R			O	Co-occurs with D545Y , needs to be tested indep	
+unparseable_mutation	294	HCMV	UL27	del218			A		
+unparseable_mutation	297	HCMV	UL27	del301-311			A		
+unparseable_mutation	89	HCMV	UL54	C539R; F595I	UL97	H520Q	A		
+unparseable_mutation	88	HCMV	UL54	C539R;F595I	UL97	G598D	A		
+unparseable_mutation	1681	HCMV	UL54	D981del2			A		
+unparseable_mutation	2028	HCMV	UL54	D981del2			A		
+unparseable_mutation	549	HCMV	UL54	del413			A		
+unparseable_mutation	33	HCMV	UL54	del524			A		
+unparseable_mutation	81	HCMV	UL54	del981-982			A		
+unparseable_mutation	221	HCMV	UL54	del981-982			A		
+unparseable_mutation	431	HCMV	UL54	del981-982			A		
+unparseable_mutation	2050	HCMV	UL54	del981-982			A		
+unparseable_mutation	563	HCMV	UL56	del445-447	UL56	E485G	A		
+unparseable_mutation	569	HCMV	UL56	del789-791			A		
+unparseable_mutation	277	HCMV	UL97	del355			A		
+unparseable_mutation	107	HCMV	UL97	del590-593			A		
+unparseable_mutation	174	HCMV	UL97	del595-603			A		
+unparseable_mutation	181	HCMV	UL97	del600			A		
+unparseable_mutation	288	HCMV	UL97	del617			A		
+unparseable_mutation	2089	HCMV	UL97	del617			A		
+unparseable_mutation	701	HSV1	UL23	G59W*			A		
+unparseable_mutation	788	HSV1	UL23	N301+			A		
+unparseable_mutation	772	HSV1	UL23	Y239S*			A		
+unparseable_mutation	1614	HSV1	UL23	del173			A		
+unparseable_mutation	600	HSV1	UL23	delE36			A	mutations not resolved by sequence	
+unparseable_mutation	750	HSV1	UL23	delI194			A	Only sequences TK, so any Pol mutations are unnacounted for- but all early deletions shown to be resistant causing	
+unparseable_mutation	598	HSV1	UL23	delQ35			A	mutations not resolved by sequence	
+unparseable_mutation	901	HSV1	UL30	del667			A	mutations not resolved by sequence	
+unparseable_mutation	902	HSV1	UL30	del668			A	mutations not resolved by sequence	
+unparseable_mutation	2065	HSV1	UL30	del962			A		
+unparseable_mutation	1207	HSV2	UL23	T288frameshift*			A		
+unparseable_mutation	1102	HSV2	UL30	E686+			A		
+unparseable_mutation	1220	HSV2	UL30	G684+			A		
+unparseable_mutation	1124	HSV2	UL30	P1112+			A		
+unparseable_mutation	1123	HSV2	UL30	del1106-1111			A		
+unparseable_mutation	1092	HSV2	UL30	del676-677			A		
+unparseable_mutation	1093	HSV2	UL30	del677-679			A		
+unparseable_mutation	1097	HSV2	UL30	del681-682			A		
+unparseable_mutation	1100	HSV2	UL30	del682-683			A		
+unparseable_mutation	1101	HSV2	UL30	del683-686			A		
+unparseable_mutation	1240	VZV	ORF36	del7-74			A		
