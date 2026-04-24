@@ -341,6 +341,9 @@ def extract_rows(wb):
     formula_rows = []
     non_migrated_rows = []
     group_counter = [0]
+    # Registry of already-emitted combo members: (gene, ref_id, pos, mut_token) -> member_id.
+    # Shared members across groups reuse the same row and member_id.
+    combo_member_registry: dict = {}
 
     def next_group_id():
         group_counter[0] += 1
@@ -466,29 +469,34 @@ def extract_rows(wb):
                         except (ValueError, TypeError):
                             pos = 0
 
-                    mid = f"{gid}_{mapped_gene}_{sub_aa}"
+                    member_key = (mapped_gene, ref_id, pos, mut_token)
+                    if member_key in combo_member_registry:
+                        mid = combo_member_registry[member_key]
+                    else:
+                        mid = f"{mapped_gene}_{pos}_{mut_token}"
+                        combo_member_registry[member_key] = mid
+                        # Emit member row once. No antiviral or group — the member
+                        # is shared across groups; drug context lives in formula-rules.tsv.
+                        single_rows.append({
+                            "gene": mapped_gene,
+                            "reference_identifier": ref_id,
+                            "position": pos,
+                            "reference": ref_aa or "",
+                            "mutation": mut_token,
+                            "antiviral": "",
+                            "group_id": "",
+                            "member_id": mid,
+                            "phenotype": "",
+                            "clinical_phenotype": "",
+                            "publication": pmids,
+                            "source": "Dähne et al. 2025 (Zenodo 15149867)",
+                            "comment": comment,
+                        })
                     member_ids.append(mid)
 
-                    # combo members: no phenotype per user instructions
-                    single_rows.append({
-                        "gene": mapped_gene,
-                        "reference_identifier": ref_id,
-                        "position": pos,
-                        "reference": ref_aa or "",
-                        "mutation": mut_token,
-                        "antiviral": drug.lower(),
-                        "group_id": gid,
-                        "member_id": mid,
-                        "phenotype": "",
-                        "clinical_phenotype": "",
-                        "publication": pmids,
-                        "source": "Dähne et al. 2025 (Zenodo 15149867)",
-                        "comment": comment,
-                    })
-
                 if len(member_ids) != len(parts_gene):
-                    # Already logged above; remove any partially-added members
-                    single_rows = [r for r in single_rows if r.get("group_id") != gid]
+                    # One member could not be parsed (logged above); skip this formula group.
+                    # Already-registered member rows are kept — they are valid atomic mutations.
                     continue
 
                 # formula row
