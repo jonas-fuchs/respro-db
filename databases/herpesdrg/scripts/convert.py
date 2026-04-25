@@ -2,8 +2,15 @@
 """
 Convert HerpesDRG TSV into ResPro-compatible TSV artifacts.
 
+Strategy for handling multiple IC50 values and phenotypes from the same publication:
+- When a mutation-antiviral pair appears in multiple sources (by publication),
+  the data is aggregated:
+  1. IC50 values: Calculate median. Add comment about count only if N>1.
+  2. Phenotypes: Detect conflicts (resistant vs sensitive -> contradictory).
+  3. Publications: Join with commas.
+
 Outputs:
-- rules.tsv (required)
+- rules.tsv (required, contains aggregated atomic rules)
 - formula-rules.tsv (optional, only when grouped co-mutation rows are emitted)
 - metadata.json (required)
 - non-migrated-rules.txt (audit trail)
