@@ -9,9 +9,9 @@ This repository is intended as a general home for ResPro-compatible, auto-update
 - track non-migrated source rows with explicit reasons
 - auto-update outputs via GitHub Actions and open update PRs only when a new upstream version is detected
 
-## Recommended structure per conversion
+## Required structure per conversion
 
-Each source database should use its own folder under databases:
+Each source database needs to use its own folder under databases:
 
 ```text
 databases/<source_name>/
@@ -62,9 +62,9 @@ graph TD
    - Output: `should_update` flag (true/false) and `current_source_date`
 5. **Install converter dependencies**: Run `pip install -r databases/<source>/scripts/requirements.txt`
 6. **Run converter**: Execute conversion script with `--source-url` and `--output-dir` arguments
-   - Converter receives source timestamp via `--maintainer-update` argument
+   - Converter fetches the upstream source timestamp independently (from API or response headers)
    - Converter validates and produces TSV outputs
-   - Converter updates `maintainer_update` field in metadata.json
+   - Converter sets `maintainer_update` in metadata.json to the fetched source timestamp
 7. **No update detected**: Informational step shown when no update is needed
 8. **Create pull request**: Open PR with source metadata in body and output files in `add-paths`
 
@@ -101,10 +101,6 @@ All converter scripts accept these standard arguments and produce consistent con
 - `--source-url`: Upstream data source URL (can be hardcoded or passed from workflow)
 - `--output-dir`: Directory where TSV artifacts and metadata.json should be written
 
-### Optional Arguments
-
-- `--maintainer-update`: Override the maintainer_update date (ISO 8601 `YYYY-MM-DD` format); defaults to today
-
 ### Console Output Format
 
 Converters must write progress to `stderr` using this standardized format:
@@ -128,7 +124,7 @@ Done.
 6. Generate `rules.tsv` with required columns: `gene`, `reference_identifier`, `position`, `reference`, `mutation`, `antiviral`
 7. Generate optional `formula-rules.tsv` (only if `group_id` + formula cases exist)
 8. Generate `metadata.json` with fixed schema (see `formatting_instructions/README`)
-   - Use `--maintainer-update` value if provided; else use current date
+   - Fetch source timestamp from upstream API; fall back to today's date only if API is unavailable
    - Compute `tsv_checksum` as `sha256:<hex>` of rules.tsv content
 9. Generate `non-migrated-rules.txt` with audit trail of rows that couldn't be converted
 10. Validate all required columns and fail fast on schema mismatches
@@ -139,7 +135,8 @@ Done.
 To add a new upstream database:
 
 1. Create `databases/<source_name>/scripts/convert.py`
-   - Accept `--source-url`, `--output-dir`, and `--maintainer-update` arguments
+   - Accept `--source-url` and `--output-dir` arguments
+   - Fetch the source timestamp from the upstream API and set it as `maintainer_update`
    - Follow the converter output format and responsibilities above
 2. Create `databases/<source_name>/scripts/requirements.txt` with dependencies
 3. Create `.github/workflows/<source_name>-autobump.yml`

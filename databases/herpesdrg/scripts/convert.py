@@ -414,6 +414,45 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
     return rules_rows, formula_rows, non_migrated
 
 
+def fetch_source_commit_date(source_url: str) -> str:
+    """Query the GitHub API for the latest commit date of the source file.
+
+    Returns the committer date as a YYYY-MM-DD string, or today's date as fallback.
+    """
+    # Parse owner/repo/path from a raw.githubusercontent.com URL
+    # e.g. https://raw.githubusercontent.com/owner/repo/branch/path
+    import re as _re
+
+    match = _re.match(
+        r"https://raw\.githubusercontent\.com/([^/]+)/([^/]+)/([^/]+)/(.+)",
+        source_url,
+    )
+    if not match:
+        print(
+            f"WARNING: Cannot parse GitHub raw URL to fetch commit date: {source_url}",
+            file=sys.stderr,
+        )
+        return datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    owner, repo, branch, path = match.groups()
+    api_url = (
+        f"https://api.github.com/repos/{owner}/{repo}/commits"
+        f"?path={path}&sha={branch}&per_page=1"
+    )
+    try:
+        with urllib.request.urlopen(api_url) as response:
+            commits = json.loads(response.read().decode("utf-8"))
+        commit_date = commits[0]["commit"]["committer"]["date"][:10]
+        print(f"Source commit date: {commit_date}", file=sys.stderr)
+        return commit_date
+    except Exception as exc:
+        print(
+            f"WARNING: Could not fetch commit date from GitHub API ({exc}); using today.",
+            file=sys.stderr,
+        )
+        return datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+
 def download_source(source_url: str) -> str:
     with urllib.request.urlopen(source_url) as response:
         return response.read().decode("utf-8")
@@ -434,16 +473,12 @@ def main() -> None:
         default=str(Path(__file__).resolve().parent.parent / "output"),
         help="Output directory for generated artifacts",
     )
-    parser.add_argument(
-        "--maintainer-update",
-        default=None,
-        help="Override maintainer_update date (YYYY-MM-DD format); defaults to today",
-    )
     args = parser.parse_args()
 
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    maintainer_update = fetch_source_commit_date(args.source_url)
     print(f"Downloading {args.source_url} …", file=sys.stderr)
     source_text = download_source(args.source_url)
 
@@ -465,7 +500,6 @@ def main() -> None:
     else:
         formula_path.unlink(missing_ok=True)
 
-    maintainer_update = args.maintainer_update or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     metadata = {
         "maintainers": ["Oscar Charles"],
         "contact": "oscar.charles.18@ucl.ac.uk",

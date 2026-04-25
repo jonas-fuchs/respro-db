@@ -56,6 +56,7 @@ jobs:
           python - <<'PY'
           import json
           import os
+          import sys
           from pathlib import Path
 
           latest = "${{ steps.source.outputs.source_commit_date }}"
@@ -65,17 +66,20 @@ jobs:
           if os.path.exists(metadata_path):
               with open(metadata_path, "r", encoding="utf-8") as fh:
                   metadata = json.load(fh)
-              current = str(metadata.get("maintainer_update", ""))
+              current = str(metadata.get("maintainer_update", "")).strip()
+          else:
+              print(f"Note: metadata.json does not exist (first run?)", file=sys.stderr)
+
+          print(f"Current source date: '{current}'", file=sys.stderr)
+          print(f"Latest source date:  '{latest}'", file=sys.stderr)
 
           should_update = "true" if latest and latest != current else "false"
+
+          print(f"Update required: {should_update}", file=sys.stderr)
 
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
               fh.write(f"current_source_date={current}\n")
               fh.write(f"should_update={should_update}\n")
-
-          print(f"Current source date: {current or 'none'}")
-          print(f"Latest source date: {latest or 'none'}")
-          print(f"Update required: {should_update}")
           PY
 
       - name: Install converter dependencies
@@ -89,8 +93,7 @@ jobs:
         run: |
           python databases/herpesdrg/scripts/convert.py \
             --source-url "${{ steps.source.outputs.source_url }}" \
-            --output-dir databases/herpesdrg/output \
-            --maintainer-update "${{ steps.source.outputs.source_commit_date }}"
+            --output-dir databases/herpesdrg/output
 
       - name: No update detected
         if: steps.update_check.outputs.should_update != 'true'
@@ -101,6 +104,7 @@ jobs:
         if: steps.update_check.outputs.should_update == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           branch: autobump/herpesdrg
           delete-branch: true
           commit-message: "chore(herpesdrg): autobump source outputs"

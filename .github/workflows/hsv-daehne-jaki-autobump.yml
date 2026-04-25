@@ -71,6 +71,7 @@ jobs:
           import json
           import os
           import re
+          import sys
 
           latest = "${{ steps.zenodo.outputs.record_id }}"
           metadata_path = "databases/hsv_daehne_jaki/output/metadata.json"
@@ -79,20 +80,23 @@ jobs:
           if os.path.exists(metadata_path):
               with open(metadata_path, "r", encoding="utf-8") as fh:
                   metadata = json.load(fh)
-              website = str(metadata.get("website", ""))
+              website = str(metadata.get("website", "")).strip()
               match = re.search(r"/records/(\d+)", website)
               if match:
                   current = match.group(1)
+          else:
+              print(f"Note: metadata.json does not exist (first run?)", file=sys.stderr)
+
+          print(f"Current record: '{current}'", file=sys.stderr)
+          print(f"Latest record:  '{latest}'", file=sys.stderr)
 
           should_update = "true" if latest and latest != current else "false"
+
+          print(f"Update required: {should_update}", file=sys.stderr)
 
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
               fh.write(f"current_record_id={current}\n")
               fh.write(f"should_update={should_update}\n")
-
-          print(f"Current record: {current or 'none'}")
-          print(f"Latest record: {latest or 'none'}")
-          print(f"Update required: {should_update}")
           PY
 
       - name: Install converter dependencies
@@ -117,6 +121,7 @@ jobs:
         if: steps.update_check.outputs.should_update == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           branch: autobump/hsv-daehne-jaki
           delete-branch: true
           commit-message: "chore(hsv-daehne-jaki): autobump Zenodo outputs"
