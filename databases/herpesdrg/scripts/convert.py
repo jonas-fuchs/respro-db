@@ -262,7 +262,8 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
     rules_rows = []
     formula_rows = []
     non_migrated = []
-    seen_rule_keys = set()
+    # Dictionary to aggregate single-mutation rules: (gene, ref_id, position, mutation, antiviral) -> aggregation
+    aggregated_rules = {}
     group_counter = 0
 
     def next_group_id() -> str:
@@ -330,34 +331,37 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
 
             if len(parsed_mutations) == 1:
                 ref_aa, mutation_token, pos = parsed_mutations[0]
-                rule = {
-                    "gene": gene,
-                    "reference_identifier": REFERENCE_BY_VIRUS[virus_key],
-                    "position": pos,
-                    "reference": ref_aa,
-                    "mutation": mutation_token,
-                    "antiviral": antiviral_norm,
-                    "group_id": "",
-                    "member_id": "",
-                    "phenotype": phenotype,
-                    "fold_ic50": fold_ic50,
-                    "publication": publication,
-                    "source": source_label,
-                    "comment": note,
-                }
+                ref_id = REFERENCE_BY_VIRUS[virus_key]
 
-                dedupe_key = (
-                    rule["gene"],
-                    rule["reference_identifier"],
-                    rule["position"],
-                    rule["mutation"],
-                    rule["antiviral"],
-                    rule["publication"],
-                )
-                if dedupe_key in seen_rule_keys:
-                    continue
-                seen_rule_keys.add(dedupe_key)
-                rules_rows.append(rule)
+                # Aggregation key: (gene, ref_id, position, mutation, antiviral) without publication
+                aggr_key = (gene, ref_id, pos, mutation_token, antiviral_norm)
+                
+                if aggr_key not in aggregated_rules:
+                    aggregated_rules[aggr_key] = {
+                        "gene": gene,
+                        "reference_identifier": ref_id,
+                        "position": pos,
+                        "reference": ref_aa,
+                        "mutation": mutation_token,
+                        "antiviral": antiviral_norm,
+                        "group_id": "",
+                        "member_id": "",
+                        "source": source_label,
+                        "publications": [],
+                        "phenotypes": [],
+                        "ic50_values": [],
+                    }
+                
+                # Aggregate data from this row
+                if publication:
+                    aggregated_rules[aggr_key]["publications"].append(publication)
+                if phenotype:
+                    aggregated_rules[aggr_key]["phenotypes"].append(phenotype)
+                if fold_ic50:
+                    try:
+                        aggregated_rules[aggr_key]["ic50_values"].append(float(fold_ic50))
+                    except ValueError:
+                        pass
                 emitted_for_row += 1
                 continue
 
@@ -399,6 +403,58 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
 
         if not has_antiviral_data:
             add_non_migrated(non_migrated, row, "no_antiviral_signal")
+
+    # Finalize aggregated single-mutation rules
+    for aggr_key, aggr_data in aggregated_rules.items():
+        # Calculate median IC50 if present
+        ic50_values = aggr_data["ic50_values"]
+        if ic50_values:
+            ic50_values.sort()
+            n = len(ic50_values)
+            if n % 2 == 1:
+                median_ic50 = ic50_values[n // 2]
+            else:
+                median_ic50 = (ic50_values[n // 2 - 1] + ic50_values[n // 2]) / 2.0
+            fold_ic50 = f"{median_ic50:g}" if median_ic50 else ""
+        else:
+            fold_ic50 = ""
+
+        # Determine phenotype: check for conflicts
+        phenotypes = aggr_data["phenotypes"]
+        phenotype = ""
+        if phenotypes:
+            unique_phenotypes = set(phenotypes)
+            # Check for contradiction: resistant vs sensitive
+            if "resistant" in unique_phenotypes and "sensitive" in unique_phenotypes:
+                phenotype = "contradictory"
+            else:
+                # Use the first phenotype (or most common if needed)
+                phenotype = phenotypes[0]
+
+        # Join publications with comma
+        publication = ",".join(p for p in aggr_data["publications"] if p)
+
+        # Add comment about IC50 count if multiple values
+        comment = ""
+        if len(ic50_values) > 1:
+            comment = f"{len(ic50_values)} IC50 values - displayed is median"
+
+        rule = {
+            "gene": aggr_data["gene"],
+            "reference_identifier": aggr_data["reference_identifier"],
+            "position": aggr_data["position"],
+            "reference": aggr_data["reference"],
+            "mutation": aggr_data["mutation"],
+            "antiviral": aggr_data["antiviral"],
+            "group_id": "",
+            "member_id": "",
+            "phenotype": phenotype,
+            "fold_ic50": fold_ic50,
+            "publication": publication,
+            "source": aggr_data["source"],
+            "comment": comment,
+        }
+        rules_rows.append(rule)
 
     rules_rows.sort(
         key=lambda r: (
