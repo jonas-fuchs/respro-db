@@ -96,50 +96,11 @@ REQUIRED_INPUT_COLUMNS = {
 REFERENCE_BY_VIRUS = {
     "hcmv": "NC_006273",
     "vzv": "NC_001348",
-    "adeno_ad5": "AC_000008.1",
+    "adeno": "AC_000008.1",
     "hsv1": "NC_001806",
     "hsv2": "NC_001798",
     "hhv6b": "MF511171",
 }
-
-VIRUS_ALIASES = {
-    "hcmv": "hcmv",
-    "human cytomegalovirus": "hcmv",
-    "cmv": "hcmv",
-    "vzv": "vzv",
-    "varicella zoster virus": "vzv",
-    "adeno": "adeno_ad5",
-    "adeno ad5": "adeno_ad5",
-    "adeno ad 5": "adeno_ad5",
-    "adenovirus 5": "adeno_ad5",
-    "adeno5": "adeno_ad5",
-    "hsv1": "hsv1",
-    "herpes simplex virus 1": "hsv1",
-    "hsv-1": "hsv1",
-    "hsv 1": "hsv1",
-    "hsv2": "hsv2",
-    "herpes simplex virus 2": "hsv2",
-    "hsv-2": "hsv2",
-    "hsv 2": "hsv2",
-    "hhv6b": "hhv6b",
-    "hhv-6b": "hhv6b",
-    "hhv 6b": "hhv6b",
-    "hhv6-b": "hhv6b",
-}
-
-EXCLUSION_NOTE_PATTERNS = [
-    r"\banecdotal\b",
-    r"cannot be inferred",
-    r"cannot infer",
-    r"ref wrong",
-    r"review value does not match",
-    r"unable to substantiate",
-    r"unknown co[- ]?mut",
-    r"co-occur",
-    r"not resistance data",
-    r"no data",
-    r"ambig",
-]
 
 
 def norm(v: object) -> str:
@@ -149,37 +110,24 @@ def norm(v: object) -> str:
 
 
 def normalize_virus(raw_virus: str) -> str:
-    folded = re.sub(r"\s+", " ", raw_virus.strip().lower())
-    if folded in VIRUS_ALIASES:
-        return VIRUS_ALIASES[folded]
-    compact = re.sub(r"[^a-z0-9]+", "", folded)
-    if compact in {"hcmv", "humancytomegalovirus", "cmv"}:
-        return "hcmv"
-    if compact in {"vzv", "varicellazostervirus"}:
-        return "vzv"
-    if compact in {"adeno", "adenoad5", "adeno5", "adenovirus5", "adenoadenoad5"}:
-        return "adeno_ad5"
-    if compact in {"hsv1", "herpessimplexvirus1", "hsvtype1"}:
-        return "hsv1"
-    if compact in {"hsv2", "herpessimplexvirus2", "hsvtype2"}:
-        return "hsv2"
-    if compact in {"hhv6b", "hhv6", "hhv6bvirus"}:
-        return "hhv6b"
-    return ""
+    return raw_virus.strip().lower()
 
 
-def should_exclude(status: str, note: str) -> tuple[bool, str]:
+def should_exclude(status: str) -> tuple[bool, str]:
     if status.strip().upper() != "A":
         return True, "status_not_active"
-    note_l = note.lower()
-    for pattern in EXCLUSION_NOTE_PATTERNS:
-        if re.search(pattern, note_l):
-            return True, "flagged_note"
     return False, ""
 
 
 def parse_mutation(aa_change: str) -> tuple[str, str, int]:
     text = aa_change.strip().replace(" ", "")
+
+    insertion = re.fullmatch(r"([A-Za-z])(\d+)(?:insert|ins)([A-Za-z]+)", text, flags=re.IGNORECASE)
+    if insertion:
+        ref = insertion.group(1).upper()
+        pos = int(insertion.group(2))
+        inserted = insertion.group(3).upper()
+        return ref, f"{ref}{pos}{ref}{inserted}", pos
 
     sub = re.fullmatch(r"([A-Za-z*])(\d+)([A-Za-z*])", text)
     if sub:
@@ -192,9 +140,17 @@ def parse_mutation(aa_change: str) -> tuple[str, str, int]:
     if stop_word:
         return stop_word.group(1).upper(), "*", int(stop_word.group(2))
 
-    fs = re.fullmatch(r"([A-Za-z])(\d+)(frameshift|fs.*)", text, flags=re.IGNORECASE)
+    fs = re.fullmatch(r"([A-Za-z])(\d+)(frameshift\*?|fs.*)", text, flags=re.IGNORECASE)
     if fs:
-        return fs.group(1).upper(), "fs", int(fs.group(2))
+        ref = fs.group(1).upper()
+        pos = int(fs.group(2))
+        return ref, f"{ref}{pos}fsX", pos
+
+    pref_del = re.fullmatch(r"del([A-Za-z])(\d+)", text, flags=re.IGNORECASE)
+    if pref_del:
+        ref = pref_del.group(1).upper()
+        pos = int(pref_del.group(2))
+        return ref, f"del{ref}{pos}", pos
 
     simple_del = re.fullmatch(r"([A-Za-z])(\d+)del", text, flags=re.IGNORECASE)
     if simple_del:
@@ -210,10 +166,10 @@ def parse_mutation(aa_change: str) -> tuple[str, str, int]:
         mut = f"del{start}_{end}" if not ref else f"{ref}{start}-{end}del"
         return ref, mut, start
 
-    pref_del = re.fullmatch(r"([A-Za-z])del(\d+)", text, flags=re.IGNORECASE)
-    if pref_del:
-        ref = pref_del.group(1).upper()
-        pos = int(pref_del.group(2))
+    alt_pref_del = re.fullmatch(r"([A-Za-z])del(\d+)", text, flags=re.IGNORECASE)
+    if alt_pref_del:
+        ref = alt_pref_del.group(1).upper()
+        pos = int(alt_pref_del.group(2))
         return ref, f"{ref}{pos}del", pos
 
     numeric_only = re.fullmatch(r"\d+", text)
@@ -229,14 +185,10 @@ def parse_fold_and_phenotype(value: str) -> tuple[str, str]:
         return "", ""
 
     lowered = token.lower()
-    if lowered in {"resistant", "resistance", "r"}:
+    if lowered == "resistant":
         return "", "resistant"
-    if lowered in {"sensitive", "susceptible", "s"}:
-        return "", "sensitive"
-    if lowered in {"intermediate", "i"}:
-        return "", "intermediate"
     if lowered == "polymorphism":
-        return "", "unknown"
+        return "", "sensitive"
 
     try:
         numeric = float(token)
@@ -292,13 +244,18 @@ def add_non_migrated(bucket: list[dict], source_row: dict, reason: str, details:
 
 
 def build_publication(doi: str, link: str) -> str:
-    parts = []
     if doi:
-        cleaned = doi if doi.lower().startswith("doi:") else f"doi:{doi}"
-        parts.append(cleaned)
-    if link:
-        parts.append(link)
-    return ",".join(parts)
+        return doi if doi.lower().startswith("doi:") else f"doi:{doi}"
+    return ""
+
+
+def split_combo_mutations(aa_change: str) -> list[str]:
+    return [part.strip() for part in aa_change.split(";") if part.strip()]
+
+
+def make_member_id(gene: str, position: int, mutation: str, idx: int) -> str:
+    token = re.sub(r"[^A-Za-z0-9_]+", "_", mutation).strip("_") or "mut"
+    return f"{gene}_{position}_{token}_{idx}"
 
 
 def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
@@ -306,9 +263,14 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
     formula_rows = []
     non_migrated = []
     seen_rule_keys = set()
+    group_counter = 0
+
+    def next_group_id() -> str:
+        nonlocal group_counter
+        group_counter += 1
+        return f"G{group_counter:05d}"
 
     for row in source_rows:
-        mutation_id = norm(row.get("mutation_id"))
         virus_raw = norm(row.get("virus"))
         gene = norm(row.get("gene"))
         aa_change = norm(row.get("aa_change"))
@@ -324,7 +286,7 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
             add_non_migrated(non_migrated, row, "missing_reference_mapping", "Supported virus but no fixed reference")
             continue
 
-        exclude, reason = should_exclude(status, note)
+        exclude, reason = should_exclude(status)
         if exclude:
             add_non_migrated(non_migrated, row, reason)
             continue
@@ -336,15 +298,23 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
             add_non_migrated(non_migrated, row, "missing_aa_change")
             continue
 
-        try:
-            ref_aa, mutation_token, pos = parse_mutation(aa_change)
-        except ValueError as exc:
-            add_non_migrated(non_migrated, row, str(exc))
+        mutation_parts = split_combo_mutations(aa_change)
+        parsed_mutations = []
+        for part in mutation_parts:
+            try:
+                ref_aa, mutation_token, pos = parse_mutation(part)
+            except ValueError as exc:
+                add_non_migrated(non_migrated, row, str(exc), details=f"failed_part={part}")
+                parsed_mutations = []
+                break
+            parsed_mutations.append((ref_aa, mutation_token, pos))
+        if not parsed_mutations:
             continue
 
         publication = build_publication(norm(row.get("ref_doi")), norm(row.get("ref_link")))
-        source_label = f"HerpesDRG mutation_id={mutation_id}"
+        source_label = norm(row.get("ref_title")) or "HerpesDRG"
 
+        has_antiviral_data = False
         emitted_for_row = 0
         for antiviral_column in ANTIVIRAL_COLUMNS:
             raw_value = norm(row.get(antiviral_column))
@@ -352,47 +322,83 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                 continue
 
             fold_ic50, phenotype = parse_fold_and_phenotype(raw_value)
-            rule = {
-                "gene": gene,
-                "reference_identifier": REFERENCE_BY_VIRUS[virus_key],
-                "position": pos,
-                "reference": ref_aa,
-                "mutation": mutation_token,
-                "antiviral": antiviral_column.lower(),
-                "group_id": "",
-                "member_id": "",
-                "phenotype": phenotype,
-                "fold_ic50": fold_ic50,
-                "publication": publication,
-                "source": source_label,
-                "comment": note,
-            }
-
-            dedupe_key = (
-                rule["gene"],
-                rule["reference_identifier"],
-                rule["position"],
-                rule["mutation"],
-                rule["antiviral"],
-                rule["publication"],
-            )
-            if dedupe_key in seen_rule_keys:
+            if not fold_ic50 and not phenotype:
                 continue
-            seen_rule_keys.add(dedupe_key)
-            rules_rows.append(rule)
+
+            has_antiviral_data = True
+            antiviral_norm = antiviral_column.lower()
+
+            if len(parsed_mutations) == 1:
+                ref_aa, mutation_token, pos = parsed_mutations[0]
+                rule = {
+                    "gene": gene,
+                    "reference_identifier": REFERENCE_BY_VIRUS[virus_key],
+                    "position": pos,
+                    "reference": ref_aa,
+                    "mutation": mutation_token,
+                    "antiviral": antiviral_norm,
+                    "group_id": "",
+                    "member_id": "",
+                    "phenotype": phenotype,
+                    "fold_ic50": fold_ic50,
+                    "publication": publication,
+                    "source": source_label,
+                    "comment": note,
+                }
+
+                dedupe_key = (
+                    rule["gene"],
+                    rule["reference_identifier"],
+                    rule["position"],
+                    rule["mutation"],
+                    rule["antiviral"],
+                    rule["publication"],
+                )
+                if dedupe_key in seen_rule_keys:
+                    continue
+                seen_rule_keys.add(dedupe_key)
+                rules_rows.append(rule)
+                emitted_for_row += 1
+                continue
+
+            group_id = next_group_id()
+            member_ids = []
+            for idx, (ref_aa, mutation_token, pos) in enumerate(parsed_mutations, start=1):
+                member_id = make_member_id(gene, pos, mutation_token, idx)
+                member_ids.append(member_id)
+                rules_rows.append(
+                    {
+                        "gene": gene,
+                        "reference_identifier": REFERENCE_BY_VIRUS[virus_key],
+                        "position": pos,
+                        "reference": ref_aa,
+                        "mutation": mutation_token,
+                        "antiviral": antiviral_norm,
+                        "group_id": group_id,
+                        "member_id": member_id,
+                        "phenotype": "",
+                        "fold_ic50": "",
+                        "publication": publication,
+                        "source": source_label,
+                        "comment": note,
+                    }
+                )
+            formula_rows.append(
+                {
+                    "group_id": group_id,
+                    "antiviral": antiviral_norm,
+                    "expression": "(" + " AND ".join(member_ids) + ")",
+                    "phenotype": phenotype,
+                    "fold_ic50": fold_ic50,
+                    "publication": publication,
+                    "source": source_label,
+                    "comment": note,
+                }
+            )
             emitted_for_row += 1
 
-        if emitted_for_row == 0:
+        if not has_antiviral_data:
             add_non_migrated(non_migrated, row, "no_antiviral_signal")
-
-        # Conservative handling: complex co-mutation context is excluded from formula output.
-        if norm(row.get("co_aa")) or norm(row.get("co_gene")):
-            add_non_migrated(
-                non_migrated,
-                row,
-                "co_mutation_context_excluded",
-                "Co-mutation rows are logged conservatively; no formula group emitted.",
-            )
 
     rules_rows.sort(
         key=lambda r: (

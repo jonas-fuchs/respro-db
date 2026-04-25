@@ -2,189 +2,7 @@
 # Columns: reason	mutation_id	virus	gene	aa_change	co_gene	co_aa	status	note	details
 
 reason	mutation_id	virus	gene	aa_change	co_gene	co_aa	status	note	details
-co_mutation_context_excluded	303	HCMV	UL27	C415*	UL27	A406V	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	304	HCMV	UL27	R233S	UL97	L337M	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	305	HCMV	UL27	R233S	UL97	V353A	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1772	HCMV	UL27	R233S	UL97	S334G	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1737	HCMV	UL51	A95V	UL56	L257I	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	270	HCMV	UL51	P91S	UL56	S229F	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	271	HCMV	UL51	P91S	UL56	V236M	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	272	HCMV	UL51	P91S	UL56	R369M	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	273	HCMV	UL51	P91S	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	72	HCMV	UL54	A834P	UL54	N408K	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	87	HCMV	UL54	C539R	UL97	H520Q	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	24	HCMV	UL54	D515E	UL54	L516M;I521T	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	556	HCMV	UL54	E303G	UL54	V812L	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	575	HCMV	UL54	E756K	UL54	A594V	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	92	HCMV	UL54	F412C	UL54	L802M	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1727	HCMV	UL54	H600L	UL54	T700A	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	105	HCMV	UL54	K500N	UL54	S585A	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1980	HCMV	UL54	K500N	UL54	S585A	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	93	HCMV	UL54	K513E	UL54	D558E	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	22	HCMV	UL54	K513N	UL54	V812L	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	94	HCMV	UL54	K805Q	UL54	T821I	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	97	HCMV	UL54	L545S	UL54	P829S	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	109	HCMV	UL54	L545S	UL97	M460I	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1982	HCMV	UL54	L545S	UL54	P829S	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	99	HCMV	UL54	N408D	UL54	T552N	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	100	HCMV	UL54	N408D	UL54	L957F	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1979	HCMV	UL54	N408D	UL54	T552N	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1981	HCMV	UL54	N408D	UL54	L957F	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	438	HCMV	UL54	N495K	UL54	Q738R	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	101	HCMV	UL54	T552N	UL54	L957F	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	576	HCMV	UL54	V526L	UL54	A594V	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	577	HCMV	UL54	V526L	UL54	L595F	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	255	HCMV	UL56	C25F	UL56	V231L	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	205	HCMV	UL56	E237D	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	257	HCMV	UL56	E237D	UL56	T244K; F261L	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	265	HCMV	UL56	E237D	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	201	HCMV	UL56	F261L	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	266	HCMV	UL56	F261L	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	219	HCMV	UL56	H637Q	UL56	V639M	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	203	HCMV	UL56	M329T	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	267	HCMV	UL56	M329T	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	197	HCMV	UL56	Q204R	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	268	HCMV	UL56	Q204R	UL89	D344E	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	260	HCMV	UL56	S229F	UL56	L254F; L257I	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	256	HCMV	UL56	T244K	UL56	F261L	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	258	HCMV	UL56	V236L	UL56	L257I	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	259	HCMV	UL56	V236M	UL56	L257I; M329T	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	214	HCMV	UL89	I334V	UL89	N405D	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1827	HCMV	UL97	A594P	UL97	D605E	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	2036	HCMV	UL97	A594P	UL97	D605E	A	Kinetic slowdown factors from this paper correlate very well with resistance fold changes from others - assuming 1:1 correlation	Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	2021	HCMV	UL97	A594T	UL54	P522S	A	High variation in "WT" reps - take absolute fold changes as a rough ballpark	Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1993	HCMV	UL97	A594V	UL54	E756K	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	313	HCMV	UL97	F342Y	UL97	H411Y	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1958	HCMV	UL97	G343A	UL97	H411Y	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1773	HCMV	UL97	L337M	UL27	R233S	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	2034	HCMV	UL97	M460V	UL97	A594P	A	Kinetic slowdown factors from this paper correlate very well with resistance fold changes from others - assuming 1:1 correlation	Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	289	HCMV	UL97	V353A	UL97	H411L	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	290	HCMV	UL97	V353A	UL97	H411Y	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	2043	HHV6b	U38	T435R	U38	C525S	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	2024	HSV1	UL23	A189V	UL30	L778M	A	paper includes tripple mutants - add later	Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	2026	HSV1	UL23	A189V	UL30	L802F	A	paper includes tripple mutants - add later	Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	2077	HSV1	UL23	C336Y	UL30	H168Y	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	2025	HSV1	UL23	T183P	UL30	L778M	A	paper includes tripple mutants - add later	Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	2027	HSV1	UL23	T183P	UL30	L802F	A	paper includes tripple mutants - add later	Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	2078	HSV1	UL23	T96I	UL30	A991T	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1861	HSV1	UL52	A899T	UL5	K356T	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1232	HSV2	UL30	D912V	TK	28*	A	Only pol conserved was sequenced	Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1252	VZV	ORF28	D668Y	pol	M808V	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1262	VZV	ORF36	C138R	TK	S242F	A		Co-mutation rows are logged conservatively; no formula group emitted.
-co_mutation_context_excluded	1238	VZV	ORF36	Q303*	Pol	A955T	A		Co-mutation rows are logged conservatively; no formula group emitted.
-flagged_note	731	HSV1	UL23	D162N			A	co-occuring 365I later shown to be polymorphc	
-flagged_note	786	HSV1	UL23	L291R			A	Only sequences TK, so any Pol mutations are unnacounted for - co-occuring E36del is polymorphism In later papers	
-flagged_note	1173	HSV2	UL23	R177W			A	co-occuring mutations have been subsequently characterised	
-flagged_note	1187	HSV2	UL23	R221H			A	Cannot be inferred	
-flagged_note	1170	HSV2	UL23	Y133F			A	Cannot be inferred	
-flagged_note	1157	HSV2	UL23	Y53N			A	Cannot be inferred	
-no_antiviral_signal	304	HCMV	UL27	R233S	UL97	L337M	A		
-no_antiviral_signal	305	HCMV	UL27	R233S	UL97	V353A	A		
-no_antiviral_signal	1772	HCMV	UL27	R233S	UL97	S334G	A		
-no_antiviral_signal	1737	HCMV	UL51	A95V	UL56	L257I	A		
-no_antiviral_signal	270	HCMV	UL51	P91S	UL56	S229F	A		
-no_antiviral_signal	271	HCMV	UL51	P91S	UL56	V236M	A		
-no_antiviral_signal	272	HCMV	UL51	P91S	UL56	R369M	A		
-no_antiviral_signal	273	HCMV	UL51	P91S	UL89	D344E	A		
-no_antiviral_signal	72	HCMV	UL54	A834P	UL54	N408K	A		
-no_antiviral_signal	112	HCMV	UL54	A834P			A		
-no_antiviral_signal	86	HCMV	UL54	C539R			A		
-no_antiviral_signal	87	HCMV	UL54	C539R	UL97	H520Q	A		
-no_antiviral_signal	1819	HCMV	UL54	D413A			A		
-no_antiviral_signal	556	HCMV	UL54	E303G	UL54	V812L	A		
-no_antiviral_signal	575	HCMV	UL54	E756K	UL54	A594V	A		
-no_antiviral_signal	92	HCMV	UL54	F412C	UL54	L802M	A		
-no_antiviral_signal	1727	HCMV	UL54	H600L	UL54	T700A	A		
-no_antiviral_signal	105	HCMV	UL54	K500N	UL54	S585A	A		
-no_antiviral_signal	1980	HCMV	UL54	K500N	UL54	S585A	A		
-no_antiviral_signal	93	HCMV	UL54	K513E	UL54	D558E	A		
-no_antiviral_signal	22	HCMV	UL54	K513N	UL54	V812L	A		
-no_antiviral_signal	94	HCMV	UL54	K805Q	UL54	T821I	A		
-no_antiviral_signal	97	HCMV	UL54	L545S	UL54	P829S	A		
-no_antiviral_signal	109	HCMV	UL54	L545S	UL97	M460I	A		
-no_antiviral_signal	1982	HCMV	UL54	L545S	UL54	P829S	A		
-no_antiviral_signal	103	HCMV	UL54	L802M			A		
-no_antiviral_signal	99	HCMV	UL54	N408D	UL54	T552N	A		
-no_antiviral_signal	100	HCMV	UL54	N408D	UL54	L957F	A		
-no_antiviral_signal	1979	HCMV	UL54	N408D	UL54	T552N	A		
-no_antiviral_signal	1981	HCMV	UL54	N408D	UL54	L957F	A		
-no_antiviral_signal	438	HCMV	UL54	N495K	UL54	Q738R	A		
-no_antiviral_signal	101	HCMV	UL54	T552N	UL54	L957F	A		
-no_antiviral_signal	576	HCMV	UL54	V526L	UL54	A594V	A		
-no_antiviral_signal	577	HCMV	UL54	V526L	UL54	L595F	A		
-no_antiviral_signal	255	HCMV	UL56	C25F	UL56	V231L	A		
-no_antiviral_signal	257	HCMV	UL56	E237D	UL56	T244K; F261L	A		
-no_antiviral_signal	260	HCMV	UL56	S229F	UL56	L254F; L257I	A		
-no_antiviral_signal	256	HCMV	UL56	T244K	UL56	F261L	A		
-no_antiviral_signal	258	HCMV	UL56	V236L	UL56	L257I	A		
-no_antiviral_signal	1827	HCMV	UL97	A594P	UL97	D605E	A		
-no_antiviral_signal	2036	HCMV	UL97	A594P	UL97	D605E	A	Kinetic slowdown factors from this paper correlate very well with resistance fold changes from others - assuming 1:1 correlation	
-no_antiviral_signal	2021	HCMV	UL97	A594T	UL54	P522S	A	High variation in "WT" reps - take absolute fold changes as a rough ballpark	
-no_antiviral_signal	1798	HCMV	UL97	C592G			A		
-no_antiviral_signal	548	HCMV	UL97	C603W			A		
-no_antiviral_signal	313	HCMV	UL97	F342Y	UL97	H411Y	A		
-no_antiviral_signal	1958	HCMV	UL97	G343A	UL97	H411Y	A		
-no_antiviral_signal	1773	HCMV	UL97	L337M	UL27	R233S	A		
-no_antiviral_signal	2034	HCMV	UL97	M460V	UL97	A594P	A	Kinetic slowdown factors from this paper correlate very well with resistance fold changes from others - assuming 1:1 correlation	
-no_antiviral_signal	290	HCMV	UL97	V353A	UL97	H411Y	A		
-no_antiviral_signal	1782	HCMV	UL97	V353A			A		
-no_antiviral_signal	2038	HHV6b	U38	H507Y			A		
-no_antiviral_signal	2043	HHV6b	U38	T435R	U38	C525S	A		
-no_antiviral_signal	2024	HSV1	UL23	A189V	UL30	L778M	A	paper includes tripple mutants - add later	
-no_antiviral_signal	2026	HSV1	UL23	A189V	UL30	L802F	A	paper includes tripple mutants - add later	
-no_antiviral_signal	2077	HSV1	UL23	C336Y	UL30	H168Y	A		
-no_antiviral_signal	1408	HSV1	UL23	D228*			A		
-no_antiviral_signal	1404	HSV1	UL23	K62N			A		
-no_antiviral_signal	1405	HSV1	UL23	K62N			A		
-no_antiviral_signal	1426	HSV1	UL23	L208H			A		
-no_antiviral_signal	1599	HSV1	UL23	L340R			A		
-no_antiviral_signal	1429	HSV1	UL23	M121R			A		
-no_antiviral_signal	790	HSV1	UL23	N306*			A		
-no_antiviral_signal	791	HSV1	UL23	N306*			A		
-no_antiviral_signal	792	HSV1	UL23	N306*			A		
-no_antiviral_signal	804	HSV1	UL23	N376*			A		
-no_antiviral_signal	1458	HSV1	UL23	N376H			A		
-no_antiviral_signal	1530	HSV1	UL23	N376H			A		
-no_antiviral_signal	1402	HSV1	UL23	P57H			A		
-no_antiviral_signal	1412	HSV1	UL23	R216C			A		
-no_antiviral_signal	1414	HSV1	UL23	R222C			A		
-no_antiviral_signal	1431	HSV1	UL23	T103P			A		
-no_antiviral_signal	2027	HSV1	UL23	T183P	UL30	L802F	A	paper includes tripple mutants - add later	
-no_antiviral_signal	1410	HSV1	UL23	T201P			A		
-no_antiviral_signal	1423	HSV1	UL23	Y53C			A		
-no_antiviral_signal	1514	HSV1	UL30	A910V			A		
-no_antiviral_signal	1532	HSV1	UL30	F248L			A		
-no_antiviral_signal	1302	HSV1	UL30	S724N			A		
-no_antiviral_signal	1378	HSV1	UL30	S724N			A		
-no_antiviral_signal	1515	HSV1	UL30	V958L			A		
-no_antiviral_signal	1866	HSV1	UL5	K356T			A		
-no_antiviral_signal	1871	HSV1	UL5	K356T			A	my concern with this paper is that they do not cover other important genes eg BAY-Pr1 is 50fold resistance with no ul5 mutations discard all?	
-no_antiviral_signal	1861	HSV1	UL52	A899T	UL5	K356T	A		
-no_antiviral_signal	1862	HSV1	UL52	A899T			A		
-no_antiviral_signal	1355	HSV2	UL23	A157T			A		
-no_antiviral_signal	1191	HSV2	UL23	D229*			A		
-no_antiviral_signal	1193	HSV2	UL23	D229*			A		
-no_antiviral_signal	1197	HSV2	UL23	D229*			A		
-no_antiviral_signal	1354	HSV2	UL23	G150D			A		
-no_antiviral_signal	1349	HSV2	UL23	G25A			A		
-no_antiviral_signal	1350	HSV2	UL23	G39E			A		
-no_antiviral_signal	1159	HSV2	UL23	I54*			A		
-no_antiviral_signal	1358	HSV2	UL23	L342W			A		
-no_antiviral_signal	1180	HSV2	UL23	M183*			A		
-no_antiviral_signal	1182	HSV2	UL23	M183*			A		
-no_antiviral_signal	1183	HSV2	UL23	M183*			A		
-no_antiviral_signal	1356	HSV2	UL23	R221H			A		
-no_antiviral_signal	1357	HSV2	UL23	R248W			A		
-no_antiviral_signal	1352	HSV2	UL23	T131M			A		
-no_antiviral_signal	1409	HSV2	UL23	T131P			A		
-no_antiviral_signal	1353	HSV2	UL23	Y133F			A		
-no_antiviral_signal	1351	HSV2	UL23	Y53N			A		
-no_antiviral_signal	1310	HSV2	UL30	R628C			A		
-no_antiviral_signal	1252	VZV	ORF28	D668Y	pol	M808V	A		
-no_antiviral_signal	1277	VZV	ORF28	M201I			A		
-no_antiviral_signal	1280	VZV	ORF28	S386A			A		
-no_antiviral_signal	1649	VZV	ORF36	L92P			A		
-numeric_only_mutation_not_supported	1625	HHV6b	U38	654			A		
+numeric_only_mutation_not_supported	1625	HHV6b	U38	654			A		failed_part=654
 status_not_active	1394	Adeno	pol	C687S			O	this is not resistance data	
 status_not_active	1387	Adeno	pol	F882I	pol	V180I	O	co-occuring uncharacterised mutations - oringally F740I	
 status_not_active	1397	Adeno	pol	I664M			O	this is not resistance data	
@@ -522,44 +340,38 @@ status_not_active	1072	HSV2	UL30	T144P			O	co occurs with unknown mut
 status_not_active	1084	HSV2	UL30	T347M			O	co occurs with unknown mut	
 status_not_active	1066	HSV2	UL30	T53A			O	co occurs with unknown mut	
 status_not_active	1653	VZV	ORF36	K186R			O	Co-occurs with D545Y , needs to be tested indep	
-unparseable_mutation	294	HCMV	UL27	del218			A		
-unparseable_mutation	297	HCMV	UL27	del301-311			A		
-unparseable_mutation	89	HCMV	UL54	C539R; F595I	UL97	H520Q	A		
-unparseable_mutation	88	HCMV	UL54	C539R;F595I	UL97	G598D	A		
-unparseable_mutation	1681	HCMV	UL54	D981del2			A		
-unparseable_mutation	2028	HCMV	UL54	D981del2			A		
-unparseable_mutation	549	HCMV	UL54	del413			A		
-unparseable_mutation	33	HCMV	UL54	del524			A		
-unparseable_mutation	81	HCMV	UL54	del981-982			A		
-unparseable_mutation	221	HCMV	UL54	del981-982			A		
-unparseable_mutation	431	HCMV	UL54	del981-982			A		
-unparseable_mutation	2050	HCMV	UL54	del981-982			A		
-unparseable_mutation	563	HCMV	UL56	del445-447	UL56	E485G	A		
-unparseable_mutation	569	HCMV	UL56	del789-791			A		
-unparseable_mutation	277	HCMV	UL97	del355			A		
-unparseable_mutation	107	HCMV	UL97	del590-593			A		
-unparseable_mutation	174	HCMV	UL97	del595-603			A		
-unparseable_mutation	181	HCMV	UL97	del600			A		
-unparseable_mutation	288	HCMV	UL97	del617			A		
-unparseable_mutation	2089	HCMV	UL97	del617			A		
-unparseable_mutation	701	HSV1	UL23	G59W*			A		
-unparseable_mutation	788	HSV1	UL23	N301+			A		
-unparseable_mutation	772	HSV1	UL23	Y239S*			A		
-unparseable_mutation	1614	HSV1	UL23	del173			A		
-unparseable_mutation	600	HSV1	UL23	delE36			A	mutations not resolved by sequence	
-unparseable_mutation	750	HSV1	UL23	delI194			A	Only sequences TK, so any Pol mutations are unnacounted for- but all early deletions shown to be resistant causing	
-unparseable_mutation	598	HSV1	UL23	delQ35			A	mutations not resolved by sequence	
-unparseable_mutation	901	HSV1	UL30	del667			A	mutations not resolved by sequence	
-unparseable_mutation	902	HSV1	UL30	del668			A	mutations not resolved by sequence	
-unparseable_mutation	2065	HSV1	UL30	del962			A		
-unparseable_mutation	1207	HSV2	UL23	T288frameshift*			A		
-unparseable_mutation	1102	HSV2	UL30	E686+			A		
-unparseable_mutation	1220	HSV2	UL30	G684+			A		
-unparseable_mutation	1124	HSV2	UL30	P1112+			A		
-unparseable_mutation	1123	HSV2	UL30	del1106-1111			A		
-unparseable_mutation	1092	HSV2	UL30	del676-677			A		
-unparseable_mutation	1093	HSV2	UL30	del677-679			A		
-unparseable_mutation	1097	HSV2	UL30	del681-682			A		
-unparseable_mutation	1100	HSV2	UL30	del682-683			A		
-unparseable_mutation	1101	HSV2	UL30	del683-686			A		
-unparseable_mutation	1240	VZV	ORF36	del7-74			A		
+unparseable_mutation	294	HCMV	UL27	del218			A		failed_part=del218
+unparseable_mutation	297	HCMV	UL27	del301-311			A		failed_part=del301-311
+unparseable_mutation	1681	HCMV	UL54	D981del2			A		failed_part=D981del2
+unparseable_mutation	2028	HCMV	UL54	D981del2			A		failed_part=D981del2
+unparseable_mutation	549	HCMV	UL54	del413			A		failed_part=del413
+unparseable_mutation	33	HCMV	UL54	del524			A		failed_part=del524
+unparseable_mutation	81	HCMV	UL54	del981-982			A		failed_part=del981-982
+unparseable_mutation	221	HCMV	UL54	del981-982			A		failed_part=del981-982
+unparseable_mutation	431	HCMV	UL54	del981-982			A		failed_part=del981-982
+unparseable_mutation	2050	HCMV	UL54	del981-982			A		failed_part=del981-982
+unparseable_mutation	563	HCMV	UL56	del445-447	UL56	E485G	A		failed_part=del445-447
+unparseable_mutation	569	HCMV	UL56	del789-791			A		failed_part=del789-791
+unparseable_mutation	277	HCMV	UL97	del355			A		failed_part=del355
+unparseable_mutation	107	HCMV	UL97	del590-593			A		failed_part=del590-593
+unparseable_mutation	174	HCMV	UL97	del595-603			A		failed_part=del595-603
+unparseable_mutation	181	HCMV	UL97	del600			A		failed_part=del600
+unparseable_mutation	288	HCMV	UL97	del617			A		failed_part=del617
+unparseable_mutation	2089	HCMV	UL97	del617			A		failed_part=del617
+unparseable_mutation	701	HSV1	UL23	G59W*			A		failed_part=G59W*
+unparseable_mutation	788	HSV1	UL23	N301+			A		failed_part=N301+
+unparseable_mutation	772	HSV1	UL23	Y239S*			A		failed_part=Y239S*
+unparseable_mutation	1614	HSV1	UL23	del173			A		failed_part=del173
+unparseable_mutation	901	HSV1	UL30	del667			A	mutations not resolved by sequence	failed_part=del667
+unparseable_mutation	902	HSV1	UL30	del668			A	mutations not resolved by sequence	failed_part=del668
+unparseable_mutation	2065	HSV1	UL30	del962			A		failed_part=del962
+unparseable_mutation	1102	HSV2	UL30	E686+			A		failed_part=E686+
+unparseable_mutation	1220	HSV2	UL30	G684+			A		failed_part=G684+
+unparseable_mutation	1124	HSV2	UL30	P1112+			A		failed_part=P1112+
+unparseable_mutation	1123	HSV2	UL30	del1106-1111			A		failed_part=del1106-1111
+unparseable_mutation	1092	HSV2	UL30	del676-677			A		failed_part=del676-677
+unparseable_mutation	1093	HSV2	UL30	del677-679			A		failed_part=del677-679
+unparseable_mutation	1097	HSV2	UL30	del681-682			A		failed_part=del681-682
+unparseable_mutation	1100	HSV2	UL30	del682-683			A		failed_part=del682-683
+unparseable_mutation	1101	HSV2	UL30	del683-686			A		failed_part=del683-686
+unparseable_mutation	1240	VZV	ORF36	del7-74			A		failed_part=del7-74

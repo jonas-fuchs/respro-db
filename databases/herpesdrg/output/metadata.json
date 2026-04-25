@@ -6,7 +6,7 @@
   "publication_pmid": "",
   "website": "https://github.com/ojcharles/herpesdrg-db",
   "description": "Curated multi-virus antiviral resistance rules converted from HerpesDRG TSV.",
-  "maintainer_update": "2026-04-24",
+  "maintainer_update": "2026-04-25",
   "license": "See source repository",
-  "tsv_checksum": "sha256:d49e9f8691aaec253e0d16eb7bf48c3efb3dee09b62fce63f71f44050831fd89"
+  "tsv_checksum": "sha256:e15e7a7c35c5c3c802aefbced3f508de0acc15c698dd641ede051038576c7bb0"
 }
