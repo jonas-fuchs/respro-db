@@ -150,7 +150,7 @@ def parse_mutation(aa_change: str) -> tuple[str, str, int]:
     if pref_del:
         ref = pref_del.group(1).upper()
         pos = int(pref_del.group(2))
-        return ref, f"del{ref}{pos}", pos
+        return ref, f"{ref}{pos}del", pos
 
     simple_del = re.fullmatch(r"([A-Za-z])(\d+)del", text, flags=re.IGNORECASE)
     if simple_del:
