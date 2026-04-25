@@ -109,6 +109,15 @@ REFERENCE_BY_VIRUS = {
     "hhv6b": "MF511171",
 }
 
+# These gene labels are present in the source table but not resolvable against the
+# selected reference GenBank annotations used by ResPro import.
+GENES_NOT_IN_REFERENCE_ANNOTATIONS = {
+    "U38",
+    "U69",
+    "UL89",
+    "pol",
+}
+
 
 def norm(v: object) -> str:
     if v is None:
@@ -260,9 +269,21 @@ def split_combo_mutations(aa_change: str) -> list[str]:
     return [part.strip() for part in aa_change.split(";") if part.strip()]
 
 
-def make_member_id(gene: str, position: int, mutation: str, idx: int) -> str:
+def make_member_id(group_id: str, gene: str, position: int, mutation: str, idx: int) -> str:
     token = re.sub(r"[^A-Za-z0-9_]+", "_", mutation).strip("_") or "mut"
-    return f"{gene}_{position}_{token}_{idx}"
+    return f"{group_id}_{gene}_{position}_{token}_{idx}"
+
+
+def join_unique(values: list[str]) -> str:
+    seen = set()
+    out = []
+    for value in values:
+        cleaned = norm(value)
+        if not cleaned or cleaned in seen:
+            continue
+        seen.add(cleaned)
+        out.append(cleaned)
+    return ",".join(out)
 
 
 def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
@@ -271,6 +292,8 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
     non_migrated = []
     # Dictionary to aggregate single-mutation rules: (gene, ref_id, position, mutation, antiviral) -> aggregation
     aggregated_rules = {}
+    # Dictionary to aggregate combo rules: (gene, ref_id, antiviral, parsed_mutations) -> aggregation
+    aggregated_combos = {}
     group_counter = 0
 
     def next_group_id() -> str:
@@ -301,6 +324,9 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
 
         if not gene:
             add_non_migrated(non_migrated, row, "missing_gene")
+            continue
+        if gene in GENES_NOT_IN_REFERENCE_ANNOTATIONS:
+            add_non_migrated(non_migrated, row, "gene_not_in_reference_annotation")
             continue
         if not aa_change:
             add_non_migrated(non_migrated, row, "missing_aa_change")
@@ -372,40 +398,32 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                 emitted_for_row += 1
                 continue
 
-            group_id = next_group_id()
-            member_ids = []
-            for idx, (ref_aa, mutation_token, pos) in enumerate(parsed_mutations, start=1):
-                member_id = make_member_id(gene, pos, mutation_token, idx)
-                member_ids.append(member_id)
-                rules_rows.append(
-                    {
-                        "gene": gene,
-                        "reference_identifier": REFERENCE_BY_VIRUS[virus_key],
-                        "position": pos,
-                        "reference": ref_aa,
-                        "mutation": mutation_token,
-                        "antiviral": antiviral_norm,
-                        "group_id": group_id,
-                        "member_id": member_id,
-                        "phenotype": "",
-                        "fold_ic50": "",
-                        "publication": publication,
-                        "source": source_label,
-                        "comment": note,
-                    }
-                )
-            formula_rows.append(
-                {
-                    "group_id": group_id,
+            ref_id = REFERENCE_BY_VIRUS[virus_key]
+            combo_parts = tuple((ref_aa, mutation_token, pos) for ref_aa, mutation_token, pos in parsed_mutations)
+            combo_key = (gene, ref_id, antiviral_norm, combo_parts)
+            if combo_key not in aggregated_combos:
+                aggregated_combos[combo_key] = {
+                    "gene": gene,
+                    "reference_identifier": ref_id,
                     "antiviral": antiviral_norm,
-                    "expression": "(" + " AND ".join(member_ids) + ")",
-                    "phenotype": phenotype,
-                    "fold_ic50": fold_ic50,
-                    "publication": publication,
+                    "combo_parts": combo_parts,
                     "source": source_label,
-                    "comment": note,
+                    "publications": [],
+                    "phenotypes": [],
+                    "ic50_values": [],
+                    "comments": [],
                 }
-            )
+            if publication:
+                aggregated_combos[combo_key]["publications"].append(publication)
+            if phenotype:
+                aggregated_combos[combo_key]["phenotypes"].append(phenotype)
+            if fold_ic50:
+                try:
+                    aggregated_combos[combo_key]["ic50_values"].append(float(fold_ic50))
+                except ValueError:
+                    pass
+            if note:
+                aggregated_combos[combo_key]["comments"].append(note)
             emitted_for_row += 1
 
         if not has_antiviral_data:
@@ -422,7 +440,7 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                 median_ic50 = ic50_values[n // 2]
             else:
                 median_ic50 = (ic50_values[n // 2 - 1] + ic50_values[n // 2]) / 2.0
-            fold_ic50 = f"{median_ic50:g}" if median_ic50 else ""
+            fold_ic50 = f"{median_ic50:g}"
         else:
             fold_ic50 = ""
 
@@ -438,8 +456,8 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                 # Use the first phenotype (or most common if needed)
                 phenotype = phenotypes[0]
 
-        # Join publications with comma
-        publication = ",".join(p for p in aggr_data["publications"] if p)
+        # Join publications with comma and keep first-seen uniqueness.
+        publication = join_unique(aggr_data["publications"])
 
         # Add comment about IC50 count if multiple values
         comment = ""
@@ -462,6 +480,68 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
             "comment": comment,
         }
         rules_rows.append(rule)
+
+    # Finalize aggregated combination rules (grouped atomic rows + one formula per combo key).
+    for combo_data in aggregated_combos.values():
+        group_id = next_group_id()
+        member_ids = []
+        for idx, (ref_aa, mutation_token, pos) in enumerate(combo_data["combo_parts"], start=1):
+            member_id = make_member_id(group_id, combo_data["gene"], pos, mutation_token, idx)
+            member_ids.append(member_id)
+            rules_rows.append(
+                {
+                    "gene": combo_data["gene"],
+                    "reference_identifier": combo_data["reference_identifier"],
+                    "position": pos,
+                    "reference": ref_aa,
+                    "mutation": mutation_token,
+                    "antiviral": "",
+                    "group_id": group_id,
+                    "member_id": member_id,
+                    "phenotype": "",
+                    "fold_ic50": "",
+                    "publication": join_unique(combo_data["publications"]),
+                    "source": combo_data["source"],
+                    "comment": join_unique(combo_data["comments"]),
+                }
+            )
+
+        phenotypes = combo_data["phenotypes"]
+        phenotype = ""
+        if phenotypes:
+            unique_phenotypes = set(phenotypes)
+            if "resistant" in unique_phenotypes and "sensitive" in unique_phenotypes:
+                phenotype = "contradictory"
+            else:
+                phenotype = phenotypes[0]
+
+        ic50_values = sorted(combo_data["ic50_values"])
+        if ic50_values:
+            n = len(ic50_values)
+            if n % 2 == 1:
+                median_ic50 = ic50_values[n // 2]
+            else:
+                median_ic50 = (ic50_values[n // 2 - 1] + ic50_values[n // 2]) / 2.0
+            fold_ic50 = f"{median_ic50:g}"
+        else:
+            fold_ic50 = ""
+
+        formula_comment = ""
+        if len(ic50_values) > 1:
+            formula_comment = f"{len(ic50_values)} IC50 values - displayed is median"
+
+        formula_rows.append(
+            {
+                "group_id": group_id,
+                "antiviral": combo_data["antiviral"],
+                "expression": "(" + " AND ".join(member_ids) + ")",
+                "phenotype": phenotype,
+                "fold_ic50": fold_ic50,
+                "publication": join_unique(combo_data["publications"]),
+                "source": combo_data["source"],
+                "comment": formula_comment,
+            }
+        )
 
     rules_rows.sort(
         key=lambda r: (

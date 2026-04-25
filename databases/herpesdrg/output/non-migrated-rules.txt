@@ -2,7 +2,45 @@
 # Columns: reason	mutation_id	virus	gene	aa_change	co_gene	co_aa	status	note	details
 
 reason	mutation_id	virus	gene	aa_change	co_gene	co_aa	status	note	details
-numeric_only_mutation_not_supported	1625	HHV6b	U38	654			A		failed_part=654
+gene_not_in_reference_annotation	1389	Adeno	pol	A501E			A	originally  A359E	
+gene_not_in_reference_annotation	1385	Adeno	pol	L883S			A	L741S originally	
+gene_not_in_reference_annotation	193	HCMV	UL89	C347S			A		
+gene_not_in_reference_annotation	192	HCMV	UL89	D344E			A		
+gene_not_in_reference_annotation	1763	HCMV	UL89	D344E			A		
+gene_not_in_reference_annotation	212	HCMV	UL89	H389N			A		
+gene_not_in_reference_annotation	208	HCMV	UL89	I334V			A		
+gene_not_in_reference_annotation	214	HCMV	UL89	I334V	UL89	N405D	A		
+gene_not_in_reference_annotation	572	HCMV	UL89	I531T			A		
+gene_not_in_reference_annotation	207	HCMV	UL89	M359I			A		
+gene_not_in_reference_annotation	206	HCMV	UL89	N320H			A		
+gene_not_in_reference_annotation	209	HCMV	UL89	N329S			A		
+gene_not_in_reference_annotation	213	HCMV	UL89	N405D			A		
+gene_not_in_reference_annotation	194	HCMV	UL89	R351H			A		
+gene_not_in_reference_annotation	210	HCMV	UL89	T350M			A		
+gene_not_in_reference_annotation	211	HCMV	UL89	V362M			A		
+gene_not_in_reference_annotation	1625	HHV6b	U38	654			A		
+gene_not_in_reference_annotation	2039	HHV6b	U38	A961V			A		
+gene_not_in_reference_annotation	2042	HHV6b	U38	C525S			A		
+gene_not_in_reference_annotation	2040	HHV6b	U38	F292S			A		
+gene_not_in_reference_annotation	2037	HHV6b	U38	H507Y			A		
+gene_not_in_reference_annotation	2038	HHV6b	U38	H507Y			A		
+gene_not_in_reference_annotation	1640	HHV6b	U38	R798I			A		
+gene_not_in_reference_annotation	2041	HHV6b	U38	T435R			A		
+gene_not_in_reference_annotation	2043	HHV6b	U38	T435R	U38	C525S	A		
+gene_not_in_reference_annotation	1633	HHV6b	U69	A447D			A		
+gene_not_in_reference_annotation	1636	HHV6b	U69	A462D			A		
+gene_not_in_reference_annotation	1630	HHV6b	U69	C448G			A		
+gene_not_in_reference_annotation	1634	HHV6b	U69	C448G			A		
+gene_not_in_reference_annotation	1631	HHV6b	U69	C463Y			A		
+gene_not_in_reference_annotation	1637	HHV6b	U69	C463Y			A		
+gene_not_in_reference_annotation	1638	HHV6b	U69	L202I			A		
+gene_not_in_reference_annotation	1962	HHV6b	U69	L202I			A		
+gene_not_in_reference_annotation	1629	HHV6b	U69	L213I			A		
+gene_not_in_reference_annotation	1639	HHV6b	U69	L213I			A		
+gene_not_in_reference_annotation	1963	HHV6b	U69	L213I			A		
+gene_not_in_reference_annotation	1635	HHV6b	U69	L450S			A		
+gene_not_in_reference_annotation	1628	HHV6b	U69	M318V			A		
+gene_not_in_reference_annotation	1632	HHV6b	U69	M318V			A		
 status_not_active	1394	Adeno	pol	C687S			O	this is not resistance data	
 status_not_active	1387	Adeno	pol	F882I	pol	V180I	O	co-occuring uncharacterised mutations - oringally F740I	
 status_not_active	1397	Adeno	pol	I664M			O	this is not resistance data	
