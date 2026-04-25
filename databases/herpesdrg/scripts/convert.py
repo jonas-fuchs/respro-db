@@ -106,16 +106,7 @@ REFERENCE_BY_VIRUS = {
     "adeno": "AC_000008.1",
     "hsv1": "NC_001806",
     "hsv2": "NC_001798",
-    "hhv6b": "MF511171",
-}
-
-# These gene labels are present in the source table but not resolvable against the
-# selected reference GenBank annotations used by ResPro import.
-GENES_NOT_IN_REFERENCE_ANNOTATIONS = {
-    "U38",
-    "U69",
-    "UL89",
-    "pol",
+    "hhv6b": "NC_001664",
 }
 
 
@@ -324,9 +315,6 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
 
         if not gene:
             add_non_migrated(non_migrated, row, "missing_gene")
-            continue
-        if gene in GENES_NOT_IN_REFERENCE_ANNOTATIONS:
-            add_non_migrated(non_migrated, row, "gene_not_in_reference_annotation")
             continue
         if not aa_change:
             add_non_migrated(non_migrated, row, "missing_aa_change")

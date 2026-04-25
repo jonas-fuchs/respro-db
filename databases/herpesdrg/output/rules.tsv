@@ -1,4 +1,6 @@
 gene	reference_identifier	position	reference	mutation	antiviral	group_id	member_id	phenotype	fold_ic50	publication	source	comment
+pol	AC_000008.1	501	A	E	cidofovir				4.6	doi:doi.org/10.1016/S0166-3542(02)00098-0	HerpesDRG	
+pol	AC_000008.1	883	L	S	cidofovir			resistant		doi:doi.org/10.1016/S0166-3542(02)00098-0	HerpesDRG	
 ORF28	NC_001348	3	I	L	aciclovir				0.9	doi:doi.org/10.1016/j.jviromet.2016.03.006	HerpesDRG	
 ORF28	NC_001348	39	T	A	aciclovir				1	doi:doi.org/10.1016/j.jcv.2017.08.011	HerpesDRG	
 ORF28	NC_001348	39	T	A	brivudine				1.2	doi:doi.org/10.1016/j.jcv.2017.08.011	HerpesDRG	
@@ -182,6 +184,32 @@ ORF36	NC_001348	334	N	*	penciclovir				10	doi:doi.org/10.1128/AAC.05115-14	Herpe
 ORF36	NC_001348	479	N	I	aciclovir				80	doi:doi.org/10.1007/s00430-011-0191-4	HerpesDRG	
 ORF55	NC_001348	350	K	N	aciclovir				0.8	doi:doi.org/10.1002/jmv.70080	HerpesDRG	
 ORF55	NC_001348	350	K	N	amenamevir				2500	doi:doi.org/10.1002/jmv.70080	HerpesDRG	
+U38	NC_001664	292	F	S	cidofovir				6	doi:doi.org/10.1177/135965350701200608	HerpesDRG	
+U38	NC_001664	292	F	S	foscarnet				6	doi:doi.org/10.1177/135965350701200608	HerpesDRG	
+U38	NC_001664	292	F	S	ganciclovir				6	doi:doi.org/10.1177/135965350701200608	HerpesDRG	
+U38	NC_001664	435	T	R	cidofovir				5.35	doi:doi.org/10.1177/135965350701200608	HerpesDRG	2 IC50 values - displayed is median
+U38	NC_001664	435	T	R	foscarnet				5.35	doi:doi.org/10.1177/135965350701200608	HerpesDRG	2 IC50 values - displayed is median
+U38	NC_001664	435	T	R	ganciclovir				5.35	doi:doi.org/10.1177/135965350701200608	HerpesDRG	2 IC50 values - displayed is median
+U38	NC_001664	507	H	Y	cidofovir				1.85	doi:doi.org/10.1177/135965350701200608	HerpesDRG	2 IC50 values - displayed is median
+U38	NC_001664	507	H	Y	foscarnet				5.25	doi:doi.org/10.1177/135965350701200608	HerpesDRG	2 IC50 values - displayed is median
+U38	NC_001664	507	H	Y	ganciclovir				1.75	doi:doi.org/10.1177/135965350701200608	HerpesDRG	2 IC50 values - displayed is median
+U38	NC_001664	525	C	S	cidofovir				3.4	doi:doi.org/10.1177/135965350701200608	HerpesDRG	
+U38	NC_001664	525	C	S	foscarnet				3.4	doi:doi.org/10.1177/135965350701200608	HerpesDRG	
+U38	NC_001664	525	C	S	ganciclovir				3.4	doi:doi.org/10.1177/135965350701200608	HerpesDRG	
+U38	NC_001664	798	R	I	cidofovir				213	doi:doi.org/10.1016/j.antiviral.2007.12.004	HerpesDRG	
+U38	NC_001664	798	R	I	foscarnet				1.2	doi:doi.org/10.1016/j.antiviral.2007.12.004	HerpesDRG	
+U38	NC_001664	798	R	I	ganciclovir				4	doi:doi.org/10.1016/j.antiviral.2007.12.004	HerpesDRG	
+U38	NC_001664	961	A	V	cidofovir				0.7	doi:doi.org/10.1177/135965350701200608	HerpesDRG	
+U38	NC_001664	961	A	V	foscarnet				0.7	doi:doi.org/10.1177/135965350701200608	HerpesDRG	
+U38	NC_001664	961	A	V	ganciclovir				0.7	doi:doi.org/10.1177/135965350701200608	HerpesDRG	
+U69	NC_001664	202	L	I	ganciclovir			sensitive	1	doi:doi.org/10.1016/j.jviromet.2009.06.016,doi:doi.org/10.1016/j.jcv.2008.09.002	HerpesDRG	
+U69	NC_001664	213	L	I	ganciclovir			sensitive	1	doi:doi.org/10.1002/jmv.10510,doi:doi.org/10.1016/j.jviromet.2009.06.016,doi:doi.org/10.1016/j.jcv.2008.09.002	HerpesDRG	
+U69	NC_001664	318	M	V	ganciclovir			resistant		doi:doi.org/10.1002/jmv.10510,doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	
+U69	NC_001664	447	A	D	ganciclovir			resistant		doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	
+U69	NC_001664	448	C	G	ganciclovir			resistant		doi:doi.org/10.1002/jmv.10510,doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	
+U69	NC_001664	450	L	S	ganciclovir			resistant		doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	
+U69	NC_001664	462	A	D	ganciclovir			resistant		doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	
+U69	NC_001664	463	C	Y	ganciclovir			resistant		doi:doi.org/10.1002/jmv.10510,doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	
 UL23	NC_001798	25	G	A	aciclovir				1.45	doi:doi.org/10.1016/j.antiviral.2018.02.004	HerpesDRG	2 IC50 values - displayed is median
 UL23	NC_001798	25	G	A	penciclovir				1.35	doi:doi.org/10.1016/j.antiviral.2018.02.004	HerpesDRG	2 IC50 values - displayed is median
 UL23	NC_001798	26	R	H	aciclovir			sensitive		doi:doi.org/10.1016/j.antiviral.2003.08.018	HerpesDRG	
@@ -2490,6 +2518,29 @@ UL56	NC_006273	800	P	L	ganciclovir				0.23	doi:doi.org/10.1093/infdis/jiac349	He
 UL56	NC_006273	800	P	L	letermovir				1.1	doi:doi.org/10.1093/infdis/jiac349	HerpesDRG	
 UL56	NC_006273	814	V	A	letermovir				1	doi:doi.org/10.1093/infdis/jiz577	HerpesDRG	
 UL56	NC_006273	816	R	W	letermovir				0.9	doi:doi.org/10.1093/infdis/jiz577	HerpesDRG	
+UL89	NC_006273	320	N	H	letermovir				1.8	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	320	N	H	tomeglovir				6.5	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	329	N	S	letermovir				2	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	329	N	S	tomeglovir				15	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	334	I	V	letermovir				1.15	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	2 IC50 values - displayed is median
+UL89	NC_006273	334	I	V	tomeglovir				6.45	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	2 IC50 values - displayed is median
+UL89	NC_006273	344	D	E	letermovir				1.7	doi:doi.org/10.1128/AAC.01325-17,doi:doi.org/10.1016/j.antiviral.2017.10.019	HerpesDRG	2 IC50 values - displayed is median
+UL89	NC_006273	344	D	E	tomeglovir				1.7	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	347	C	S	letermovir				0.6	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	347	C	S	tomeglovir				0.3	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	350	T	M	letermovir				2.8	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	350	T	M	tomeglovir				8.7	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	351	R	H	letermovir				0.7	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	351	R	H	tomeglovir				0.4	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	359	M	I	letermovir				1.5	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	359	M	I	tomeglovir				7.4	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	362	V	M	letermovir				1.2	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	362	V	M	tomeglovir				98	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	389	H	N	letermovir				1.1	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	389	H	N	tomeglovir				29	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	405	N	D	letermovir				1	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	405	N	D	tomeglovir				15	doi:doi.org/10.1128/AAC.01325-17	HerpesDRG	
+UL89	NC_006273	531	I	T	letermovir				1	doi:doi.org/10.1093/infdis/jiz577	HerpesDRG	
 UL97	NC_006273	324	I	V	maribavir				0.6	doi:doi.org/10.1016/j.antiviral.2012.05.013	HerpesDRG	
 UL97	NC_006273	329	D	H	ganciclovir			sensitive		doi:doi.org/10.1086/338362	HerpesDRG	
 UL97	NC_006273	334	S	G	maribavir				1.1	doi:doi.org/10.1016/j.antiviral.2012.05.013	HerpesDRG	
