@@ -434,12 +434,17 @@ def main() -> None:
         default=str(Path(__file__).resolve().parent.parent / "output"),
         help="Output directory for generated artifacts",
     )
+    parser.add_argument(
+        "--maintainer-update",
+        default=None,
+        help="Override maintainer_update date (YYYY-MM-DD format); defaults to today",
+    )
     args = parser.parse_args()
 
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"Downloading source TSV: {args.source_url}", file=sys.stderr)
+    print(f"Downloading {args.source_url} …", file=sys.stderr)
     source_text = download_source(args.source_url)
 
     reader = csv.DictReader(source_text.splitlines(), delimiter="\t")
@@ -449,33 +454,42 @@ def main() -> None:
     rules_rows, formula_rows, non_migrated_rows = convert(source_rows)
 
     rules_content = tsv_from_rows(rules_rows, RULES_COLUMNS)
-    (out_dir / "rules.tsv").write_text(rules_content, encoding="utf-8")
+    rules_path = out_dir / "rules.tsv"
+    rules_path.write_text(rules_content, encoding="utf-8")
 
     formula_path = out_dir / "formula-rules.tsv"
     if formula_rows:
         formula_content = tsv_from_rows(formula_rows, FORMULA_COLUMNS)
         formula_path.write_text(formula_content, encoding="utf-8")
+        print(f"Written {formula_path} ({len(formula_rows)} rows).", file=sys.stderr)
     else:
         formula_path.unlink(missing_ok=True)
 
+    maintainer_update = args.maintainer_update or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     metadata = {
-        "maintainers": ["HerpesDRG Team"],
-        "contact": "https://github.com/ojcharles/herpesdrg-db",
-        "publication_pmid": "",
+        "maintainers": ["Oscar Charles"],
+        "contact": "oscar.charles.18@ucl.ac.uk",
+        "publication_pmid": "39192205",
         "website": "https://github.com/ojcharles/herpesdrg-db",
-        "description": "Curated multi-virus antiviral resistance rules converted from HerpesDRG TSV.",
-        "maintainer_update": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-        "license": "See source repository",
+        "description": "Comprehensive resource for human herpesvirus antiviral drug resistance genotyping.",
+        "maintainer_update": maintainer_update,
+        "license": "MIT",
         "tsv_checksum": checksum(rules_content),
     }
-    (out_dir / "metadata.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+    metadata_path = out_dir / "metadata.json"
+    metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
 
     non_migrated_content = non_migrated_text(non_migrated_rows)
-    (out_dir / "non-migrated-rules.txt").write_text(non_migrated_content, encoding="utf-8")
+    non_migrated_path = out_dir / "non-migrated-rules.txt"
+    non_migrated_path.write_text(non_migrated_content, encoding="utf-8")
 
-    print(f"rules.tsv rows: {len(rules_rows)}", file=sys.stderr)
-    print(f"formula-rules.tsv rows: {len(formula_rows)}", file=sys.stderr)
-    print(f"non-migrated entries: {len(non_migrated_rows)}", file=sys.stderr)
+    print(f"Written {rules_path} ({len(rules_rows)} rows).", file=sys.stderr)
+    print(f"Written {metadata_path}.", file=sys.stderr)
+    print(
+        f"Written {non_migrated_path} ({len(non_migrated_rows)} aggregated entries).",
+        file=sys.stderr,
+    )
+    print("Done.", file=sys.stderr)
 
 
 if __name__ == "__main__":

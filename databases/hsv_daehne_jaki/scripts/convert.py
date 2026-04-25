@@ -758,14 +758,12 @@ def main():
         tmp_path = Path(tmp_file.name)
     print(f"Downloading {args.source_url} …", file=sys.stderr)
     urllib.request.urlretrieve(args.source_url, tmp_path)
-    print(f"Download complete ({tmp_path.stat().st_size} bytes).", file=sys.stderr)
 
     try:
         wb = openpyxl.load_workbook(tmp_path)
         single_rows, formula_rows, non_migrated_rows = extract_rows(wb)
     finally:
         tmp_path.unlink(missing_ok=True)
-        print("Temporary file deleted.", file=sys.stderr)
 
     # --- Deduplication ---
     single_rows = deduplicate_single_rows(single_rows, non_migrated_rows)

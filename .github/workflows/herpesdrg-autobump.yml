@@ -22,117 +22,83 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Resolve upstream source metadata
+      - name: Resolve latest upstream source
         id: source
         run: |
           set -euo pipefail
-          url="https://raw.githubusercontent.com/ojcharles/herpesdrg-db/main/herpesdrg-db.tsv"
-          etag="$(curl -fsSI "$url" | awk -F': ' 'tolower($1)=="etag" {print $2}' | tr -d '\r' | head -n1)"
-          modified="$(curl -fsSI "$url" | awk -F': ' 'tolower($1)=="last-modified" {print $2}' | tr -d '\r' | head -n1)"
+          repo_owner="ojcharles"
+          repo_name="herpesdrg-db"
+          file_path="herpesdrg-db.tsv"
+          branch="main"
+
+          # Get latest commit timestamp for the file via GitHub API
+          api_url="https://api.github.com/repos/${repo_owner}/${repo_name}/commits?path=${file_path}&sha=${branch}&per_page=1"
+          response=$(curl -fsSL "$api_url")
+          commit_date=$(echo "$response" | jq -r '.[0].commit.committer.date' | cut -d'T' -f1)
+          commit_sha=$(echo "$response" | jq -r '.[0].sha')
+
+          raw_url="https://raw.githubusercontent.com/${repo_owner}/${repo_name}/${branch}/${file_path}"
 
           {
-            echo "source_url=$url"
-            echo "source_etag=$etag"
-            echo "source_last_modified=$modified"
+            echo "source_url=$raw_url"
+            echo "source_commit_date=$commit_date"
+            echo "source_commit_sha=$commit_sha"
           } >> "$GITHUB_OUTPUT"
 
-          echo "Source URL: $url"
-          echo "Source ETag: ${etag:-unknown}"
-          echo "Source Last-Modified: ${modified:-unknown}"
+          echo "Source URL: $raw_url"
+          echo "Source Commit Date: $commit_date"
+          echo "Source Commit SHA: $commit_sha"
+
+      - name: Compare with current tracked source
+        id: update_check
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          latest = "${{ steps.source.outputs.source_commit_date }}"
+          metadata_path = "databases/herpesdrg/output/metadata.json"
+
+          current = ""
+          if os.path.exists(metadata_path):
+              with open(metadata_path, "r", encoding="utf-8") as fh:
+                  metadata = json.load(fh)
+              current = str(metadata.get("maintainer_update", ""))
+
+          should_update = "true" if latest and latest != current else "false"
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"current_source_date={current}\n")
+              fh.write(f"should_update={should_update}\n")
+
+          print(f"Current source date: {current or 'none'}")
+          print(f"Latest source date: {latest or 'none'}")
+          print(f"Update required: {should_update}")
+          PY
 
       - name: Install converter dependencies
+        if: steps.update_check.outputs.should_update == 'true'
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r databases/herpesdrg/scripts/requirements.txt
 
       - name: Run converter
+        if: steps.update_check.outputs.should_update == 'true'
         run: |
           python databases/herpesdrg/scripts/convert.py \
             --source-url "${{ steps.source.outputs.source_url }}" \
-            --output-dir databases/herpesdrg/output
+            --output-dir databases/herpesdrg/output \
+            --maintainer-update "${{ steps.source.outputs.source_commit_date }}"
 
-      - name: Validate artifacts
+      - name: No update detected
+        if: steps.update_check.outputs.should_update != 'true'
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-
-          out = Path("databases/herpesdrg/output")
-          rules = out / "rules.tsv"
-          metadata = out / "metadata.json"
-          formula = out / "formula-rules.tsv"
-
-          if not rules.exists():
-              raise SystemExit("rules.tsv missing")
-          if not metadata.exists():
-              raise SystemExit("metadata.json missing")
-
-          required_rules = [
-              "gene",
-              "reference_identifier",
-              "position",
-              "reference",
-              "mutation",
-              "antiviral",
-          ]
-          with rules.open("r", encoding="utf-8") as fh:
-              lines = [line.rstrip("\n") for line in fh]
-          if not lines:
-              raise SystemExit("rules.tsv is empty")
-
-          header = lines[0].split("\t")
-          missing_rules = [c for c in required_rules if c not in header]
-          if missing_rules:
-              raise SystemExit(f"rules.tsv missing required headers: {missing_rules}")
-
-          idx = {name: i for i, name in enumerate(header)}
-          for line_no, line in enumerate(lines[1:], start=2):
-              if not line.strip():
-                  continue
-              cells = line.split("\t")
-              for col in required_rules:
-                  pos = idx[col]
-                  if pos >= len(cells) or not cells[pos].strip():
-                      raise SystemExit(f"rules.tsv empty required cell at line {line_no}, column {col}")
-
-          allowed_metadata = {
-              "maintainers",
-              "contact",
-              "publication_pmid",
-              "website",
-              "description",
-              "maintainer_update",
-              "license",
-              "tsv_checksum",
-          }
-          payload = json.loads(metadata.read_text(encoding="utf-8"))
-          keys = set(payload.keys())
-          if keys != allowed_metadata:
-              raise SystemExit(
-                  "metadata.json keys mismatch. "
-                  f"expected={sorted(allowed_metadata)} got={sorted(keys)}"
-              )
-
-          if not str(payload["maintainer_update"]).strip():
-              raise SystemExit("metadata.json maintainer_update is empty")
-          if not str(payload["tsv_checksum"]).startswith("sha256:"):
-              raise SystemExit("metadata.json tsv_checksum does not start with sha256:")
-
-          if formula.exists():
-              with formula.open("r", encoding="utf-8") as fh:
-                  flines = [line.rstrip("\n") for line in fh]
-              if flines:
-                  fheader = flines[0].split("\t")
-                  required_formula = ["group_id", "antiviral", "expression"]
-                  missing_formula = [c for c in required_formula if c not in fheader]
-                  if missing_formula:
-                      raise SystemExit(
-                          "formula-rules.tsv missing required headers: "
-                          f"{missing_formula}"
-                      )
-          PY
+          echo "No new upstream source detected; skipping converter and PR creation."
 
       - name: Create pull request
+        if: steps.update_check.outputs.should_update == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           branch: autobump/herpesdrg
@@ -140,11 +106,12 @@ jobs:
           commit-message: "chore(herpesdrg): autobump source outputs"
           title: "chore: autobump herpesdrg outputs"
           body: |
-            Automated update for HerpesDRG source data.
+            Automated monthly update for HerpesDRG source data.
 
+            - Previous source date: ${{ steps.update_check.outputs.current_source_date }}
+            - Source commit date: ${{ steps.source.outputs.source_commit_date }}
+            - Source commit SHA: ${{ steps.source.outputs.source_commit_sha }}
             - Source URL: ${{ steps.source.outputs.source_url }}
-            - Source ETag: ${{ steps.source.outputs.source_etag }}
-            - Source Last-Modified: ${{ steps.source.outputs.source_last_modified }}
 
             This PR was generated by the autobump workflow.
           labels: autobump

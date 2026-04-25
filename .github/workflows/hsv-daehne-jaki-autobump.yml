@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Resolve latest Zenodo XLSX for concept
+      - name: Resolve latest upstream source
         id: zenodo
         run: |
           python - <<'PY'
@@ -64,7 +64,7 @@ jobs:
           print(f"Source URL: {latest_url}")
           PY
 
-      - name: Compare with current tracked Zenodo record
+      - name: Compare with current tracked source
         id: update_check
         run: |
           python - <<'PY'
