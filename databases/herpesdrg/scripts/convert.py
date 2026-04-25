@@ -320,7 +320,7 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
             continue
 
         publication = build_publication(norm(row.get("ref_doi")), norm(row.get("ref_link")))
-        source_label = norm(row.get("ref_title")) or "HerpesDRG"
+        source_label = "HerpesDRG"
 
         has_antiviral_data = False
         emitted_for_row = 0
