@@ -491,6 +491,7 @@ def extract_rows(wb):
                             "publication": pmids,
                             "source": "Dähne et al. 2025 (Zenodo 15149867)",
                             "comment": comment,
+                            "sheet": sheet_name,
                         })
                     member_ids.append(mid)
 
@@ -617,6 +618,7 @@ def extract_rows(wb):
                     "publication": pmids,
                     "source": "Dähne et al. 2025 (Zenodo 15149867)",
                     "comment": comment,
+                    "sheet": sheet_name,
                 })
 
     return single_rows, formula_rows, non_migrated_rows
@@ -660,7 +662,7 @@ def deduplicate_single_rows(rows, non_migrated_rows):
                     add_non_migrated(
                         non_migrated_rows,
                         reason="duplicate_rule_dropped_fewer_pmids",
-                        sheet="",
+                        sheet=r.get("sheet", ""),
                         gene=r["gene"],
                         drug=r["antiviral"],
                         aa_change=f"{r['reference']}{r['position']}{r['mutation']}",
