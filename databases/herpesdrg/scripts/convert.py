@@ -419,16 +419,11 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
 
     # Finalize aggregated single-mutation rules
     for aggr_key, aggr_data in aggregated_rules.items():
-        # Calculate median IC50 if present
+        # Calculate mean IC50 if present
         ic50_values = aggr_data["ic50_values"]
         if ic50_values:
-            ic50_values.sort()
-            n = len(ic50_values)
-            if n % 2 == 1:
-                median_ic50 = ic50_values[n // 2]
-            else:
-                median_ic50 = (ic50_values[n // 2 - 1] + ic50_values[n // 2]) / 2.0
-            fold_ic50 = f"{median_ic50:g}"
+            mean_ic50 = sum(ic50_values) / len(ic50_values)
+            fold_ic50 = f"{mean_ic50:g}"
         else:
             fold_ic50 = ""
 
@@ -447,10 +442,11 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
         # Join publications with comma and keep first-seen uniqueness.
         publication = join_unique(aggr_data["publications"])
 
-        # Add comment about IC50 count if multiple values
+        # Add comment about IC50 values if multiple
         comment = ""
         if len(ic50_values) > 1:
-            comment = f"{len(ic50_values)} IC50 values - displayed is median"
+            values_str = ", ".join(f"{v:g}" for v in ic50_values)
+            comment = f"IC50 values: {values_str}; mean displayed"
 
         rule = {
             "gene": aggr_data["gene"],
@@ -505,18 +501,15 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
 
         ic50_values = sorted(combo_data["ic50_values"])
         if ic50_values:
-            n = len(ic50_values)
-            if n % 2 == 1:
-                median_ic50 = ic50_values[n // 2]
-            else:
-                median_ic50 = (ic50_values[n // 2 - 1] + ic50_values[n // 2]) / 2.0
-            fold_ic50 = f"{median_ic50:g}"
+            mean_ic50 = sum(ic50_values) / len(ic50_values)
+            fold_ic50 = f"{mean_ic50:g}"
         else:
             fold_ic50 = ""
 
         formula_comment = ""
         if len(ic50_values) > 1:
-            formula_comment = f"{len(ic50_values)} IC50 values - displayed is median"
+            values_str = ", ".join(f"{v:g}" for v in ic50_values)
+            formula_comment = f"IC50 values: {values_str}; mean displayed"
 
         formula_rows.append(
             {

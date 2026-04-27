@@ -1,4 +1,4 @@
 group_id	antiviral	expression	phenotype	fold_ic50	publication	source	comment
-G00001	ganciclovir	(G00001_UL54_539_R_1 AND G00001_UL54_595_I_2)		53.5	doi:doi.org/10.1128/aac.00334-11	HerpesDRG	2 IC50 values - displayed is median
+G00001	ganciclovir	(G00001_UL54_539_R_1 AND G00001_UL54_595_I_2)		53.5	doi:doi.org/10.1128/aac.00334-11	HerpesDRG	IC50 values: 28, 79; mean displayed
 G00002	cidofovir	(G00002_UL54_539_R_1 AND G00002_UL54_595_I_2)		13	doi:doi.org/10.1128/aac.00334-11	HerpesDRG	
 G00003	foscarnet	(G00003_UL54_539_R_1 AND G00003_UL54_595_I_2)		6.3	doi:doi.org/10.1128/aac.00334-11	HerpesDRG	
