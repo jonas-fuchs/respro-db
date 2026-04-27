@@ -1,4 +1,4 @@
-gene	reference_identifier	position	reference	mutation	antiviral	group_id	member_id	phenotype	fold_ic50	publication	source	comment
+gene	reference_identifier	position	reference	mutation	antiviral	group_id	member_id	phenotype	ic50	publication	source	comment
 pol	AC_000008.1	501	A	E	cidofovir				4.6	doi:doi.org/10.1016/S0166-3542(02)00098-0	HerpesDRG	
 pol	AC_000008.1	883	L	S	cidofovir			resistant		doi:doi.org/10.1016/S0166-3542(02)00098-0	HerpesDRG	
 ORF28	NC_001348	3	I	L	aciclovir				0.9	doi:doi.org/10.1016/j.jviromet.2016.03.006	HerpesDRG	

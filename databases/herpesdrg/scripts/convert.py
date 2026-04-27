@@ -38,7 +38,7 @@ RULES_COLUMNS = [
     "group_id",
     "member_id",
     "phenotype",
-    "fold_ic50",
+    "ic50",
     "publication",
     "source",
     "comment",
@@ -49,7 +49,7 @@ FORMULA_COLUMNS = [
     "antiviral",
     "expression",
     "phenotype",
-    "fold_ic50",
+    "ic50",
     "publication",
     "source",
     "comment",
@@ -186,7 +186,7 @@ def parse_mutation(aa_change: str) -> tuple[str, str, int]:
     raise ValueError("unparseable_mutation")
 
 
-def parse_fold_and_phenotype(value: str) -> tuple[str, str]:
+def parse_ic50_and_phenotype(value: str) -> tuple[str, str]:
     token = value.strip()
     if not token:
         return "", ""
@@ -343,8 +343,8 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
             if not raw_value:
                 continue
 
-            fold_ic50, phenotype = parse_fold_and_phenotype(raw_value)
-            if not fold_ic50 and not phenotype:
+            ic50, phenotype = parse_ic50_and_phenotype(raw_value)
+            if not ic50 and not phenotype:
                 continue
 
             has_antiviral_data = True
@@ -378,9 +378,9 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                     aggregated_rules[aggr_key]["publications"].append(publication)
                 if phenotype:
                     aggregated_rules[aggr_key]["phenotypes"].append(phenotype)
-                if fold_ic50:
+                if ic50:
                     try:
-                        aggregated_rules[aggr_key]["ic50_values"].append(float(fold_ic50))
+                        aggregated_rules[aggr_key]["ic50_values"].append(float(ic50))
                     except ValueError:
                         pass
                 emitted_for_row += 1
@@ -405,9 +405,9 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                 aggregated_combos[combo_key]["publications"].append(publication)
             if phenotype:
                 aggregated_combos[combo_key]["phenotypes"].append(phenotype)
-            if fold_ic50:
+            if ic50:
                 try:
-                    aggregated_combos[combo_key]["ic50_values"].append(float(fold_ic50))
+                    aggregated_combos[combo_key]["ic50_values"].append(float(ic50))
                 except ValueError:
                     pass
             if note:
@@ -423,9 +423,9 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
         ic50_values = aggr_data["ic50_values"]
         if ic50_values:
             mean_ic50 = sum(ic50_values) / len(ic50_values)
-            fold_ic50 = f"{mean_ic50:g}"
+            ic50 = f"{mean_ic50:g}"
         else:
-            fold_ic50 = ""
+            ic50 = ""
 
         # Determine phenotype: check for conflicts
         phenotypes = aggr_data["phenotypes"]
@@ -458,7 +458,7 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
             "group_id": "",
             "member_id": "",
             "phenotype": phenotype,
-            "fold_ic50": fold_ic50,
+            "ic50": ic50,
             "publication": publication,
             "source": aggr_data["source"],
             "comment": comment,
@@ -483,7 +483,7 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                     "group_id": group_id,
                     "member_id": member_id,
                     "phenotype": "",
-                    "fold_ic50": "",
+                    "ic50": "",
                     "publication": join_unique(combo_data["publications"]),
                     "source": combo_data["source"],
                     "comment": join_unique(combo_data["comments"]),
@@ -502,9 +502,9 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
         ic50_values = sorted(combo_data["ic50_values"])
         if ic50_values:
             mean_ic50 = sum(ic50_values) / len(ic50_values)
-            fold_ic50 = f"{mean_ic50:g}"
+            ic50 = f"{mean_ic50:g}"
         else:
-            fold_ic50 = ""
+            ic50 = ""
 
         formula_comment = ""
         if len(ic50_values) > 1:
@@ -517,7 +517,7 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                 "antiviral": combo_data["antiviral"],
                 "expression": "(" + " AND ".join(member_ids) + ")",
                 "phenotype": phenotype,
-                "fold_ic50": fold_ic50,
+                "ic50": ic50,
                 "publication": join_unique(combo_data["publications"]),
                 "source": combo_data["source"],
                 "comment": formula_comment,
