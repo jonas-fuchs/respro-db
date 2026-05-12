@@ -95,6 +95,11 @@ jobs:
             --source-url "${{ steps.source.outputs.source_url }}" \
             --output-dir databases/herpesdrg/output
 
+      - name: Build global metadata manifest
+        if: steps.update_check.outputs.should_update == 'true'
+        run: |
+          python scripts/build_metadata_manifest.py
+
       - name: No update detected
         if: steps.update_check.outputs.should_update != 'true'
         run: |
@@ -124,3 +129,4 @@ jobs:
             databases/herpesdrg/output/formula-rules.tsv
             databases/herpesdrg/output/metadata.json
             databases/herpesdrg/output/non-migrated-rules.txt
+            databases/manifest.json

@@ -1,0 +1,43 @@
+{
+  "manifest_version": 1,
+  "databases": [
+    {
+      "source_name": "herpesdrg",
+      "metadata_path": "databases/herpesdrg/output/metadata.json",
+      "rules_path": "databases/herpesdrg/output/rules.tsv",
+      "formula_rules_path": "databases/herpesdrg/output/formula-rules.tsv",
+      "metadata": {
+        "maintainers": [
+          "Oscar Charles"
+        ],
+        "contact": "oscar.charles.18@ucl.ac.uk",
+        "publication_pmid": "39192205",
+        "website": "https://github.com/ojcharles/herpesdrg-db",
+        "description": "Comprehensive resource for human herpesvirus antiviral drug resistance genotyping.",
+        "maintainer_update": "2026-01-02",
+        "license": "MIT",
+        "tsv_checksum": "sha256:6e737f17a20d2fade106a82fed9791361563f4ff317220a2b3699cffabbea1c6"
+      }
+    },
+    {
+      "source_name": "hsv_daehne_jaki",
+      "metadata_path": "databases/hsv_daehne_jaki/output/metadata.json",
+      "rules_path": "databases/hsv_daehne_jaki/output/rules.tsv",
+      "formula_rules_path": "databases/hsv_daehne_jaki/output/formula-rules.tsv",
+      "metadata": {
+        "maintainers": [
+          "Dähne, Theo",
+          "Gosert, Rainer",
+          "Jaki, Lena"
+        ],
+        "contact": "marcus.panning@uniklinik-freiburg.de",
+        "publication_pmid": "40349973",
+        "website": "https://zenodo.org/records/15149867",
+        "description": "HSV-1 and HSV-2 drug resistance mutation database curated from published literature. Covers TK (UL23), DNA Polymerase (UL30), and Helicase-Primase Complex (UL5/UL52) genes. ",
+        "maintainer_update": "2025-05-05",
+        "license": "CC-BY-4.0",
+        "tsv_checksum": "sha256:79afd11411feed127b9c0eb8bbf95144cb510179ddc77f7c0e3e0bb229884631"
+      }
+    }
+  ]
+}

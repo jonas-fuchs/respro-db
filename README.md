@@ -2,6 +2,23 @@
 
 This repository is intended as a general home for ResPro-compatible, auto-updated antiviral resistance databases.
 
+## Global metadata manifest
+
+To simplify unauthenticated clients, this repository publishes a single discovery file at `databases/manifest.json`.
+The manifest is generated from all `databases/*/output/metadata.json` files and includes:
+
+- source name
+- relative path to `metadata.json`
+- relative path to `rules.tsv`
+- relative path to `formula-rules.tsv` (empty when not present)
+- embedded metadata content
+
+For GitHub-based consumers, fetch it via the raw URL:
+
+`https://raw.githubusercontent.com/jonas-fuchs/respro-db/main/databases/manifest.json`
+
+Then follow `metadata_path` and `rules_path` entries directly for each source.
+
 ## Repository purpose
 
 - fetch curated upstream source data (Zenodo, Github, release assets, or similar)
@@ -14,6 +31,8 @@ This repository is intended as a general home for ResPro-compatible, auto-update
 Each source database needs to use its own folder under databases:
 
 ```text
+databases/manifest.json
+
 databases/<source_name>/
   scripts/
     convert.py
