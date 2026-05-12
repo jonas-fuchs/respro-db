@@ -1,0 +1,12 @@
+{
+  "maintainers": [
+    "Stanford HIVDB Team"
+  ],
+  "contact": "",
+  "publication_pmid": "",
+  "website": "https://hivdb.stanford.edu/",
+  "description": "Stanford HIVDB ASI drug-resistance scoring rules converted to ResPro TSV artifacts.",
+  "maintainer_update": "2026-04-26",
+  "license": "Unlicense",
+  "tsv_checksum": "sha256:4fce1bb2c6a16f6174711192bd1d04edbadb102d1d7d4adf49ab3b25852bddab"
+}
