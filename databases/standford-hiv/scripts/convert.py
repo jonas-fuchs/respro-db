@@ -98,12 +98,12 @@ RESERVED_EXPR_WORDS: frozenset[str] = frozenset({"AND", "OR", "NOT", "XOR"})
 
 RULES_COLUMNS = [
     "gene", "reference_identifier", "position", "reference", "mutation",
-    "antiviral", "member_id", "phenotype", "score",
+    "antiviral", "member_id", "score",
     "ic50", "publication", "source", "comment",
 ]
 
 FORMULA_COLUMNS = [
-    "group_id", "antiviral", "expression", "phenotype", "score",
+    "group_id", "antiviral", "expression", "score",
     "ic50", "publication", "source", "comment",
 ]
 
@@ -115,6 +115,18 @@ NON_MIGRATED_COLUMNS = ["reason", "drug", "gene", "score", "raw_rule", "details"
 
 def norm(v: object) -> str:
     return "" if v is None else str(v).strip()
+
+
+def sanitize_comment_text(text: str) -> str:
+    """Remove unresolved wildcard helper phrases from comment text."""
+    cleaned = re.sub(
+        r"\s*\$listMutsIn\{[^}]+\}\s*[^.?!]*(?:[.?!]|$)",
+        " ",
+        norm(text),
+        flags=re.IGNORECASE,
+    )
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    return cleaned
 
 
 def eprint(msg: str) -> None:
@@ -328,6 +340,9 @@ def extract_comment_hints(
             continue
         segment = gene_match.group(1)
         text = text_of(cs, "TEXT")
+        text = sanitize_comment_text(text)
+        if not text:
+            continue
 
         # Scan the TEXT for mutation tokens; word-boundary rules prevent
         # the gene prefix in cs_id from accidentally yielding false matches.
@@ -775,6 +790,7 @@ def _emit_rule(
             or atomic_comment
             or "HIVDB ASI atomic score rule"
         )
+        comment = sanitize_comment_text(comment)
         ctx.rules_rows.append({
             "gene": mem["gene"],
             "reference_identifier": mem["reference_identifier"],
