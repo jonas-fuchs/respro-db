@@ -2,42 +2,12 @@
 # Columns: reason	drug	gene	score	raw_rule	details
 
 reason	drug	gene	score	raw_rule	details
-duplicate_member_in_max_expression	AZT	RT	10	MAX:210W AND 215FY => 10|210W AND 215ACDEILNSV => 10	duplicate member IDs in generated expression: ME516CE551AF33F
-duplicate_member_in_max_expression	AZT	RT	10	MAX:41L AND 215FY => 10|41L AND 215ACDEILNSV => 10	duplicate member IDs in generated expression: M5C2E07735896E1
-duplicate_member_in_max_expression	DOR	RT	5	MAX:101E AND 190A => 5|101E AND 190S => 5	duplicate member IDs in generated expression: M430409E25CF9DF
-duplicate_member_in_max_expression	DOR	RT	15	MAX:106I AND 227CLIVY => 15|106A AND 227CL => 15	duplicate member IDs in generated expression: M0074BF445010B6,MCA140403CF1A8D
-duplicate_member_in_max_expression	ETR	RT	5	MAX:101E AND 190A => 5|101E AND 190S => 5	duplicate member IDs in generated expression: M430409E25CF9DF
-mixed_score_max_not_representable	BIC	IN	10,5	74I AND 118R => 5 | 74FM AND 118R => 10	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	BIC	IN	15,5	74I AND 148HKR => 5 | 74FM AND 148HKR => 15	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	CAB	IN	15,5	74I AND 148HKR => 5 | 74FM AND 148HKR => 15	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	DTG	IN	15,5	74I AND 148HKR => 5 | 74FM AND 148HKR => 15	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	3TC	RT	15,30	69i => 30 | 69d => 15	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	ABC	RT	15,5	67E => 5 | 67G => 5 | 67H => 5 | 67N => 5 | 67S => 5 | 67T => 5 | 67d => 15	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	ABC	RT	10,15,60	69G => 10 | 69i => 60 | 69d => 15	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	ABC	RT	15,5	70E => 15 | 70G => 15 | 70N => 15 | 70Q => 15 | 70R => 5 | 70S => 15 | 70T => 15 | 70d => 15	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	AZT	RT	15,30	67E => 15 | 67G => 15 | 67H => 15 | 67N => 15 | 67S => 15 | 67T => 15 | 67d => 30	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	AZT	RT	5,60	69G => 5 | 69i => 60	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	D4T	RT	10,5	210W AND 215FY => 10 | 210W AND 215ACDEILNSV => 5	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	D4T	RT	10,5	41L AND 215FY => 10 | 41L AND 215ACDEILNSV => 5	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	D4T	RT	10,15,30	67E => 10 | 67G => 10 | 67H => 10 | 67N => 15 | 67S => 10 | 67T => 10 | 67d => 30	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	D4T	RT	10,30,60	69G => 10 | 69i => 60 | 69d => 30 | 69D => 10	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	D4T	RT	15,30	70E => 15 | 70G => 15 | 70N => 15 | 70Q => 15 | 70R => 15 | 70S => 15 | 70T => 15 | 70d => 30	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	DDI	RT	10,5	210W AND 215FY => 10 | 210W AND 215ACDEILNSV => 5	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	DDI	RT	10,5	41L AND 215FY => 10 | 41L AND 215ACDEILNSV => 5	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	DDI	RT	30,5	67E => 5 | 67G => 5 | 67H => 5 | 67N => 5 | 67S => 5 | 67T => 5 | 67d => 30	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	DDI	RT	10,30,60	69G => 10 | 69i => 60 | 69d => 30 | 69D => 30	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	DDI	RT	10,15,30	70E => 15 | 70G => 15 | 70N => 15 | 70Q => 15 | 70R => 10 | 70S => 15 | 70T => 15 | 70d => 30	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	EFV	RT	10,15	106I AND 227CLIVY => 10 | 106A AND 227CL => 15	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	ETR	RT	10,15	179F AND 181C => 15 | 179T AND 181C => 10	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	FTC	RT	15,30	69i => 30 | 69d => 15	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	RPV	RT	10,15	106I AND 227CLIVY => 15 | 106A AND 227CL => 10	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	RPV	RT	10,15	179F AND 181C => 15 | 179T AND 181C => 10	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	TDF	RT	15,5	67E => 5 | 67G => 5 | 67H => 5 | 67N => 5 | 67S => 5 | 67T => 5 | 67d => 15	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	TDF	RT	15,5,60	69G => 5 | 69i => 60 | 69d => 15	MAX with mixed scores cannot be represented with plain additive boolean formulas
-mixed_score_max_not_representable	TDF	RT	15,5	70E => 15 | 70G => 15 | 70N => 15 | 70Q => 15 | 70R => 5 | 70S => 15 | 70T => 15 | 70d => 15	MAX with mixed scores cannot be represented with plain additive boolean formulas
-unsupported_or_unresolved_expression	3TC	RT	15	68d => 15	
-unsupported_or_unresolved_expression	ABC	RT	15	68d => 15	
-unsupported_or_unresolved_expression	D4T	RT	30	68d => 30	
-unsupported_or_unresolved_expression	DDI	RT	30	68d => 30	
-unsupported_or_unresolved_expression	FTC	RT	15	68d => 15	
-unsupported_or_unresolved_expression	TDF	RT	15	68d => 15	
+non_portable_insertion_event	3TC	RT	30	69i => 30	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	ABC	RT	60	69i => 60	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	AZT	RT	60	69i => 60	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	D4T	RT	60	69i => 60	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	DDI	RT	60	69i => 60	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	FTC	RT	30	69i => 30	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	ISL	RT	60	69i => 60	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	TDF	RT	60	69i => 60	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	TDF	RT	10	69i AND 184VI => 10	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence

@@ -2,17 +2,41 @@
 """
 Convert Stanford HIVDB ASI XML into ResPro-compatible TSV artifacts.
 
-Outputs:
-- rules.tsv
-- formula-rules.tsv, only when grouped logical rules are emitted
-- metadata.json
-- non-migrated-rules.txt
+Outputs written to databases/standford-hiv/output/:
+  rules.tsv           – one row per atomic mutation or formula member
+  formula-rules.tsv   – boolean combination rules (emitted only when needed)
+  metadata.json       – provenance, version, and checksum
+  non-migrated-rules.txt – score rules that could not be converted
 
-Important mapping:
-- Atomic score rule -> rules.tsv row with antiviral + score.
-- Boolean rule -> atomic member rows in rules.tsv + expression row in formula-rules.tsv.
-- Equal-score MAX(...) -> OR formula.
-- Mixed-score MAX(...) -> non-migrated audit entry to avoid double-counting.
+Data sources fetched at runtime:
+  HIVDB ASI XML             – drug-resistance scoring rules (Stanford HIVDB)
+  hivfacts drugs.json       – drug abbreviation → full name mapping
+  hivfacts genes_hiv1.json  – segment reference sequences and genomic coordinates
+
+Pipeline stages:
+  1. Fetch XML + hivfacts auxiliary data
+  2. Validate XML metadata (ALGNAME, version, date)
+  3. Build drug-to-segment map from DEFINITIONS
+  4. Extract COMMENT_STRING hints (reference AAs and annotation text)
+  5. For each DRUG, parse CONDITION into scored score items
+  6. For each score item:
+       a. Non-MAX: parse LHS, resolve references, emit atomic or formula row
+       b. MAX scope: parse each branch independently:
+            - equal-score, no shared members → combine as single OR formula
+            - equal-score, shared members   → emit each branch separately
+            - mixed-score                   → emit each branch separately
+            (Branches are mutually exclusive in single-infection context, so
+             emitting them as independent rules is semantically correct.)
+  7. Materialise shared formula-member rows
+  8. Deduplicate, sort deterministically, write outputs
+  9. Validate schema and referential integrity before exit
+
+Mutation rule types handled:
+  41L => 5                        – atomic substitution
+  65R AND 151M => 10              – AND combination → formula
+  67EGNHST => 15                  – compressed alternatives → expanded
+  MAX(151L => 30, 151M => 60)     – equal-score: OR formula; mixed: separate rules
+  MAX(210W AND 215FY => 10, ...)  – same logic, branch-by-branch
 """
 
 from __future__ import annotations
@@ -20,161 +44,93 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
-import io
 import json
 import re
 import sys
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from collections import Counter, defaultdict
-from dataclasses import dataclass
-from datetime import datetime, timezone
+from collections import defaultdict
+from dataclasses import dataclass, field
 from pathlib import Path
 
-DEFAULT_SOURCE_URL = (
-    "https://raw.githubusercontent.com/hivdb/hivfacts/main/data/algorithms/"
-    "HIVDB_latest.xml"
+# ---------------------------------------------------------------------------
+# URLs
+# ---------------------------------------------------------------------------
+
+HIVDB_LATEST_URL = (
+    "https://raw.githubusercontent.com/hivdb/hivfacts/main/data/algorithms/HIVDB_latest.xml"
+)
+HIVDB_VERSIONS_URL = (
+    "https://raw.githubusercontent.com/hivdb/hivfacts/main/data/algorithms/versions.json"
+)
+HIVFACTS_DRUGS_URL = (
+    "https://raw.githubusercontent.com/hivdb/hivfacts/main/data/drugs.json"
+)
+HIVFACTS_GENES_URL = (
+    "https://raw.githubusercontent.com/hivdb/hivfacts/main/data/genes_hiv1.json"
 )
 
-DEFAULT_MUTATION_TYPES_URL = (
-    "https://raw.githubusercontent.com/hivdb/hivfacts/main/data/"
-    "mutation-type-pairs_hiv1.csv"
-)
+# ---------------------------------------------------------------------------
+# Constants
+# ---------------------------------------------------------------------------
 
-REFERENCE_IDENTIFIER = "MN919177" # HIV-1 subtype B reference sequence used by Stanford HIVDB ASI
+# HIV-1 subtype B reference accession used throughout Stanford HIVDB.
+REFERENCE_IDENTIFIER = "MN919177"
+
+SOURCE_LABEL = "Stanford HIVDB"
+
+# Stanford ASI uses short segment codes (CA, PR, RT, IN).
+# Maps each to (output gene name, parent gene abstractGene from hivfacts).
+# Position offsets (within-segment -> full-protein) are derived at
+# runtime from hivfacts genes_hiv1.json refRanges.
+SEGMENT_TO_GENE: dict[str, tuple[str, str]] = {
+    "CA": ("gag protein", "gag"),
+    "PR": ("pol protein", "pol"),
+    "RT": ("pol protein", "pol"),
+    "IN": ("pol protein", "pol"),
+}
+
+GENE_ORDER: dict[str, int] = {"gag protein": 0, "pol protein": 1}
+
+CANONICAL_AA: frozenset[str] = frozenset("ACDEFGHIKLMNPQRSTVWY")
+RESERVED_EXPR_WORDS: frozenset[str] = frozenset({"AND", "OR", "NOT", "XOR"})
 
 RULES_COLUMNS = [
-    "gene",
-    "reference_identifier",
-    "position",
-    "reference",
-    "mutation",
-    "antiviral",
-    "group_id",
-    "member_id",
-    "phenotype",
-    "score",
-    "ic50",
-    "publication",
-    "source",
-    "comment",
+    "gene", "reference_identifier", "position", "reference", "mutation",
+    "antiviral", "group_id", "member_id", "phenotype", "score",
+    "ic50", "publication", "source", "comment",
 ]
 
 FORMULA_COLUMNS = [
-    "group_id",
-    "antiviral",
-    "expression",
-    "phenotype",
-    "score",
-    "ic50",
-    "publication",
-    "source",
-    "comment",
+    "group_id", "antiviral", "expression", "phenotype", "score",
+    "ic50", "publication", "source", "comment",
 ]
 
-NON_MIGRATED_COLUMNS = [
-    "reason",
-    "drug",
-    "gene",
-    "score",
-    "raw_rule",
-    "details",
-]
+NON_MIGRATED_COLUMNS = ["reason", "drug", "gene", "score", "raw_rule", "details"]
 
-SOURCE_LABEL = "Stanford HIVDB"
-CANONICAL_AA = set("ACDEFGHIKLMNPQRSTVWY")
-RESERVED_EXPR_WORDS = {"AND", "OR", "NOT", "XOR"}
+# ---------------------------------------------------------------------------
+# Shared utilities
+# ---------------------------------------------------------------------------
 
-GENE_ORDER = {"CA": 0, "PR": 1, "RT": 2, "IN": 3}
-
-# Stanford HIVDB uses short drug codes. Use canonical full names for better
-# downstream metadata enrichment (e.g., PubChem lookup).
-DRUG_NAME_MAP = {
-    "3TC": "lamivudine",
-    "ABC": "abacavir",
-    "ATV/R": "atazanavir",
-    "AZT": "zidovudine",
-    "BIC": "bictegravir",
-    "CAB": "cabotegravir",
-    "D4T": "stavudine",
-    "DDI": "didanosine",
-    "DOR": "doravirine",
-    "DPV": "dapivirine",
-    "DRV/R": "darunavir",
-    "DTG": "dolutegravir",
-    "EFV": "efavirenz",
-    "ETR": "etravirine",
-    "EVG": "elvitegravir",
-    "FPV/R": "fosamprenavir",
-    "FTC": "emtricitabine",
-    "IDV/R": "indinavir",
-    "ISL": "islatravir",
-    "LEN": "lenacapavir",
-    "LPV/R": "lopinavir",
-    "NFV": "nelfinavir",
-    "NVP": "nevirapine",
-    "RAL": "raltegravir",
-    "RPV": "rilpivirine",
-    "SQV/R": "saquinavir",
-    "TDF": "tenofovir disoproxil",
-    "TPV/R": "tipranavir",
-}
+def norm(v: object) -> str:
+    return "" if v is None else str(v).strip()
 
 
-@dataclass(frozen=True)
-class SourceInfo:
-    requested_url: str
-    xml_url: str
-    pointer_filename: str
-    source_version: str
-    source_date: str
-    commit_date: str
-    source_sha256: str
-
-
-@dataclass(frozen=True)
-class RuleItem:
-    lhs: str
-    score: str
-    raw: str
-    max_scope: str
-
-
-@dataclass(frozen=True)
-class MutationTerm:
-    position: int
-    reference_hint: str
-    mutation: str
-
-
-@dataclass(frozen=True)
-class ParsedExpression:
-    expression: str
-    members: tuple[dict, ...]
-    is_formula: bool
-
-
-def norm(value: object) -> str:
-    if value is None:
-        return ""
-    return str(value).strip()
-
-
-def eprint(message: str) -> None:
-    print(message, file=sys.stderr)
+def eprint(msg: str) -> None:
+    print(msg, file=sys.stderr)
 
 
 def http_get_bytes(url: str) -> bytes:
-    request = urllib.request.Request(
+    req = urllib.request.Request(
         url,
         headers={
-            "User-Agent": "respro-stanford-hivdb-converter/1.0",
+            "User-Agent": "respro-stanford-hivdb-converter/2.0",
             "Accept": "application/vnd.github+json, text/plain, */*",
         },
     )
-    with urllib.request.urlopen(request, timeout=60) as response:
-        return response.read()
+    with urllib.request.urlopen(req, timeout=60) as resp:
+        return resp.read()
 
 
 def http_get_text(url: str) -> str:
@@ -189,1047 +145,964 @@ def checksum_bytes(data: bytes) -> str:
     return "sha256:" + hashlib.sha256(data).hexdigest()
 
 
-def parse_finite_score(value: str) -> float | None:
+def finite_float(v: str) -> float | None:
+    """Return a parsed finite float, or None for non-finite / non-numeric input."""
     try:
-        parsed = float(value)
+        f = float(v)
+        return None if (f != f or f in (float("inf"), float("-inf"))) else f
     except (TypeError, ValueError):
         return None
-    if parsed != parsed or parsed in (float("inf"), float("-inf")):
-        return None
-    return parsed
 
 
-def version_from_hivdb_filename(filename: str) -> str:
-    match = re.fullmatch(r"HIVDB_(.+)\.xml", filename)
-    if not match:
-        raise ValueError(f"Could not extract HIVDB version from filename: {filename}")
-    return match.group(1)
+def text_of(el: ET.Element, tag: str, default: str = "") -> str:
+    child = el.find(tag)
+    return child.text.strip() if (child is not None and child.text) else default
 
 
-def versions_url_for(source_url: str) -> str:
-    return urllib.parse.urljoin(source_url, "versions.json")
+def split_csv(v: str) -> list[str]:
+    return [p.strip() for p in v.split(",") if p.strip()]
 
 
-def resolve_source(source_url: str) -> SourceInfo:
-    source_url = source_url.strip()
+# ---------------------------------------------------------------------------
+# Source resolution
+# ---------------------------------------------------------------------------
 
-    if source_url.endswith("HIVDB_latest.xml"):
-        pointer_filename = http_get_text(source_url).strip()
-        if not re.fullmatch(r"HIVDB_.+\.xml", pointer_filename):
-            raise ValueError(
-                f"HIVDB_latest.xml returned unexpected content: {pointer_filename!r}"
-            )
-        xml_url = urllib.parse.urljoin(source_url, pointer_filename)
+@dataclass(frozen=True)
+class SourceInfo:
+    xml_url: str
+    source_version: str
+    source_date: str
+    source_sha256: str
+
+
+def resolve_source(url: str) -> tuple[SourceInfo, bytes]:
+    """Download the HIVDB XML (resolving the latest pointer if needed) and
+    validate version/date against versions.json.  Returns (SourceInfo, xml_bytes)."""
+    url = url.strip()
+    if url.endswith("HIVDB_latest.xml"):
+        pointer = http_get_text(url).strip()
+        if not re.fullmatch(r"HIVDB_.+\.xml", pointer):
+            raise ValueError(f"HIVDB_latest.xml returned unexpected content: {pointer!r}")
+        xml_url = urllib.parse.urljoin(url, pointer)
     else:
-        pointer_filename = ""
-        xml_url = source_url
+        xml_url = url
 
     filename = Path(urllib.parse.urlparse(xml_url).path).name
-    source_version = version_from_hivdb_filename(filename)
+    m = re.fullmatch(r"HIVDB_(.+)\.xml", filename)
+    if not m:
+        raise ValueError(f"Cannot extract version from XML filename: {filename!r}")
+    version = m.group(1)
 
-    versions = json.loads(http_get_text(versions_url_for(source_url)))
+    versions = json.loads(http_get_text(HIVDB_VERSIONS_URL))
     source_date = ""
-    for version, date, virus in versions.get("HIVDB", []):
-        if version == source_version and virus == "HIV1":
-            source_date = date
+    for v, d, virus in versions.get("HIVDB", []):
+        if v == version and virus == "HIV1":
+            source_date = d
             break
-
     if not source_date:
-        raise ValueError(f"Could not find HIVDB {source_version} HIV1 in versions.json")
+        raise ValueError(f"HIVDB {version} HIV1 not found in versions.json")
 
     xml_bytes = http_get_bytes(xml_url)
-    source_sha256 = checksum_bytes(xml_bytes)
-
     return SourceInfo(
-        requested_url=source_url,
         xml_url=xml_url,
-        pointer_filename=pointer_filename,
-        source_version=source_version,
+        source_version=version,
         source_date=source_date,
-        commit_date=fetch_source_commit_date(xml_url),
-        source_sha256=source_sha256,
-    )
+        source_sha256=checksum_bytes(xml_bytes),
+    ), xml_bytes
 
 
-def fetch_source_commit_date(raw_url: str) -> str:
-    match = re.match(
-        r"https://raw\.githubusercontent\.com/([^/]+)/([^/]+)/([^/]+)/(.+)",
-        raw_url,
-    )
-    if not match:
-        return datetime.now(timezone.utc).strftime("%Y-%m-%d")
+# ---------------------------------------------------------------------------
+# hivfacts data loading
+# ---------------------------------------------------------------------------
 
-    owner, repo, branch, path = match.groups()
-    api_url = (
-        f"https://api.github.com/repos/{owner}/{repo}/commits"
-        f"?path={urllib.parse.quote(path)}&sha={urllib.parse.quote(branch)}&per_page=1"
-    )
+def load_drug_map(drugs_json: str) -> dict[str, str]:
+    """Build (displayAbbr.upper()) -> fullName lookup from hivfacts drugs.json.
 
-    try:
-        commits = json.loads(http_get_text(api_url))
-        return commits[0]["commit"]["committer"]["date"][:10]
-    except Exception as exc:
-        eprint(f"WARNING: Could not fetch GitHub commit date: {exc}")
-        return datetime.now(timezone.utc).strftime("%Y-%m-%d")
-
-
-def text_of(parent: ET.Element, child_name: str, default: str = "") -> str:
-    child = parent.find(child_name)
-    if child is None or child.text is None:
-        return default
-    return child.text.strip()
+    Stanford ASI drug codes match hivfacts displayAbbr (e.g. '3TC', 'ATV/R').
+    Synonyms (e.g. 'DTG_QD') are also registered.
+    """
+    mapping: dict[str, str] = {}
+    for entry in json.loads(drugs_json):
+        abbr = norm(entry.get("displayAbbr")).upper()
+        full = norm(entry.get("fullName"))
+        if abbr and full:
+            mapping[abbr] = full
+        for syn in entry.get("synonyms", []):
+            if syn:
+                mapping[syn.upper()] = full
+    return mapping
 
 
-def split_csv_text(value: str) -> list[str]:
-    return [part.strip() for part in value.split(",") if part.strip()]
+def load_gene_data(genes_json: str) -> dict[str, tuple[str, int, str]]:
+    """Build segment -> (gene_name, position_offset, refSequence) from hivfacts genes_hiv1.json.
 
+    Position offset converts a 1-based within-segment position to a 1-based
+    full-protein position, derived as:
+        offset = (segment_nt_start - parent_gene_nt_start) / 3
+
+    Example:
+        CA refRanges [1186, 1878], gag refRanges [790, 2289]
+        offset = (1186 - 790) / 3 = 132  ->  CA pos 1 = gag protein pos 133
+    """
+    genes_list = json.loads(genes_json)
+    by_abstract: dict[str, dict] = {
+        g["abstractGene"]: g for g in genes_list if g.get("abstractGene")
+    }
+
+    result: dict[str, tuple[str, int, str]] = {}
+    for segment, (gene_name, parent_abstract) in SEGMENT_TO_GENE.items():
+        seg = by_abstract.get(segment)
+        par = by_abstract.get(parent_abstract)
+        if seg is None or par is None:
+            raise ValueError(
+                f"hivfacts genes_hiv1.json missing entry for {segment!r} or {parent_abstract!r}"
+            )
+        seg_start = seg["refRanges"][0][0]
+        par_start = par["refRanges"][0][0]
+        offset = (seg_start - par_start) // 3
+        refseq = seg.get("refSequence", "").replace("\n", "").replace(" ", "")
+        result[segment] = (gene_name, offset, refseq)
+
+    return result
+
+
+# ---------------------------------------------------------------------------
+# XML extraction
+# ---------------------------------------------------------------------------
 
 def build_drug_to_gene(root: ET.Element) -> dict[str, str]:
-    definitions = root.find("DEFINITIONS")
-    if definitions is None:
-        raise ValueError("XML has no DEFINITIONS element")
+    """Parse DEFINITIONS element -> drug abbreviation -> segment code."""
+    defs = root.find("DEFINITIONS")
+    if defs is None:
+        raise ValueError("XML missing DEFINITIONS element")
 
     gene_to_classes: dict[str, list[str]] = {}
     class_to_drugs: dict[str, list[str]] = {}
 
-    for gene_def in definitions.findall("GENE_DEFINITION"):
-        gene = text_of(gene_def, "NAME")
-        classes = split_csv_text(text_of(gene_def, "DRUGCLASSLIST"))
-        if gene:
-            gene_to_classes[gene] = classes
+    for gd in defs.findall("GENE_DEFINITION"):
+        g = text_of(gd, "NAME")
+        if g:
+            gene_to_classes[g] = split_csv(text_of(gd, "DRUGCLASSLIST"))
 
-    for drug_class in definitions.findall("DRUGCLASS"):
-        class_name = text_of(drug_class, "NAME")
-        drugs = split_csv_text(text_of(drug_class, "DRUGLIST"))
-        if class_name:
-            class_to_drugs[class_name] = drugs
+    for dc in defs.findall("DRUGCLASS"):
+        c = text_of(dc, "NAME")
+        if c:
+            class_to_drugs[c] = split_csv(text_of(dc, "DRUGLIST"))
 
-    drug_to_gene: dict[str, str] = {}
+    out: dict[str, str] = {}
     for gene, classes in gene_to_classes.items():
-        for class_name in classes:
-            for drug in class_to_drugs.get(class_name, []):
-                drug_to_gene[drug] = gene
+        for cls in classes:
+            for drug in class_to_drugs.get(cls, []):
+                out[drug] = gene
 
-    if not drug_to_gene:
-        raise ValueError("Could not map drugs to genes from DEFINITIONS")
+    if not out:
+        raise ValueError("DEFINITIONS yielded no drug->gene mappings")
+    return out
 
-    return drug_to_gene
+
+@dataclass
+class CommentHint:
+    """Annotation extracted from a COMMENT_STRING element."""
+    reference: str  # reference amino acid at this position
+    text: str       # full annotation text (used as comment on matching atomic rules)
 
 
-def strip_outer_parens(text: str) -> str:
+_COMMENT_MUT_RE = re.compile(r"\b([A-Z])(\d{1,4})([A-Za-z*_\-/]+)\b")
+
+
+def extract_comment_hints(
+    root: ET.Element,
+) -> dict[tuple[str, int, str], CommentHint]:
+    """Parse COMMENT_STRING elements into {(segment, position, mutation): CommentHint}.
+
+    COMMENT_STRING ids follow [GENE][pos][mutations], e.g. 'RT227C'.
+    The TEXT element starts with mutation notation, e.g. 'F227C is a nonpolymorphic...'.
+    We scan the TEXT field for mutation tokens to extract reference AAs and annotation text.
+    """
+    hints: dict[tuple[str, int, str], CommentHint] = {}
+
+    for cs in root.findall(".//COMMENT_STRING"):
+        cs_id = cs.attrib.get("id", "")
+        gene_match = re.match(r"^(CA|PR|RT|IN)", cs_id)
+        if not gene_match:
+            continue
+        segment = gene_match.group(1)
+        text = text_of(cs, "TEXT")
+
+        # Scan the TEXT for mutation tokens; word-boundary rules prevent
+        # the gene prefix in cs_id from accidentally yielding false matches.
+        for m in _COMMENT_MUT_RE.finditer(text):
+            ref = m.group(1)
+            pos = int(m.group(2))
+            for mut in _expand_muts(m.group(3)):
+                if mut and mut != ref:
+                    key = (segment, pos, mut)
+                    if key not in hints:
+                        hints[key] = CommentHint(reference=ref, text=text)
+
+    return hints
+
+
+# ---------------------------------------------------------------------------
+# Mutation token expansion
+# ---------------------------------------------------------------------------
+
+def _expand_muts(raw: str) -> list[str]:
+    """Expand a compressed mutation string into a list of single-character AA tokens.
+
+    Handles:
+      - Compressed alternatives: 'EGNHST' -> ['E','G','N','H','S','T']
+      - Stop codon: '*' -> ['*']
+      - Deletion shorthands: '-' or 'd' -> ['-']
+      - Insertion shorthands: '_' or 'i' -> ['_']  (non-portable; caller may warn)
+      - Slash separator: '/' -> ignored (e.g. 'F/Y' -> ['F','Y'])
+      - Whole-word forms: 'insertion', 'del', etc.
+    """
+    lraw = raw.lower().strip()
+    if lraw in {"insertion", "insert", "ins"}:
+        return ["_"]
+    if lraw in {"deletion", "del"}:
+        return ["-"]
+
+    out: list[str] = []
+    for ch in raw:
+        if ch == "*":
+            out.append("*")
+        elif ch == "-":
+            out.append("-")
+        elif ch.lower() == "d":
+            out.append("-")
+        elif ch.lower() == "i":
+            out.append("_")
+        elif ch.isalpha() and ch.upper() in CANONICAL_AA:
+            out.append(ch.upper())
+        # "/" and other separators are silently skipped.
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Condition parsing
+# ---------------------------------------------------------------------------
+
+def _strip_parens(text: str) -> str:
+    """Remove one layer of balanced outer parentheses, if present."""
     text = text.strip()
     if not (text.startswith("(") and text.endswith(")")):
         return text
-
     depth = 0
-    for idx, char in enumerate(text):
-        if char == "(":
+    for i, ch in enumerate(text):
+        if ch == "(":
             depth += 1
-        elif char == ")":
+        elif ch == ")":
             depth -= 1
-            if depth == 0 and idx != len(text) - 1:
-                return text
-
+            if depth == 0 and i < len(text) - 1:
+                return text  # parens do not wrap the entire string
     return text[1:-1].strip()
 
 
-def split_top_level(text: str, sep: str = ",") -> list[str]:
+def _split_top(text: str, sep: str = ",") -> list[str]:
+    """Split *text* at *sep* characters that are not inside parentheses."""
     parts: list[str] = []
-    start = 0
-    paren = brace = bracket = 0
-
-    for idx, char in enumerate(text):
-        if char == "(":
-            paren += 1
-        elif char == ")":
-            paren = max(0, paren - 1)
-        elif char == "{":
-            brace += 1
-        elif char == "}":
-            brace = max(0, brace - 1)
-        elif char == "[":
-            bracket += 1
-        elif char == "]":
-            bracket = max(0, bracket - 1)
-        elif char == sep and paren == brace == bracket == 0:
-            part = text[start:idx].strip()
-            if part:
-                parts.append(part)
-            start = idx + 1
-
+    start = depth = 0
+    for i, ch in enumerate(text):
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth = max(0, depth - 1)
+        elif ch == sep and depth == 0:
+            p = text[start:i].strip()
+            if p:
+                parts.append(p)
+            start = i + 1
     tail = text[start:].strip()
     if tail:
         parts.append(tail)
-
     return parts
 
 
-def split_score_item(part: str) -> tuple[str, str] | None:
-    if "=>" not in part:
-        return None
-    lhs, score = part.split("=>", 1)
-    return strip_outer_parens(lhs.strip()), score.strip()
+@dataclass(frozen=True)
+class ScoreItem:
+    """One scored branch extracted from a CONDITION string."""
+    lhs: str        # mutation expression left of '=>'
+    score: str      # numeric score (as string)
+    raw: str        # original full text of this branch
+    max_scope: str  # non-empty tag when item is inside MAX(...)
 
 
-def normalize_antiviral(drug: str) -> str:
-    token = norm(drug).upper()
-    if token in DRUG_NAME_MAP:
-        return DRUG_NAME_MAP[token]
-    return norm(drug).lower()
+def parse_condition(condition: str) -> list[ScoreItem]:
+    """Split a CONDITION string into a flat list of ScoreItems.
 
-
-def extract_rule_items(condition: str) -> list[RuleItem]:
-    condition = re.sub(r"\s+", " ", condition or "").strip()
+    Handles nested MAX(...) scopes, assigning a unique scope tag to each.
+    Items outside any MAX have an empty max_scope.
+    """
+    condition = re.sub(r"\s+", " ", norm(condition))
     if not condition:
         return []
-
     if condition.upper().startswith("SCORE FROM"):
-        condition = condition[len("SCORE FROM") :].strip()
+        condition = condition[len("SCORE FROM"):].strip()
+    condition = _strip_parens(condition)
 
-    condition = strip_outer_parens(condition)
-    items: list[RuleItem] = []
-    max_counter = 0
+    items: list[ScoreItem] = []
+    counter = 0
 
-    def visit(fragment: str, max_scope: str = "") -> None:
-        nonlocal max_counter
-        fragment = strip_outer_parens(fragment.strip())
-
-        for part in split_top_level(fragment):
+    def visit(frag: str, scope: str = "") -> None:
+        nonlocal counter
+        frag = _strip_parens(frag.strip())
+        for part in _split_top(frag):
             part = part.strip()
             if not part:
                 continue
-
             if part.upper().startswith("MAX"):
-                max_counter += 1
-                inner = part[3:].strip()
-                inner = strip_outer_parens(inner)
-                visit(inner, max_scope=f"MAX{max_counter:05d}")
+                counter += 1
+                inner = _strip_parens(part[3:].strip())
+                visit(inner, scope=f"MAX{counter:05d}")
                 continue
-
-            split_item = split_score_item(part)
-            if split_item is None:
+            if "=>" not in part:
                 continue
-
-            lhs, score = split_item
-            items.append(RuleItem(lhs=lhs, score=score, raw=part, max_scope=max_scope))
+            lhs, score = part.split("=>", 1)
+            items.append(ScoreItem(
+                lhs=_strip_parens(lhs.strip()),
+                score=score.strip(),
+                raw=part,
+                max_scope=scope,
+            ))
 
     visit(condition)
     return items
 
 
-def expand_mutation_group(raw_group: str) -> list[str]:
-    token = raw_group.strip()
-    lower = token.lower()
-
-    # Whole-token shorthands.
-    if lower in {"insertion", "insert", "ins"}:
-        return ["_"]
-    if lower in {"deletion", "del"}:
-        return ["-"]
-
-    out = []
-    for char in token:
-        if char in {"_", "-", "*"}:
-            out.append(char)
-            continue
-
-        if char.isalpha():
-            # Stanford ASI may use lowercase d/i as deletion/insertion shorthand.
-            if char == "d":
-                out.append("-")
-                continue
-            if char == "i":
-                out.append("_")
-                continue
-
-            aa = char.upper()
-            if aa in CANONICAL_AA:
-                out.append(aa)
-
-    return out
-
-
-TERM_PAREN_RE = re.compile(
+# Regex patterns for mutation tokens.
+# PAREN form:  '65(NOT V)'  ->  position=65, aas='V', negated
+# SIMPLE form: 'K65R', '65R', '67EGNHST'
+_TERM_PAREN_RE = re.compile(
     r"(?<![A-Za-z0-9])(?P<pos>\d{1,4})\(\s*(?P<not>NOT\s+)?(?P<aas>[A-Za-z*_\-/]+)\s*\)",
     re.IGNORECASE,
 )
-
-TERM_SIMPLE_RE = re.compile(
+_TERM_SIMPLE_RE = re.compile(
     r"(?<![A-Za-z0-9])(?P<ref>[A-Z*]?)(?P<pos>\d{1,4})(?P<aas>[A-Za-z*_\-/]+)(?![A-Za-z0-9])",
     re.IGNORECASE,
 )
 
+# ASI markers that indicate unsupported algorithm constructs.
+_UNSUPPORTED_MARKERS = frozenset([
+    "$", ">=", "<=", "!=", "==", " TO ", "FROM ",
+    "SELECT ", "EXCEPT ", "ATLEAST", "NUMBEROF", "COUNT",
+])
 
-def parse_term_text(text: str) -> tuple[list[MutationTerm], bool]:
+
+@dataclass(frozen=True)
+class MutTerm:
+    position: int
+    ref_hint: str   # reference AA hint from the token itself (may be empty)
+    mutation: str   # expanded single-character AA token
+
+
+def _parse_token(text: str) -> tuple[list[MutTerm], bool]:
+    """Parse a single mutation token into MutTerms and a negation flag."""
     text = text.strip()
 
-    paren = TERM_PAREN_RE.fullmatch(text)
-    if paren:
-        position = int(paren.group("pos"))
-        negative = bool(paren.group("not"))
-        aas = expand_mutation_group(paren.group("aas"))
-        return [
-            MutationTerm(position=position, reference_hint="", mutation=aa)
-            for aa in aas
-        ], negative
+    m = _TERM_PAREN_RE.fullmatch(text)
+    if m:
+        pos = int(m.group("pos"))
+        neg = bool(m.group("not"))
+        return [MutTerm(pos, "", aa) for aa in _expand_muts(m.group("aas"))], neg
 
-    simple = TERM_SIMPLE_RE.fullmatch(text)
-    if simple:
-        reference_hint = (simple.group("ref") or "").upper()
-        position = int(simple.group("pos"))
-        aas_raw = simple.group("aas")
-
-        aas = expand_mutation_group(aas_raw)
-
+    m = _TERM_SIMPLE_RE.fullmatch(text)
+    if m:
+        ref = (m.group("ref") or "").upper()
+        pos = int(m.group("pos"))
         terms = []
-        for aa in aas:
-            if reference_hint and aa == reference_hint:
+        for aa in _expand_muts(m.group("aas")):
+            # Skip no-op where reference == mutation.
+            if ref and aa == ref:
                 continue
-            terms.append(
-                MutationTerm(
-                    position=position,
-                    reference_hint=reference_hint,
-                    mutation=aa,
-                )
-            )
+            terms.append(MutTerm(pos, ref, aa))
         return terms, False
 
     return [], False
 
 
-COMMENT_MUT_RE = re.compile(r"\b([A-Z])(\d{1,4})([A-Z*_\-/]+)\b")
+def _has_insertion(lhs: str) -> bool:
+    """Return True if the LHS contains a Stanford ASI insertion shorthand ('_')."""
+    for regex in (_TERM_PAREN_RE, _TERM_SIMPLE_RE):
+        for m in regex.finditer(lhs):
+            terms, _ = _parse_token(m.group(0))
+            if any(t.mutation == "_" for t in terms):
+                return True
+    return False
 
 
-def infer_reference_hints_from_comments(root: ET.Element) -> dict[tuple[str, int, str], str]:
-    hints: dict[tuple[str, int, str], str] = {}
-
-    for comment in root.findall(".//COMMENT_STRING"):
-        comment_id = comment.attrib.get("id", "")
-        gene_match = re.match(r"^(CA|PR|RT|IN)", comment_id)
-        if not gene_match:
-            continue
-
-        gene = gene_match.group(1)
-        text = text_of(comment, "TEXT")
-        searchable = f"{comment_id} {text}"
-
-        for match in COMMENT_MUT_RE.finditer(searchable):
-            reference = match.group(1)
-            position = int(match.group(2))
-            for mutation in expand_mutation_group(match.group(3)):
-                if mutation != reference:
-                    hints[(gene, position, mutation)] = reference
-
-    return hints
+def _normalize_bool(chunk: str) -> str:
+    """Normalise boolean operators to canonical uppercase with single spaces."""
+    chunk = chunk.replace("&&", " AND ").replace("||", " OR ").replace("+", " AND ")
+    for op in ("AND", "OR", "NOT", "XOR"):
+        chunk = re.sub(rf"\b{op}\b", f" {op} ", chunk, flags=re.IGNORECASE)
+    return re.sub(r"\s+", " ", chunk).strip()
 
 
-def infer_reference_by_position_from_mutation_types(
-    mutation_types_text: str,
-) -> dict[tuple[str, int], str]:
-    reader = csv.DictReader(io.StringIO(mutation_types_text))
-    if not reader.fieldnames:
-        return {}
+# ---------------------------------------------------------------------------
+# Reference resolution
+# ---------------------------------------------------------------------------
 
-    required = {"gene", "position", "aas"}
-    if not required.issubset(set(reader.fieldnames)):
-        return {}
-
-    seen: dict[tuple[str, int], set[str]] = defaultdict(set)
-
-    for row in reader:
-        gene = norm(row.get("gene"))
-        position_text = norm(row.get("position"))
-        aas = norm(row.get("aas"))
-
-        if not gene or not position_text.isdigit():
-            continue
-
-        key = (gene, int(position_text))
-        for aa in expand_mutation_group(aas):
-            if aa in CANONICAL_AA:
-                seen[key].add(aa)
-
-    inferred = {}
-    for key, observed in seen.items():
-        missing = CANONICAL_AA - observed
-        if len(missing) == 1:
-            inferred[key] = next(iter(missing))
-
-    return inferred
-
-
-def choose_reference(
-    gene: str,
-    term: MutationTerm,
-    by_mutation: dict[tuple[str, int, str], str],
-    by_position: dict[tuple[str, int], str],
+def resolve_reference(
+    segment: str,
+    position: int,
+    mutation: str,
+    ref_hint: str,
+    comment_hints: dict[tuple[str, int, str], CommentHint],
+    gene_data: dict[str, tuple[str, int, str]],
 ) -> str:
-    if term.reference_hint and term.reference_hint in CANONICAL_AA:
-        return term.reference_hint
+    """Determine the reference amino acid for a mutation.
 
-    if (gene, term.position, term.mutation) in by_mutation:
-        return by_mutation[(gene, term.position, term.mutation)]
+    Resolution order:
+      1. Explicit ref_hint embedded in the token (e.g. 'K' in 'K65R').
+      2. COMMENT_STRING hint keyed by (segment, position, mutation).
+      3. genes_hiv1.json refSequence at (position - 1).
+      4. Empty string -- caller treats this as unresolved and skips the rule.
+    """
+    if ref_hint and ref_hint in CANONICAL_AA:
+        return ref_hint
 
-    if (gene, term.position) in by_position:
-        return by_position[(gene, term.position)]
+    hint = comment_hints.get((segment, position, mutation))
+    if hint and hint.reference in CANONICAL_AA:
+        return hint.reference
+
+    _, _, refseq = gene_data.get(segment, ("", 0, ""))
+    if refseq and 1 <= position <= len(refseq):
+        return refseq[position - 1]
 
     return ""
 
 
-def make_group_id(drug: str, gene: str, raw_rule: str, score: str) -> str:
+# ---------------------------------------------------------------------------
+# Member / group ID generation
+# ---------------------------------------------------------------------------
+
+def _make_member_id(gene: str, position: int, reference: str, mutation: str) -> str:
+    """Stable, hash-based member ID shared across drugs for the same mutation.
+
+    The hash seed format is identical to the previous converter so that
+    member_ids are preserved for mutations unaffected by the rewrite.
+    """
+    seed = f"{gene}|{position}|{reference}|{mutation}".encode("utf-8")
+    mid = "M" + hashlib.sha256(seed).hexdigest()[:14].upper()
+    return mid if mid.upper() not in RESERVED_EXPR_WORDS else "M_" + mid
+
+
+def _make_group_id(drug: str, gene: str, raw_rule: str, score: str) -> str:
     seed = f"{drug}|{gene}|{raw_rule}|{score}".encode("utf-8")
     return "G" + hashlib.sha256(seed).hexdigest()[:12].upper()
 
 
-def make_member_id(group_id: str, index: int) -> str:
-    member_id = f"{group_id}_M{index:03d}"
-    if member_id.upper() in RESERVED_EXPR_WORDS:
-        member_id = f"{group_id}_MEMBER_{index:03d}"
-    return member_id
+# ---------------------------------------------------------------------------
+# LHS expression builder
+# ---------------------------------------------------------------------------
+
+@dataclass
+class ParsedLHS:
+    """Result of parsing one ASI LHS expression."""
+    expression: str       # ResPro expression using member_ids as atoms
+    members: list[dict]   # member dicts (subset of RULES_COLUMNS fields)
+    is_formula: bool      # True when boolean operators or >1 member present
 
 
-def make_shared_member_id(gene: str, position: int, reference: str, mutation: str) -> str:
-    seed = f"{gene}|{position}|{reference}|{mutation}".encode("utf-8")
-    member_id = "M" + hashlib.sha256(seed).hexdigest()[:14].upper()
-    if member_id.upper() in RESERVED_EXPR_WORDS:
-        member_id = "M_" + member_id
-    return member_id
-
-
-def normalize_logic_chunk(chunk: str) -> str:
-    chunk = chunk.replace("&&", " AND ")
-    chunk = chunk.replace("||", " OR ")
-    chunk = chunk.replace("+", " AND ")
-    chunk = re.sub(r"\bAND\b", " AND ", chunk, flags=re.IGNORECASE)
-    chunk = re.sub(r"\bOR\b", " OR ", chunk, flags=re.IGNORECASE)
-    chunk = re.sub(r"\bNOT\b", " NOT ", chunk, flags=re.IGNORECASE)
-    chunk = re.sub(r"\bXOR\b", " XOR ", chunk, flags=re.IGNORECASE)
-    chunk = re.sub(r"\s+", " ", chunk)
-    return chunk.strip()
-
-
-def contains_unsupported_asi(lhs: str) -> bool:
-    unsupported_markers = [
-        "$",
-        ">=",
-        "<=",
-        "!=",
-        "==",
-        " TO ",
-        "FROM ",
-        "SELECT ",
-        "EXCEPT ",
-        "ATLEAST",
-        "ATLEAST",
-        "numberOf",
-        "count",
-    ]
-    upper = lhs.upper()
-    return any(marker.upper() in upper for marker in unsupported_markers)
-
-
-def parse_lhs_to_expression(
+def parse_lhs(
     lhs: str,
-    gene: str,
-    reference_by_mutation: dict[tuple[str, int, str], str],
-    reference_by_position: dict[tuple[str, int], str],
-) -> ParsedExpression | None:
-    if contains_unsupported_asi(lhs):
+    segment: str,
+    comment_hints: dict[tuple[str, int, str], CommentHint],
+    gene_data: dict[str, tuple[str, int, str]],
+) -> ParsedLHS | None:
+    """Convert an ASI LHS mutation expression into a ParsedLHS.
+
+    Returns None when the expression is unsupported (unknown ASI constructs)
+    or when a reference amino acid cannot be resolved for any mutation term.
+    """
+    if any(m.upper() in lhs.upper() for m in _UNSUPPORTED_MARKERS):
         return None
 
-    # First collect mutation-looking tokens.
-    matches = []
+    # Collect mutation token spans without overlap.
     occupied = [False] * len(lhs)
-
-    for regex in (TERM_PAREN_RE, TERM_SIMPLE_RE):
-        for match in regex.finditer(lhs):
-            if any(occupied[i] for i in range(match.start(), match.end())):
-                continue
-            for i in range(match.start(), match.end()):
-                occupied[i] = True
-            matches.append(match)
-
-    matches.sort(key=lambda m: m.start())
+    matches: list[re.Match] = []
+    for regex in (_TERM_PAREN_RE, _TERM_SIMPLE_RE):
+        for m in regex.finditer(lhs):
+            if not any(occupied[i] for i in range(m.start(), m.end())):
+                for i in range(m.start(), m.end()):
+                    occupied[i] = True
+                matches.append(m)
+    matches.sort(key=lambda x: x.start())
     if not matches:
         return None
 
-    pieces = []
-    members = []
+    gene_name, offset, _ = gene_data[segment]
+    pieces: list[str] = []
+    members: list[dict] = []
     last = 0
-    saw_boolean_or_group = False
+    saw_bool = False
 
     for match in matches:
-        chunk = normalize_logic_chunk(lhs[last : match.start()])
-        if chunk:
-            # Only boolean syntax and parentheses are allowed in non-mutation chunks.
-            cleaned = re.sub(r"\b(AND|OR|NOT|XOR)\b", "", chunk, flags=re.IGNORECASE)
+        # Validate the gap between tokens -- only boolean operators and parens allowed.
+        gap = _normalize_bool(lhs[last:match.start()])
+        if gap:
+            cleaned = re.sub(r"\b(AND|OR|NOT|XOR)\b", "", gap, flags=re.IGNORECASE)
             cleaned = cleaned.replace("(", "").replace(")", "").strip()
             if cleaned:
-                return None
-            pieces.append(chunk)
-            if any(word in chunk.upper().split() for word in RESERVED_EXPR_WORDS):
-                saw_boolean_or_group = True
+                return None  # unexpected non-boolean content in between tokens
+            pieces.append(gap)
+            if any(w in gap.upper().split() for w in RESERVED_EXPR_WORDS):
+                saw_bool = True
 
-        token_text = match.group(0)
-        terms, negative = parse_term_text(token_text)
+        terms, negative = _parse_token(match.group(0))
         if not terms:
             return None
 
-        member_ids = []
+        token_ids: list[str] = []
         for term in terms:
-            reference = choose_reference(
-                gene=gene,
-                term=term,
-                by_mutation=reference_by_mutation,
-                by_position=reference_by_position,
-            )
-            if not reference:
-                return None
-
-            member_id = make_shared_member_id(
-                gene=gene,
+            ref = resolve_reference(
+                segment=segment,
                 position=term.position,
-                reference=reference,
                 mutation=term.mutation,
+                ref_hint=term.ref_hint,
+                comment_hints=comment_hints,
+                gene_data=gene_data,
             )
+            if not ref:
+                return None  # unresolved reference -- skip rule
 
-            members.append(
-                {
-                    "gene": gene,
-                    "reference_identifier": REFERENCE_IDENTIFIER,
-                    "position": str(term.position),
-                    "reference": reference,
-                    "mutation": term.mutation,
-                    "member_id": member_id,
-                }
-            )
-            member_ids.append(member_id)
+            abs_pos = term.position + offset
+            # Stanford ASI '-' (deletion) -> ResPro canonical {ref}{pos}del form.
+            mutation = f"{ref}{abs_pos}del" if term.mutation == "-" else term.mutation
+            mid = _make_member_id(gene_name, abs_pos, ref, mutation)
 
-        if len(member_ids) == 1:
-            expr = member_ids[0]
+            members.append({
+                "gene": gene_name,
+                "reference_identifier": REFERENCE_IDENTIFIER,
+                "position": str(abs_pos),
+                "reference": ref,
+                "mutation": mutation,
+                "member_id": mid,
+            })
+            token_ids.append(mid)
+
+        if len(token_ids) == 1:
+            expr_part = token_ids[0]
         else:
-            expr = "(" + " OR ".join(member_ids) + ")"
-            saw_boolean_or_group = True
+            expr_part = "(" + " OR ".join(token_ids) + ")"
+            saw_bool = True
 
         if negative:
-            expr = f"(NOT {expr})"
-            saw_boolean_or_group = True
+            expr_part = f"(NOT {expr_part})"
+            saw_bool = True
 
-        pieces.append(expr)
+        pieces.append(expr_part)
         last = match.end()
 
-    tail = normalize_logic_chunk(lhs[last:])
+    # Validate trailing content.
+    tail = _normalize_bool(lhs[last:])
     if tail:
         cleaned = re.sub(r"\b(AND|OR|NOT|XOR)\b", "", tail, flags=re.IGNORECASE)
         cleaned = cleaned.replace("(", "").replace(")", "").strip()
         if cleaned:
             return None
         pieces.append(tail)
-        if any(word in tail.upper().split() for word in RESERVED_EXPR_WORDS):
-            saw_boolean_or_group = True
+        if any(w in tail.upper().split() for w in RESERVED_EXPR_WORDS):
+            saw_bool = True
 
-    expression = " ".join(piece for piece in pieces if piece)
-    expression = re.sub(r"\s+", " ", expression).strip()
+    expr = re.sub(r"\s+", " ", " ".join(p for p in pieces if p)).strip()
+    is_formula = saw_bool or len(members) != 1 or expr != members[0]["member_id"]
 
-    # If the expression is just one member with no boolean/grouping, it can be atomic.
-    is_formula = saw_boolean_or_group or len(members) != 1 or expression != members[0]["member_id"]
-
-    return ParsedExpression(
-        expression=expression,
-        members=tuple(members),
-        is_formula=is_formula,
-    )
+    return ParsedLHS(expression=expr, members=members, is_formula=is_formula)
 
 
-def tsv_from_rows(rows: list[dict], columns: list[str]) -> str:
-    lines = ["\t".join(columns)]
-    for row in rows:
-        lines.append("\t".join(norm(row.get(col, "")) for col in columns))
-    return "\n".join(lines) + "\n"
+# ---------------------------------------------------------------------------
+# Conversion context (shared mutable state for one convert() call)
+# ---------------------------------------------------------------------------
+
+@dataclass
+class _Ctx:
+    drug_map: dict[str, str]
+    gene_data: dict[str, tuple[str, int, str]]
+    comment_hints: dict[tuple[str, int, str], CommentHint]
+    # Absolute-position lookup: (gene_name, abs_pos, mutation) -> annotation text
+    abs_comments: dict[tuple[str, int, str], str] = field(default_factory=dict)
+    rules_rows: list[dict] = field(default_factory=list)
+    member_registry: dict[str, dict] = field(default_factory=dict)
+    formula_rows: list[dict] = field(default_factory=list)
+    non_migrated: list[dict] = field(default_factory=list)
 
 
-def non_migrated_text(rows: list[dict]) -> str:
-    lines = [
-        "# Non-migrated Stanford HIVDB rules",
-        "# Columns: " + "\t".join(NON_MIGRATED_COLUMNS),
-        "",
-        "\t".join(NON_MIGRATED_COLUMNS),
-    ]
-
-    for row in sorted(
-        rows,
-        key=lambda r: (
-            norm(r.get("reason")),
-            norm(r.get("gene")),
-            norm(r.get("drug")),
-            norm(r.get("raw_rule")),
-        ),
-    ):
-        lines.append("\t".join(norm(row.get(col, "")) for col in NON_MIGRATED_COLUMNS))
-
-    return "\n".join(lines) + "\n"
+def _build_abs_comments(
+    comment_hints: dict[tuple[str, int, str], CommentHint],
+    gene_data: dict[str, tuple[str, int, str]],
+) -> dict[tuple[str, int, str], str]:
+    """Re-key COMMENT_STRING hints from segment-relative to full-protein coordinates."""
+    out: dict[tuple[str, int, str], str] = {}
+    for (segment, pos, mut), ch in comment_hints.items():
+        if segment in gene_data:
+            gene_name, offset, _ = gene_data[segment]
+            out[(gene_name, pos + offset, mut)] = ch.text
+    return out
 
 
-def add_non_migrated(
-    bucket: list[dict],
-    reason: str,
-    drug: str,
-    gene: str,
+# ---------------------------------------------------------------------------
+# Rule emission
+# ---------------------------------------------------------------------------
+
+def _drug_name(code: str, drug_map: dict[str, str]) -> str:
+    return drug_map.get(code.upper(), code.lower())
+
+
+def _emit_rule(
+    parsed: ParsedLHS,
+    *,
+    drug_code: str,
     score: str,
     raw_rule: str,
-    details: str = "",
+    ctx: _Ctx,
+    formula_comment: str = "HIVDB ASI formula score rule",
+    atomic_comment: str = "",
 ) -> None:
-    bucket.append(
-        {
-            "reason": reason,
-            "drug": drug,
-            "gene": gene,
-            "score": score,
-            "raw_rule": raw_rule,
-            "details": details,
-        }
-    )
-
-
-def emit_atomic_or_formula(
-    parsed: ParsedExpression,
-    drug: str,
-    score: str,
-    raw_rule: str,
-    rules_rows: list[dict],
-    member_registry: dict[str, dict],
-    formula_rows: list[dict],
-    formula_comment: str = "",
-) -> None:
-    drug_norm = normalize_antiviral(drug)
+    """Emit an atomic rule row, or a formula row plus shared member rows."""
+    drug = _drug_name(drug_code, ctx.drug_map)
 
     if not parsed.is_formula:
-        member = parsed.members[0]
-        rules_rows.append(
-            {
-                "gene": member["gene"],
-                "reference_identifier": member["reference_identifier"],
-                "position": member["position"],
-                "reference": member["reference"],
-                "mutation": member["mutation"],
-                "antiviral": drug_norm,
-                "group_id": "",
-                "member_id": "",
-                "phenotype": "",
-                "score": score,
-                "ic50": "",
-                "publication": "",
-                "source": SOURCE_LABEL,
-                "comment": "HIVDB ASI atomic score rule",
-            }
+        mem = parsed.members[0]
+        # Prefer an annotation from COMMENT_STRING over the generic fallback.
+        comment = (
+            ctx.abs_comments.get((mem["gene"], int(mem["position"]), mem["mutation"]))
+            or atomic_comment
+            or "HIVDB ASI atomic score rule"
         )
-        return
-
-    group_id_match = re.match(r"(G[A-F0-9]{12})_", parsed.members[0]["member_id"])
-    group_id = (
-        group_id_match.group(1)
-        if group_id_match
-        else make_group_id(drug, parsed.members[0]["gene"], raw_rule, score)
-    )
-
-    for member in parsed.members:
-        existing = member_registry.get(member["member_id"])
-        if existing is None:
-            member_registry[member["member_id"]] = {
-                "gene": member["gene"],
-                "reference_identifier": member["reference_identifier"],
-                "position": member["position"],
-                "reference": member["reference"],
-                "mutation": member["mutation"],
-                "member_id": member["member_id"],
-                "group_ids": {group_id},
-            }
-        else:
-            key_existing = (
-                existing["gene"],
-                existing["reference_identifier"],
-                existing["position"],
-                existing["reference"],
-                existing["mutation"],
-            )
-            key_new = (
-                member["gene"],
-                member["reference_identifier"],
-                member["position"],
-                member["reference"],
-                member["mutation"],
-            )
-            if key_existing != key_new:
-                raise ValueError(
-                    f"Shared member_id collision for {member['member_id']}: {key_existing} vs {key_new}"
-                )
-            existing["group_ids"].add(group_id)
-
-    formula_rows.append(
-        {
-            "group_id": group_id,
-            "antiviral": drug_norm,
-            "expression": parsed.expression,
+        ctx.rules_rows.append({
+            "gene": mem["gene"],
+            "reference_identifier": mem["reference_identifier"],
+            "position": mem["position"],
+            "reference": mem["reference"],
+            "mutation": mem["mutation"],
+            "antiviral": drug,
+            "group_id": "",
+            "member_id": "",
             "phenotype": "",
             "score": score,
             "ic50": "",
             "publication": "",
             "source": SOURCE_LABEL,
-            "comment": formula_comment or "HIVDB ASI formula score rule",
-        }
+            "comment": comment,
+        })
+        return
+
+    # Formula rule: register members (shared across drugs) and emit a formula row.
+    group_id = _make_group_id(drug_code, parsed.members[0]["gene"], raw_rule, score)
+
+    for mem in parsed.members:
+        mid = mem["member_id"]
+        if mid in ctx.member_registry:
+            ctx.member_registry[mid]["group_ids"].add(group_id)
+        else:
+            ctx.member_registry[mid] = {**mem, "group_ids": {group_id}}
+
+    ctx.formula_rows.append({
+        "group_id": group_id,
+        "antiviral": drug,
+        "expression": parsed.expression,
+        "phenotype": "",
+        "score": score,
+        "ic50": "",
+        "publication": "",
+        "source": SOURCE_LABEL,
+        "comment": formula_comment,
+    })
+
+
+# ---------------------------------------------------------------------------
+# MAX scope handling
+# ---------------------------------------------------------------------------
+
+def _handle_max_scope(
+    scope_items: list[ScoreItem],
+    *,
+    drug_code: str,
+    segment: str,
+    ctx: _Ctx,
+) -> None:
+    """Process one MAX(...) scope.
+
+    Strategy:
+      - Parse every branch individually.  Unparsable branches (insertion events,
+        unresolved references, unsupported syntax) are recorded in non_migrated.
+      - If all branches share a single score and no member_id would repeat in the
+        combined OR expression: emit one combined OR formula.
+      - Otherwise: emit each parsed branch as an independent rule.
+        This is correct because MAX branches represent mutually exclusive events
+        in a single-infection context (the MAX semantics only matter for
+        quasi-species / mixed-population scoring, which is outside ResPro scope).
+    """
+    parsed_branches: list[tuple[ParsedLHS, str]] = []
+
+    for item in scope_items:
+        if _has_insertion(item.lhs):
+            _add_non_migrated(
+                ctx, "non_portable_insertion_event",
+                drug=drug_code, gene=segment, score=item.score, raw_rule=item.raw,
+                details="Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence",
+            )
+            continue
+
+        parsed = parse_lhs(item.lhs, segment, ctx.comment_hints, ctx.gene_data)
+        if parsed is None:
+            _add_non_migrated(
+                ctx, "unsupported_or_unresolved_expression",
+                drug=drug_code, gene=segment, score=item.score, raw_rule=item.raw,
+            )
+            continue
+
+        parsed_branches.append((parsed, item.score))
+
+    if not parsed_branches:
+        return
+
+    # Group branches by score.
+    by_score: dict[str, list[ParsedLHS]] = defaultdict(list)
+    for pb, sc in parsed_branches:
+        by_score[sc].append(pb)
+
+    if len(by_score) == 1:
+        # Equal-score MAX: attempt a single combined OR formula.
+        score = next(iter(by_score))
+        _try_combined_or(
+            parts=by_score[score],
+            score=score,
+            raw_rule="MAX:" + "|".join(i.raw for i in scope_items),
+            drug_code=drug_code,
+            ctx=ctx,
+        )
+        return
+
+    # Mixed-score MAX: emit each branch as an independent rule.
+    branch_cmt = "HIVDB ASI MAX branch (mutually exclusive in single-infection context)"
+    for parsed, score in parsed_branches:
+        _emit_rule(
+            parsed,
+            drug_code=drug_code, score=score,
+            raw_rule="MAX branch: " + parsed.expression,
+            ctx=ctx,
+            formula_comment=branch_cmt,
+            atomic_comment=branch_cmt,
+        )
+
+
+def _try_combined_or(
+    parts: list[ParsedLHS],
+    score: str,
+    raw_rule: str,
+    drug_code: str,
+    ctx: _Ctx,
+) -> None:
+    """Combine equal-score MAX branches into one OR formula when safe to do so.
+
+    Falls back to emitting each branch separately when the combined expression
+    would contain duplicate member_ids (forbidden by the ResPro schema validator).
+    """
+    # Deduplicate branch expressions before combining.
+    seen_exprs: set[str] = set()
+    unique_exprs: list[str] = []
+    all_members: list[dict] = []
+    for parsed in parts:
+        if parsed.expression not in seen_exprs:
+            seen_exprs.add(parsed.expression)
+            unique_exprs.append(f"({parsed.expression})")
+            all_members.extend(parsed.members)
+
+    combined_expr = " OR ".join(unique_exprs)
+
+    # Check for duplicate member IDs -- disallowed in a single formula expression.
+    ids_in_expr = [
+        t for t in re.findall(r"\b[A-Za-z_][A-Za-z0-9_]*\b", combined_expr)
+        if t.upper() not in RESERVED_EXPR_WORDS
+    ]
+    if len(ids_in_expr) != len(set(ids_in_expr)):
+        # Shared members detected: fall back to separate branch rules.
+        cmt = "HIVDB ASI equal-score MAX branch"
+        for parsed in parts:
+            _emit_rule(
+                parsed,
+                drug_code=drug_code, score=score,
+                raw_rule="MAX branch: " + parsed.expression,
+                ctx=ctx,
+                formula_comment=cmt, atomic_comment=cmt,
+            )
+        return
+
+    # Safe to combine into a single OR formula.
+    combined = ParsedLHS(expression=combined_expr, members=all_members, is_formula=True)
+    _emit_rule(
+        combined,
+        drug_code=drug_code, score=score, raw_rule=raw_rule,
+        ctx=ctx,
+        formula_comment="HIVDB ASI equal-score MAX represented as OR",
     )
 
+
+def _add_non_migrated(
+    ctx: _Ctx, reason: str, *,
+    drug: str, gene: str, score: str, raw_rule: str, details: str = "",
+) -> None:
+    ctx.non_migrated.append({
+        "reason": reason, "drug": drug, "gene": gene,
+        "score": score, "raw_rule": raw_rule, "details": details,
+    })
+
+
+# ---------------------------------------------------------------------------
+# Main conversion pipeline
+# ---------------------------------------------------------------------------
 
 def convert(
     source_info: SourceInfo,
     xml_bytes: bytes,
-    mutation_types_text: str,
+    drug_map: dict[str, str],
+    gene_data: dict[str, tuple[str, int, str]],
     output_dir: Path,
-) -> tuple[int, int, int]:
+) -> None:
+    """Run the full conversion pipeline and write all output artifacts."""
     root = ET.fromstring(xml_bytes)
 
+    # Validate XML metadata against resolved source provenance.
     alg_name = text_of(root, "ALGNAME")
     alg_version = text_of(root, "ALGVERSION")
     alg_date = text_of(root, "ALGDATE")
-
     if alg_name != "HIVDB":
-        raise ValueError(f"Expected ALGNAME=HIVDB, found {alg_name!r}")
-
+        raise ValueError(f"Expected ALGNAME=HIVDB, got {alg_name!r}")
     if alg_version != source_info.source_version:
         raise ValueError(
-            f"Filename version {source_info.source_version!r} does not match "
-            f"XML ALGVERSION {alg_version!r}"
+            f"Filename version {source_info.source_version!r} != XML ALGVERSION {alg_version!r}"
         )
-
     if alg_date != source_info.source_date:
         raise ValueError(
-            f"versions.json date {source_info.source_date!r} does not match "
-            f"XML ALGDATE {alg_date!r}"
+            f"versions.json date {source_info.source_date!r} != XML ALGDATE {alg_date!r}"
         )
 
     drug_to_gene = build_drug_to_gene(root)
-    reference_by_mutation = infer_reference_hints_from_comments(root)
-    reference_by_position = infer_reference_by_position_from_mutation_types(
-        mutation_types_text
+    comment_hints = extract_comment_hints(root)
+
+    ctx = _Ctx(
+        drug_map=drug_map,
+        gene_data=gene_data,
+        comment_hints=comment_hints,
+        abs_comments=_build_abs_comments(comment_hints, gene_data),
     )
 
-    rules_rows: list[dict] = []
-    member_registry: dict[str, dict] = {}
-    formula_rows: list[dict] = []
-    non_migrated: list[dict] = []
-    flattened_mixed_max = 0
+    for drug_el in root.findall("DRUG"):
+        drug_code = text_of(drug_el, "NAME")
+        segment = drug_to_gene.get(drug_code, "")
 
-    for drug_element in root.findall("DRUG"):
-        drug = text_of(drug_element, "NAME")
-        gene = drug_to_gene.get(drug, "")
-
-        if not drug or not gene:
-            add_non_migrated(
-                non_migrated,
-                reason="drug_without_gene_mapping",
-                drug=drug,
-                gene=gene,
-                score="",
-                raw_rule="",
+        if not drug_code or not segment:
+            _add_non_migrated(
+                ctx, "drug_without_gene_mapping",
+                drug=drug_code, gene=segment, score="", raw_rule="",
                 details="Could not map DRUG/NAME to gene via DEFINITIONS",
             )
             continue
 
-        rule_node = drug_element.find("./RULE")
-        condition = text_of(rule_node if rule_node is not None else drug_element, "CONDITION")
-        items = extract_rule_items(condition)
-
-        if not items:
-            add_non_migrated(
-                non_migrated,
-                reason="no_score_items_extracted",
-                drug=drug,
-                gene=gene,
-                score="",
-                raw_rule=condition[:500],
+        if segment not in gene_data:
+            _add_non_migrated(
+                ctx, "drug_without_gene_mapping",
+                drug=drug_code, gene=segment, score="", raw_rule="",
+                details=f"Segment {segment!r} not in supported SEGMENT_TO_GENE",
             )
             continue
 
-        # Process non-MAX rules directly.
-        max_scopes: dict[str, list[RuleItem]] = defaultdict(list)
+        rule_node = drug_el.find("./RULE")
+        condition = text_of(rule_node if rule_node is not None else drug_el, "CONDITION")
+        items = parse_condition(condition)
 
+        if not items:
+            _add_non_migrated(
+                ctx, "no_score_items_extracted",
+                drug=drug_code, gene=segment, score="", raw_rule=condition[:500],
+            )
+            continue
+
+        # Separate non-MAX items from MAX-scoped groups.
+        max_scopes: dict[str, list[ScoreItem]] = defaultdict(list)
         for item in items:
-            if item.max_scope:
-                max_scopes[item.max_scope].append(item)
+            max_scopes[item.max_scope].append(item)
+
+        # Process direct (non-MAX) score items.
+        for item in max_scopes.pop("", []):
+            if _has_insertion(item.lhs):
+                _add_non_migrated(
+                    ctx, "non_portable_insertion_event",
+                    drug=drug_code, gene=segment, score=item.score, raw_rule=item.raw,
+                    details="Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence",
+                )
                 continue
 
-            parsed = parse_lhs_to_expression(
-                item.lhs,
-                gene=gene,
-                reference_by_mutation=reference_by_mutation,
-                reference_by_position=reference_by_position,
-            )
-
+            parsed = parse_lhs(item.lhs, segment, ctx.comment_hints, ctx.gene_data)
             if parsed is None:
-                add_non_migrated(
-                    non_migrated,
-                    reason="unsupported_or_unresolved_expression",
-                    drug=drug,
-                    gene=gene,
-                    score=item.score,
-                    raw_rule=item.raw,
+                _add_non_migrated(
+                    ctx, "unsupported_or_unresolved_expression",
+                    drug=drug_code, gene=segment, score=item.score, raw_rule=item.raw,
                 )
                 continue
 
-            emit_atomic_or_formula(
-                parsed=parsed,
-                drug=drug,
-                score=item.score,
-                raw_rule=item.raw,
-                rules_rows=rules_rows,
-                member_registry=member_registry,
-                formula_rows=formula_rows,
-            )
+            _emit_rule(parsed, drug_code=drug_code, score=item.score, raw_rule=item.raw, ctx=ctx)
 
-        # Process MAX groups. Equal-score MAX can be represented as OR.
-        for scope, scoped_items in max_scopes.items():
-            scores = {item.score for item in scoped_items}
-            if len(scores) != 1:
-                # Safe flattening case: all MAX branches are simple single-mutation
-                # substitutions at exactly the same site, which are mutually exclusive.
-                parsed_singletons = []
-                common_site = None
-                flattenable = True
+        # Process MAX scopes.
+        for scope_items in max_scopes.values():
+            _handle_max_scope(scope_items, drug_code=drug_code, segment=segment, ctx=ctx)
 
-                for item in scoped_items:
-                    parsed = parse_lhs_to_expression(
-                        item.lhs,
-                        gene=gene,
-                        reference_by_mutation=reference_by_mutation,
-                        reference_by_position=reference_by_position,
-                    )
-                    if parsed is None or parsed.is_formula or len(parsed.members) != 1:
-                        flattenable = False
-                        break
+    # Materialise shared formula-member rows from the registry.
+    for item in ctx.member_registry.values():
+        ctx.rules_rows.append({
+            "gene": item["gene"],
+            "reference_identifier": item["reference_identifier"],
+            "position": item["position"],
+            "reference": item["reference"],
+            "mutation": item["mutation"],
+            "antiviral": "",
+            "group_id": ",".join(sorted(item["group_ids"])),
+            "member_id": item["member_id"],
+            "phenotype": "",
+            "score": "",
+            "ic50": "",
+            "publication": "",
+            "source": SOURCE_LABEL,
+            "comment": "HIVDB ASI formula member",
+        })
 
-                    member = parsed.members[0]
-                    if member["mutation"] not in CANONICAL_AA:
-                        flattenable = False
-                        break
+    # Deduplicate and sort deterministically.
+    rules_rows = _dedupe(ctx.rules_rows, RULES_COLUMNS)
+    formula_rows = _dedupe(ctx.formula_rows, FORMULA_COLUMNS)
 
-                    score_value = parse_finite_score(item.score)
-                    if score_value is None:
-                        flattenable = False
-                        break
+    rules_rows.sort(key=lambda r: (
+        GENE_ORDER.get(norm(r["gene"]), 99),
+        norm(r["gene"]),
+        int(norm(r.get("position")) or 0),
+        norm(r["reference"]),
+        norm(r["mutation"]),
+        norm(r["antiviral"]),
+        norm(r["group_id"]),
+        norm(r["member_id"]),
+        norm(r["score"]),
+    ))
+    formula_rows.sort(key=lambda r: (
+        norm(r["group_id"]),
+        norm(r["antiviral"]),
+        norm(r["expression"]),
+        norm(r["score"]),
+    ))
 
-                    site = (member["gene"], member["position"], member["reference"])
-                    if common_site is None:
-                        common_site = site
-                    elif common_site != site:
-                        flattenable = False
-                        break
-
-                    parsed_singletons.append(
-                        {
-                            "member": member,
-                            "score_str": item.score,
-                            "score_value": score_value,
-                        }
-                    )
-
-                if flattenable and parsed_singletons:
-                    best_by_mutation: dict[str, dict] = {}
-                    for candidate in parsed_singletons:
-                        mutation = candidate["member"]["mutation"]
-                        previous = best_by_mutation.get(mutation)
-                        if previous is None or candidate["score_value"] > previous["score_value"]:
-                            best_by_mutation[mutation] = candidate
-
-                    for mutation in sorted(best_by_mutation):
-                        candidate = best_by_mutation[mutation]
-                        member = candidate["member"]
-                        rules_rows.append(
-                            {
-                                "gene": member["gene"],
-                                "reference_identifier": member["reference_identifier"],
-                                "position": member["position"],
-                                "reference": member["reference"],
-                                "mutation": member["mutation"],
-                                "antiviral": normalize_antiviral(drug),
-                                "group_id": "",
-                                "member_id": "",
-                                "phenotype": "",
-                                "score": candidate["score_str"],
-                                "ic50": "",
-                                "publication": "",
-                                "source": SOURCE_LABEL,
-                                "comment": "HIVDB ASI mixed-score MAX flattened (mutually exclusive substitutions)",
-                            }
-                        )
-
-                    flattened_mixed_max += 1
-                    continue
-
-                add_non_migrated(
-                    non_migrated,
-                    reason="mixed_score_max_not_representable",
-                    drug=drug,
-                    gene=gene,
-                    score=",".join(sorted(scores)),
-                    raw_rule=" | ".join(item.raw for item in scoped_items),
-                    details="MAX with mixed scores cannot be represented with plain additive boolean formulas",
-                )
-                continue
-
-            score = next(iter(scores))
-            parsed_parts = []
-            member_rows = []
-            ok = True
-
-            for item in scoped_items:
-                parsed = parse_lhs_to_expression(
-                    item.lhs,
-                    gene=gene,
-                    reference_by_mutation=reference_by_mutation,
-                    reference_by_position=reference_by_position,
-                )
-                if parsed is None:
-                    ok = False
-                    add_non_migrated(
-                        non_migrated,
-                        reason="unsupported_expression_inside_max",
-                        drug=drug,
-                        gene=gene,
-                        score=item.score,
-                        raw_rule=item.raw,
-                    )
-                    break
-                parsed_parts.append(parsed.expression)
-                member_rows.extend(parsed.members)
-
-            if not ok:
-                continue
-
-            # Deduplicate members by member_id.
-            unique_members = []
-            seen_member_ids = set()
-            for member in member_rows:
-                if member["member_id"] in seen_member_ids:
-                    continue
-                seen_member_ids.add(member["member_id"])
-                unique_members.append(member)
-
-            # Deduplicate repeated parsed branches while preserving order.
-            unique_parts = []
-            seen_parts = set()
-            for expr in parsed_parts:
-                if expr in seen_parts:
-                    continue
-                seen_parts.add(expr)
-                unique_parts.append(expr)
-            parsed_parts = unique_parts
-
-            max_expression = "(" + " OR ".join(f"({expr})" for expr in parsed_parts) + ")"
-            expression_tokens = [
-                token
-                for token in re.findall(r"\b[A-Za-z_][A-Za-z0-9_]*\b", max_expression)
-                if token.upper() not in RESERVED_EXPR_WORDS
-            ]
-            token_counts = Counter(expression_tokens)
-            duplicate_tokens = [t for t, c in token_counts.items() if c > 1]
-            if duplicate_tokens:
-                add_non_migrated(
-                    non_migrated,
-                    reason="duplicate_member_in_max_expression",
-                    drug=drug,
-                    gene=gene,
-                    score=score,
-                    raw_rule="MAX:" + "|".join(item.raw for item in scoped_items),
-                    details="duplicate member IDs in generated expression: "
-                    + ",".join(sorted(duplicate_tokens)),
-                )
-                continue
-
-            max_parsed = ParsedExpression(
-                expression=max_expression,
-                members=tuple(unique_members),
-                is_formula=True,
-            )
-
-            emit_atomic_or_formula(
-                parsed=max_parsed,
-                drug=drug,
-                score=score,
-                raw_rule="MAX:" + "|".join(item.raw for item in scoped_items),
-                rules_rows=rules_rows,
-                member_registry=member_registry,
-                formula_rows=formula_rows,
-                formula_comment="HIVDB ASI equal-score MAX represented as OR",
-            )
-
-    # Materialize shared formula members, attaching all group memberships.
-    for item in member_registry.values():
-        rules_rows.append(
-            {
-                "gene": item["gene"],
-                "reference_identifier": item["reference_identifier"],
-                "position": item["position"],
-                "reference": item["reference"],
-                "mutation": item["mutation"],
-                "antiviral": "",
-                "group_id": ",".join(sorted(item["group_ids"])),
-                "member_id": item["member_id"],
-                "phenotype": "",
-                "score": "",
-                "ic50": "",
-                "publication": "",
-                "source": SOURCE_LABEL,
-                "comment": "HIVDB ASI formula member",
-            }
-        )
-
-    # Deduplicate rows exactly by emitted TSV columns.
-    def dedupe(rows: list[dict], columns: list[str]) -> list[dict]:
-        seen = set()
-        out = []
-        for row in rows:
-            key = tuple(norm(row.get(col, "")) for col in columns)
-            if key in seen:
-                continue
-            seen.add(key)
-            out.append(row)
-        return out
-
-    rules_rows = dedupe(rules_rows, RULES_COLUMNS)
-    formula_rows = dedupe(formula_rows, FORMULA_COLUMNS)
-
-    rules_rows.sort(
-        key=lambda r: (
-            GENE_ORDER.get(norm(r["gene"]), 99),
-            norm(r["gene"]),
-            int(norm(r["position"]) or "0"),
-            norm(r["reference"]),
-            norm(r["mutation"]),
-            norm(r["antiviral"]),
-            norm(r["group_id"]),
-            norm(r["member_id"]),
-            norm(r["score"]),
-        )
-    )
-
-    formula_rows.sort(
-        key=lambda r: (
-            norm(r["group_id"]),
-            norm(r["antiviral"]),
-            norm(r["expression"]),
-            norm(r["score"]),
-        )
-    )
-
+    # Write output files.
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    rules_content = tsv_from_rows(rules_rows, RULES_COLUMNS)
+    rules_content = _tsv(rules_rows, RULES_COLUMNS)
     rules_path = output_dir / "rules.tsv"
     rules_path.write_text(rules_content, encoding="utf-8")
+    eprint(f"Written {rules_path} ({len(rules_rows)} rows).")
 
     formula_path = output_dir / "formula-rules.tsv"
     if formula_rows:
-        formula_content = tsv_from_rows(formula_rows, FORMULA_COLUMNS)
+        formula_content = _tsv(formula_rows, FORMULA_COLUMNS)
         formula_path.write_text(formula_content, encoding="utf-8")
         eprint(f"Written {formula_path} ({len(formula_rows)} rows).")
     else:
@@ -1240,142 +1113,184 @@ def convert(
         "contact": "",
         "publication_pmid": "",
         "website": "https://hivdb.stanford.edu/",
-        "description": "Stanford HIVDB ASI drug-resistance scoring rules converted to ResPro TSV artifacts.",
+        "description": (
+            "Stanford HIVDB ASI drug-resistance scoring rules converted to ResPro TSV artifacts."
+        ),
         "maintainer_update": source_info.source_date,
         "license": "Unlicense",
         "tsv_checksum": checksum_text(rules_content),
     }
-
     metadata_path = output_dir / "metadata.json"
     metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+    eprint(f"Written {metadata_path}.")
 
-    non_migrated_content = non_migrated_text(non_migrated)
-    non_migrated_path = output_dir / "non-migrated-rules.txt"
-    non_migrated_path.write_text(non_migrated_content, encoding="utf-8")
+    nm_content = _non_migrated_text(ctx.non_migrated)
+    nm_path = output_dir / "non-migrated-rules.txt"
+    nm_path.write_text(nm_content, encoding="utf-8")
+    eprint(f"Written {nm_path} ({len(ctx.non_migrated)} entries).")
 
     validate_outputs(rules_path, formula_path if formula_rows else None)
 
-    eprint(f"Written {rules_path} ({len(rules_rows)} rows).")
-    eprint(f"Written {metadata_path}.")
-    eprint(
-        f"Written {non_migrated_path} ({len(non_migrated)} aggregated entries)."
-    )
-    eprint(f"Flattened mixed-score MAX rules: {flattened_mixed_max}.")
 
-    return len(rules_rows), len(formula_rows), len(non_migrated)
+# ---------------------------------------------------------------------------
+# Output formatting helpers
+# ---------------------------------------------------------------------------
 
+def _tsv(rows: list[dict], columns: list[str]) -> str:
+    lines = ["\t".join(columns)]
+    for row in rows:
+        lines.append("\t".join(norm(row.get(col, "")) for col in columns))
+    return "\n".join(lines) + "\n"
+
+
+def _non_migrated_text(rows: list[dict]) -> str:
+    lines = [
+        "# Non-migrated Stanford HIVDB rules",
+        "# Columns: " + "\t".join(NON_MIGRATED_COLUMNS),
+        "",
+        "\t".join(NON_MIGRATED_COLUMNS),
+    ]
+    for row in sorted(rows, key=lambda r: (
+        norm(r.get("reason")), norm(r.get("gene")),
+        norm(r.get("drug")), norm(r.get("raw_rule")),
+    )):
+        lines.append("\t".join(norm(row.get(c, "")) for c in NON_MIGRATED_COLUMNS))
+    return "\n".join(lines) + "\n"
+
+
+def _dedupe(rows: list[dict], columns: list[str]) -> list[dict]:
+    seen: set = set()
+    out: list[dict] = []
+    for row in rows:
+        key = tuple(norm(row.get(c, "")) for c in columns)
+        if key not in seen:
+            seen.add(key)
+            out.append(row)
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Output validation
+# ---------------------------------------------------------------------------
 
 def validate_outputs(rules_path: Path, formula_path: Path | None) -> None:
-    with rules_path.open(newline="", encoding="utf-8") as handle:
-        reader = csv.DictReader(handle, delimiter="\t")
+    """Validate artifact schemas and referential integrity.
+
+    Checks:
+      - rules.tsv has the correct header and no empty required cells.
+      - member_id / group_id consistency within rules.tsv.
+      - formula-rules.tsv (if present) references only known group_ids and member_ids.
+      - No member_id appears more than once in a single formula expression.
+      - Every group_id in rules.tsv has a corresponding row in formula-rules.tsv.
+    """
+    with rules_path.open(newline="", encoding="utf-8") as fh:
+        reader = csv.DictReader(fh, delimiter="\t")
         if reader.fieldnames != RULES_COLUMNS:
             raise ValueError(f"rules.tsv header mismatch: {reader.fieldnames}")
 
-        member_ids = set()
-        group_ids = set()
+        member_ids: set[str] = set()
+        group_ids: set[str] = set()
 
-        for line_no, row in enumerate(reader, start=2):
-            if set(row) != set(RULES_COLUMNS):
-                raise ValueError(f"rules.tsv line {line_no} has wrong columns")
+        for lineno, row in enumerate(reader, start=2):
             if not row["gene"]:
-                raise ValueError(f"rules.tsv line {line_no} missing gene")
-            if not row["position"].isdigit():
-                raise ValueError(f"rules.tsv line {line_no} has non-integer position")
-
-            member_id = row["member_id"]
-            group_id = row["group_id"]
-
-            if member_id:
-                if member_id.upper() in RESERVED_EXPR_WORDS:
-                    raise ValueError(
-                        f"rules.tsv line {line_no} member_id uses reserved keyword"
-                    )
-                if not group_id:
-                    raise ValueError(
-                        f"rules.tsv line {line_no} member_id without group_id"
-                    )
-                member_ids.add(member_id)
-                for gid in [p.strip() for p in group_id.split(",") if p.strip()]:
-                    group_ids.add(gid)
+                raise ValueError(f"rules.tsv:{lineno} missing gene")
+            if not norm(row["position"]).isdigit():
+                raise ValueError(f"rules.tsv:{lineno} non-integer position")
+            mid = row["member_id"]
+            gid = row["group_id"]
+            if mid:
+                if mid.upper() in RESERVED_EXPR_WORDS:
+                    raise ValueError(f"rules.tsv:{lineno} member_id uses reserved keyword")
+                if not gid:
+                    raise ValueError(f"rules.tsv:{lineno} member_id present but group_id absent")
+                member_ids.add(mid)
+                for g in split_csv(gid):
+                    group_ids.add(g)
 
     if formula_path is None:
         return
 
-    with formula_path.open(newline="", encoding="utf-8") as handle:
-        reader = csv.DictReader(handle, delimiter="\t")
+    with formula_path.open(newline="", encoding="utf-8") as fh:
+        reader = csv.DictReader(fh, delimiter="\t")
         if reader.fieldnames != FORMULA_COLUMNS:
             raise ValueError(f"formula-rules.tsv header mismatch: {reader.fieldnames}")
 
-        formula_group_ids = set()
-
-        for line_no, row in enumerate(reader, start=2):
-            group_id = row["group_id"]
-            expression = row["expression"]
-
-            if not group_id:
-                raise ValueError(f"formula-rules.tsv line {line_no} missing group_id")
-            if not expression:
-                raise ValueError(f"formula-rules.tsv line {line_no} missing expression")
-            if group_id not in group_ids:
+        formula_group_ids: set[str] = set()
+        for lineno, row in enumerate(reader, start=2):
+            gid = row["group_id"]
+            expr = row["expression"]
+            if not gid:
+                raise ValueError(f"formula-rules.tsv:{lineno} missing group_id")
+            if not expr:
+                raise ValueError(f"formula-rules.tsv:{lineno} missing expression")
+            if gid not in group_ids:
                 raise ValueError(
-                    f"formula-rules.tsv line {line_no} references unknown group_id"
+                    f"formula-rules.tsv:{lineno} unknown group_id {gid!r}"
                 )
-            if group_id in formula_group_ids:
+            if gid in formula_group_ids:
                 raise ValueError(
-                    f"formula-rules.tsv line {line_no} duplicates group_id {group_id}"
+                    f"formula-rules.tsv:{lineno} duplicate group_id {gid!r}"
                 )
-            formula_group_ids.add(group_id)
+            formula_group_ids.add(gid)
 
-            tokens = re.findall(r"\b[A-Za-z_][A-Za-z0-9_]*\b", expression)
-            seen_formula_members = set()
+            tokens = [
+                t for t in re.findall(r"\b[A-Za-z_][A-Za-z0-9_]*\b", expr)
+                if t.upper() not in RESERVED_EXPR_WORDS
+            ]
+            seen_in_expr: set[str] = set()
             for token in tokens:
-                if token.upper() in RESERVED_EXPR_WORDS:
-                    continue
                 if token not in member_ids:
                     raise ValueError(
-                        f"formula-rules.tsv line {line_no} references unknown member_id {token}"
+                        f"formula-rules.tsv:{lineno} unknown member_id {token!r}"
                     )
-                if token in seen_formula_members:
+                if token in seen_in_expr:
                     raise ValueError(
-                        f"formula-rules.tsv line {line_no} repeats member_id {token}"
+                        f"formula-rules.tsv:{lineno} member_id {token!r} used more than once"
                     )
-                seen_formula_members.add(token)
+                seen_in_expr.add(token)
 
-        missing_formula_groups = sorted(group_ids - formula_group_ids)
-        if missing_formula_groups:
+        missing = sorted(group_ids - formula_group_ids)
+        if missing:
             raise ValueError(
-                "formula-rules.tsv missing group_id entries for grouped rules: "
-                + ",".join(missing_formula_groups)
+                "formula-rules.tsv missing entries for group_ids: " + ",".join(missing)
             )
 
+
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
 
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Convert Stanford HIVDB ASI XML to ResPro TSV artifacts"
     )
-    parser.add_argument("--source-url", default=DEFAULT_SOURCE_URL)
+    parser.add_argument(
+        "--source-url",
+        default=HIVDB_LATEST_URL,
+        help="URL to HIVDB_latest.xml or a specific HIVDB_X.Y.xml (default: latest)",
+    )
     parser.add_argument(
         "--output-dir",
         default=str(Path(__file__).resolve().parent.parent / "output"),
+        help="Directory to write output artifacts (default: ../output relative to script)",
     )
-    parser.add_argument("--mutation-types-url", default=DEFAULT_MUTATION_TYPES_URL)
     args = parser.parse_args()
 
-    eprint(f"Downloading {args.source_url} …")
-    source_info = resolve_source(args.source_url)
+    eprint(f"Resolving source from {args.source_url} ...")
+    source_info, xml_bytes = resolve_source(args.source_url)
+    eprint(f"Source: HIVDB {source_info.source_version} ({source_info.source_date})")
 
-    if source_info.xml_url != args.source_url:
-        eprint(f"Resolved latest upstream source: {source_info.xml_url}")
+    eprint(f"Fetching drug map from {HIVFACTS_DRUGS_URL} ...")
+    drug_map = load_drug_map(http_get_text(HIVFACTS_DRUGS_URL))
 
-    xml_bytes = http_get_bytes(source_info.xml_url)
-
-    eprint(f"Downloading {args.mutation_types_url} …")
-    mutation_types_text = http_get_text(args.mutation_types_url)
+    eprint(f"Fetching gene data from {HIVFACTS_GENES_URL} ...")
+    gene_data = load_gene_data(http_get_text(HIVFACTS_GENES_URL))
 
     convert(
         source_info=source_info,
         xml_bytes=xml_bytes,
-        mutation_types_text=mutation_types_text,
+        drug_map=drug_map,
+        gene_data=gene_data,
         output_dir=Path(args.output_dir),
     )
 
