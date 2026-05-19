@@ -98,7 +98,7 @@ RESERVED_EXPR_WORDS: frozenset[str] = frozenset({"AND", "OR", "NOT", "XOR"})
 
 RULES_COLUMNS = [
     "gene", "reference_identifier", "position", "reference", "mutation",
-    "antiviral", "group_id", "member_id", "phenotype", "score",
+    "antiviral", "member_id", "phenotype", "score",
     "ic50", "publication", "source", "comment",
 ]
 
@@ -370,9 +370,9 @@ def _expand_muts(raw: str) -> list[str]:
             out.append("*")
         elif ch == "-":
             out.append("-")
-        elif ch.lower() == "d":
+        elif ch == "d":
             out.append("-")
-        elif ch.lower() == "i":
+        elif ch == "i":
             out.append("_")
         elif ch.isalpha() and ch.upper() in CANONICAL_AA:
             out.append(ch.upper())
@@ -748,7 +748,10 @@ def _build_abs_comments(
 # ---------------------------------------------------------------------------
 
 def _drug_name(code: str, drug_map: dict[str, str]) -> str:
-    return drug_map.get(code.upper(), code.lower())
+    name = drug_map.get(code.upper(), code.lower())
+    if name.endswith("/r"):
+        return name[:-2]
+    return name
 
 
 def _emit_rule(
@@ -779,7 +782,6 @@ def _emit_rule(
             "reference": mem["reference"],
             "mutation": mem["mutation"],
             "antiviral": drug,
-            "group_id": "",
             "member_id": "",
             "phenotype": "",
             "score": score,
@@ -795,10 +797,8 @@ def _emit_rule(
 
     for mem in parsed.members:
         mid = mem["member_id"]
-        if mid in ctx.member_registry:
-            ctx.member_registry[mid]["group_ids"].add(group_id)
-        else:
-            ctx.member_registry[mid] = {**mem, "group_ids": {group_id}}
+        if mid not in ctx.member_registry:
+            ctx.member_registry[mid] = {**mem}
 
     ctx.formula_rows.append({
         "group_id": group_id,
@@ -1051,28 +1051,45 @@ def convert(
         for scope_items in max_scopes.values():
             _handle_max_scope(scope_items, drug_code=drug_code, segment=segment, ctx=ctx)
 
-    # Materialise shared formula-member rows from the registry.
+    # Build mutation -> member_id mapping for formula members.
+    # member_id will be attached to the first scored occurrence of each mutation if it has one.
+    mutation_to_member_id: dict[tuple, str] = {}
     for item in ctx.member_registry.values():
-        ctx.rules_rows.append({
-            "gene": item["gene"],
-            "reference_identifier": item["reference_identifier"],
-            "position": item["position"],
-            "reference": item["reference"],
-            "mutation": item["mutation"],
-            "antiviral": "",
-            "group_id": ",".join(sorted(item["group_ids"])),
-            "member_id": item["member_id"],
-            "phenotype": "",
-            "score": "",
-            "ic50": "",
-            "publication": "",
-            "source": SOURCE_LABEL,
-            "comment": "HIVDB ASI formula member",
-        })
+        key = (norm(item["gene"]), norm(item["position"]), norm(item["reference"]), norm(item["mutation"]))
+        if key not in mutation_to_member_id:
+            mutation_to_member_id[key] = item["member_id"]
 
     # Deduplicate and sort deterministically.
     rules_rows = _dedupe(ctx.rules_rows, RULES_COLUMNS)
     formula_rows = _dedupe(ctx.formula_rows, FORMULA_COLUMNS)
+
+    # Attach member_id to first occurrence of each formula-member mutation with a score.
+    seen_mutations: set[tuple] = set()
+    for row in rules_rows:
+        key = (norm(row["gene"]), norm(row["position"]), norm(row["reference"]), norm(row["mutation"]))
+        if key in mutation_to_member_id and key not in seen_mutations and row["antiviral"]:
+            row["member_id"] = mutation_to_member_id[key]
+            seen_mutations.add(key)
+
+    # Emit placeholder rows for formula members without any scored atomic rules.
+    for item in ctx.member_registry.values():
+        key = (norm(item["gene"]), norm(item["position"]), norm(item["reference"]), norm(item["mutation"]))
+        if key not in seen_mutations:
+            rules_rows.append({
+                "gene": item["gene"],
+                "reference_identifier": item["reference_identifier"],
+                "position": item["position"],
+                "reference": item["reference"],
+                "mutation": item["mutation"],
+                "antiviral": "",
+                "member_id": item["member_id"],
+                "phenotype": "",
+                "score": "",
+                "ic50": "",
+                "publication": "",
+                "source": SOURCE_LABEL,
+                "comment": "HIVDB ASI formula member",
+            })
 
     rules_rows.sort(key=lambda r: (
         GENE_ORDER.get(norm(r["gene"]), 99),
@@ -1081,7 +1098,6 @@ def convert(
         norm(r["reference"]),
         norm(r["mutation"]),
         norm(r["antiviral"]),
-        norm(r["group_id"]),
         norm(r["member_id"]),
         norm(r["score"]),
     ))
@@ -1178,10 +1194,8 @@ def validate_outputs(rules_path: Path, formula_path: Path | None) -> None:
 
     Checks:
       - rules.tsv has the correct header and no empty required cells.
-      - member_id / group_id consistency within rules.tsv.
-      - formula-rules.tsv (if present) references only known group_ids and member_ids.
+            - formula-rules.tsv (if present) references only known member_ids.
       - No member_id appears more than once in a single formula expression.
-      - Every group_id in rules.tsv has a corresponding row in formula-rules.tsv.
     """
     with rules_path.open(newline="", encoding="utf-8") as fh:
         reader = csv.DictReader(fh, delimiter="\t")
@@ -1189,23 +1203,16 @@ def validate_outputs(rules_path: Path, formula_path: Path | None) -> None:
             raise ValueError(f"rules.tsv header mismatch: {reader.fieldnames}")
 
         member_ids: set[str] = set()
-        group_ids: set[str] = set()
-
         for lineno, row in enumerate(reader, start=2):
             if not row["gene"]:
                 raise ValueError(f"rules.tsv:{lineno} missing gene")
             if not norm(row["position"]).isdigit():
                 raise ValueError(f"rules.tsv:{lineno} non-integer position")
             mid = row["member_id"]
-            gid = row["group_id"]
             if mid:
                 if mid.upper() in RESERVED_EXPR_WORDS:
                     raise ValueError(f"rules.tsv:{lineno} member_id uses reserved keyword")
-                if not gid:
-                    raise ValueError(f"rules.tsv:{lineno} member_id present but group_id absent")
                 member_ids.add(mid)
-                for g in split_csv(gid):
-                    group_ids.add(g)
 
     if formula_path is None:
         return
@@ -1223,10 +1230,6 @@ def validate_outputs(rules_path: Path, formula_path: Path | None) -> None:
                 raise ValueError(f"formula-rules.tsv:{lineno} missing group_id")
             if not expr:
                 raise ValueError(f"formula-rules.tsv:{lineno} missing expression")
-            if gid not in group_ids:
-                raise ValueError(
-                    f"formula-rules.tsv:{lineno} unknown group_id {gid!r}"
-                )
             if gid in formula_group_ids:
                 raise ValueError(
                     f"formula-rules.tsv:{lineno} duplicate group_id {gid!r}"
@@ -1248,12 +1251,6 @@ def validate_outputs(rules_path: Path, formula_path: Path | None) -> None:
                         f"formula-rules.tsv:{lineno} member_id {token!r} used more than once"
                     )
                 seen_in_expr.add(token)
-
-        missing = sorted(group_ids - formula_group_ids)
-        if missing:
-            raise ValueError(
-                "formula-rules.tsv missing entries for group_ids: " + ",".join(missing)
-            )
 
 
 # ---------------------------------------------------------------------------
