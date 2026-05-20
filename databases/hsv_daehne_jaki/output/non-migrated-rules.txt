@@ -1,7 +1,7 @@
 # Non-migrated rules from source workbook
-# Columns: reason	sheet	gene	drug	aa_change	aa_position	resistance	pmids	details
+# Columns: reason	sheet	feature	drug	aa_change	aa_position	resistance	pmids	details
 
-reason	sheet	gene	drug	aa_change	aa_position	resistance	pmids	details
+reason	sheet	feature	drug	aa_change	aa_position	resistance	pmids	details
 duplicate_rule_dropped_fewer_pmids	HSV-1 Pol	UL30	aciclovir	L359I	359		PMID:34419483	Kept publication set: PMID:34419483; this row had fewer PMID entries.
 duplicate_rule_dropped_fewer_pmids	HSV-1 Pol	UL30	aciclovir	M1226I	1226		PMID:34419483	Kept publication set: PMID:26055375; this row had fewer PMID entries.
 duplicate_rule_dropped_fewer_pmids	HSV-1 Pol	UL30	aciclovir	P1124H	1124		PMID:20211650	Kept publication set: PMID:14670581,PMID:24055837; this row had fewer PMID entries.

@@ -1,7 +1,7 @@
 # Non-migrated HerpesDRG rows
-# Columns: reason	mutation_id	virus	gene	aa_change	co_gene	co_aa	status	note	details
+# Columns: reason	mutation_id	virus	feature	aa_change	co_feature	co_aa	status	note	details
 
-reason	mutation_id	virus	gene	aa_change	co_gene	co_aa	status	note	details
+reason	mutation_id	virus	feature	aa_change	co_feature	co_aa	status	note	details
 numeric_only_mutation_not_supported	1625	HHV6b	U38	654			A		failed_part=654
 status_not_active	1394	Adeno	pol	C687S			O	this is not resistance data	
 status_not_active	1387	Adeno	pol	F882I	pol	V180I	O	co-occuring uncharacterised mutations - oringally F740I	

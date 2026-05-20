@@ -30,7 +30,7 @@ ZENODO_URL = (
     "Supplementary%20table%203.docx.xlsx"
 )
 
-GENE_MAP = {
+FEATURE_MAP = {
     "Thymidine Kinase": "UL23",
     "DNA Polymerase": "UL30",
     "UL5": "UL5",
@@ -53,7 +53,7 @@ SHEET_VIRUS = {
 }
 
 RULES_COLUMNS = [
-    "gene",
+    "feature",
     "reference_identifier",
     "position",
     "reference",
@@ -80,7 +80,7 @@ FORMULA_COLUMNS = [
 NON_MIGRATED_COLUMNS = [
     "reason",
     "sheet",
-    "gene",
+    "feature",
     "drug",
     "aa_change",
     "aa_position",
@@ -300,7 +300,7 @@ def add_non_migrated(
     non_migrated_rows,
     reason: str,
     sheet: str,
-    gene: str,
+    feature: str,
     drug: str,
     aa_change: str,
     aa_position,
@@ -312,7 +312,7 @@ def add_non_migrated(
         {
             "reason": reason,
             "sheet": sheet,
-            "gene": gene,
+            "feature": feature,
             "drug": drug,
             "aa_change": aa_change,
             "aa_position": "" if aa_position is None else str(aa_position),
@@ -340,7 +340,7 @@ def extract_rows(wb):
     formula_rows = []
     non_migrated_rows = []
     group_counter = [0]
-    # Registry of already-emitted combo members: (gene, ref_id, pos, mut_token) -> member_id.
+    # Registry of already-emitted combo members: (feature, ref_id, pos, mut_token) -> member_id.
     # Shared members across groups reuse the same row and member_id.
     combo_member_registry: dict = {}
 
@@ -357,8 +357,8 @@ def extract_rows(wb):
         ref_id = REFERENCE_IDS[virus]
 
         for row in ws.iter_rows(min_row=2, values_only=True):
-            gene_raw = norm_str(row[0])
-            if not gene_raw:
+            feature_raw = norm_str(row[0])
+            if not feature_raw:
                 continue
 
             drug = norm_str(row[1]).strip()
@@ -384,7 +384,7 @@ def extract_rows(wb):
                     non_migrated_rows,
                     reason="nucleotide_only_row",
                     sheet=sheet_name,
-                    gene=gene_raw,
+                    feature=feature_raw,
                     drug=drug,
                     aa_change=aa_change,
                     aa_position=aa_pos_raw,
@@ -395,17 +395,17 @@ def extract_rows(wb):
                 continue
 
             # Slash-separated mutations define a combo rule.
-            # If genes are slash-separated too, members are matched by index.
-            # If only one gene is provided, it applies to all mutation members.
+            # If features are slash-separated too, members are matched by index.
+            # If only one feature is provided, it applies to all mutation members.
             parts_aa = [part.strip() for part in aa_change.split("/") if part.strip()]
             is_dual_allele = bool(re.match(r"^[A-Z]\d+[A-Z]/[A-Z]$", aa_change, re.IGNORECASE))
             is_combo = len(parts_aa) > 1 and not is_dual_allele
             if is_combo:
-                raw_parts_gene = [part.strip() for part in gene_raw.split("/") if part.strip()]
-                if len(raw_parts_gene) == 1:
-                    parts_gene = raw_parts_gene * len(parts_aa)
+                raw_parts_feature = [part.strip() for part in feature_raw.split("/") if part.strip()]
+                if len(raw_parts_feature) == 1:
+                    parts_feature = raw_parts_feature * len(parts_aa)
                 else:
-                    parts_gene = raw_parts_gene
+                    parts_feature = raw_parts_feature
 
                 # Position column may also be slash-split ("356/222").
                 if aa_pos_raw and "/" in str(aa_pos_raw):
@@ -413,9 +413,9 @@ def extract_rows(wb):
                 else:
                     parts_pos = [str(aa_pos_raw)] * len(parts_aa)
 
-                if len(parts_gene) != len(parts_aa) or len(parts_pos) != len(parts_aa):
+                if len(parts_feature) != len(parts_aa) or len(parts_pos) != len(parts_aa):
                     print(
-                        f"WARNING: Cannot parse combo row gene='{gene_raw}' "
+                        f"WARNING: Cannot parse combo row feature='{feature_raw}' "
                         f"aa='{aa_change}' in sheet '{sheet_name}' — skipping.",
                         file=sys.stderr,
                     )
@@ -423,7 +423,7 @@ def extract_rows(wb):
                         non_migrated_rows,
                         reason="invalid_combo_format",
                         sheet=sheet_name,
-                        gene=gene_raw,
+                        feature=feature_raw,
                         drug=drug,
                         aa_change=aa_change,
                         aa_position=aa_pos_raw,
@@ -431,7 +431,7 @@ def extract_rows(wb):
                         pmids=pmids,
                         details=(
                             "Expected the same number of mutation and position members, and "
-                            "either one gene or one gene per mutation member."
+                            "either one feature or one feature per mutation member."
                         ),
                     )
                     continue
@@ -439,20 +439,20 @@ def extract_rows(wb):
                 gid = next_group_id()
                 member_ids = []
 
-                for sub_gene, sub_aa, sub_pos_raw in zip(parts_gene, parts_aa, parts_pos):
-                    mapped_gene = GENE_MAP.get(sub_gene, sub_gene)
+                for sub_feature, sub_aa, sub_pos_raw in zip(parts_feature, parts_aa, parts_pos):
+                    mapped_feature = FEATURE_MAP.get(sub_feature, sub_feature)
                     ref_aa, pos, mut_token = parse_aa_change(sub_aa)
                     if mut_token is None or ref_aa is None:
                         print(
                             f"WARNING: Cannot parse mutation '{sub_aa}' (or missing ref AA) in combo row "
-                            f"(sheet={sheet_name}, gene={sub_gene}) — skipping entire combo.",
+                            f"(sheet={sheet_name}, feature={sub_feature}) — skipping entire combo.",
                             file=sys.stderr,
                         )
                         add_non_migrated(
                             non_migrated_rows,
                             reason="combo_member_unparseable_or_missing_ref",
                             sheet=sheet_name,
-                            gene=sub_gene,
+                            feature=sub_feature,
                             drug=drug,
                             aa_change=sub_aa,
                             aa_position=sub_pos_raw,
@@ -468,16 +468,16 @@ def extract_rows(wb):
                         except (ValueError, TypeError):
                             pos = 0
 
-                    member_key = (mapped_gene, ref_id, pos, mut_token)
+                    member_key = (mapped_feature, ref_id, pos, mut_token)
                     if member_key in combo_member_registry:
                         mid = combo_member_registry[member_key]
                     else:
-                        mid = f"{mapped_gene}_{pos}_{mut_token}"
+                        mid = f"{mapped_feature}_{pos}_{mut_token}"
                         combo_member_registry[member_key] = mid
                         # Emit member row once. No antiviral or group — the member
                         # is shared across groups; drug context lives in formula-rules.tsv.
                         single_rows.append({
-                            "gene": mapped_gene,
+                            "feature": mapped_feature,
                             "reference_identifier": ref_id,
                             "position": pos,
                             "reference": ref_aa or "",
@@ -493,7 +493,7 @@ def extract_rows(wb):
                         })
                     member_ids.append(mid)
 
-                if len(member_ids) != len(parts_gene):
+                if len(member_ids) != len(parts_feature):
                     # One member could not be parsed (logged above); skip this formula group.
                     # Already-registered member rows are kept — they are valid atomic mutations.
                     continue
@@ -514,24 +514,24 @@ def extract_rows(wb):
                 })
 
             else:
-                # Regular single-gene row
-                mapped_gene = GENE_MAP.get(gene_raw)
-                if mapped_gene is None:
+                # Regular single-feature row
+                mapped_feature = FEATURE_MAP.get(feature_raw)
+                if mapped_feature is None:
                     print(
-                        f"WARNING: Unknown gene '{gene_raw}' in sheet '{sheet_name}' — skipping.",
+                        f"WARNING: Unknown feature '{feature_raw}' in sheet '{sheet_name}' — skipping.",
                         file=sys.stderr,
                     )
                     add_non_migrated(
                         non_migrated_rows,
-                        reason="unknown_gene",
+                        reason="unknown_feature",
                         sheet=sheet_name,
-                        gene=gene_raw,
+                        feature=feature_raw,
                         drug=drug,
                         aa_change=aa_change,
                         aa_position=aa_pos_raw,
                         resistance=resistance,
                         pmids=pmids,
-                        details="Gene not mappable to ResPro gene naming.",
+                        details="Feature not mappable to ResPro feature naming.",
                     )
                     continue
 
@@ -539,14 +539,14 @@ def extract_rows(wb):
                 if mut_token is None:
                     print(
                         f"SKIPPED unparseable mutation: sheet={sheet_name} "
-                        f"gene={mapped_gene} aa_change={aa_change!r} drug={drug}",
+                        f"feature={mapped_feature} aa_change={aa_change!r} drug={drug}",
                         file=sys.stderr,
                     )
                     add_non_migrated(
                         non_migrated_rows,
                         reason="unparseable_mutation",
                         sheet=sheet_name,
-                        gene=mapped_gene,
+                        feature=mapped_feature,
                         drug=drug,
                         aa_change=aa_change,
                         aa_position=aa_pos_raw,
@@ -558,7 +558,7 @@ def extract_rows(wb):
                 if ref_aa is None:
                     print(
                         f"SKIPPED mutation with no reference AA: sheet={sheet_name} "
-                        f"gene={mapped_gene} aa_change={aa_change!r} drug={drug} "
+                        f"feature={mapped_feature} aa_change={aa_change!r} drug={drug} "
                         f"(reference amino acid required by ResPro)",
                         file=sys.stderr,
                     )
@@ -566,7 +566,7 @@ def extract_rows(wb):
                         non_migrated_rows,
                         reason="missing_reference_amino_acid",
                         sheet=sheet_name,
-                        gene=mapped_gene,
+                        feature=mapped_feature,
                         drug=drug,
                         aa_change=aa_change,
                         aa_position=aa_pos_raw,
@@ -581,14 +581,14 @@ def extract_rows(wb):
                     except (ValueError, TypeError):
                         print(
                             f"SKIPPED row with unresolvable position: sheet={sheet_name} "
-                            f"gene={mapped_gene} aa_change={aa_change!r} pos_col={aa_pos_raw!r}",
+                            f"feature={mapped_feature} aa_change={aa_change!r} pos_col={aa_pos_raw!r}",
                             file=sys.stderr,
                         )
                         add_non_migrated(
                             non_migrated_rows,
                             reason="unresolvable_position",
                             sheet=sheet_name,
-                            gene=mapped_gene,
+                            feature=mapped_feature,
                             drug=drug,
                             aa_change=aa_change,
                             aa_position=aa_pos_raw,
@@ -603,7 +603,7 @@ def extract_rows(wb):
                 )
 
                 single_rows.append({
-                    "gene": mapped_gene,
+                    "feature": mapped_feature,
                     "reference_identifier": ref_id,
                     "position": pos,
                     "reference": ref_aa or "",
@@ -628,7 +628,7 @@ def extract_rows(wb):
 
 def deduplicate_single_rows(rows, non_migrated_rows):
     """
-    For rows with identical (gene, reference_identifier, position, mutation, antiviral)
+    For rows with identical (feature, reference_identifier, position, mutation, antiviral)
     keep the one with more PMIDs. Print dropped rows.
     """
     # Only deduplicate non-combo rows (member_id == "")
@@ -637,7 +637,7 @@ def deduplicate_single_rows(rows, non_migrated_rows):
 
     key_map = defaultdict(list)
     for r in non_combo:
-        key = (r["gene"], r["reference_identifier"], r["position"], r["mutation"], r["antiviral"])
+        key = (r["feature"], r["reference_identifier"], r["position"], r["mutation"], r["antiviral"])
         key_map[key].append(r)
 
     kept = []
@@ -649,7 +649,7 @@ def deduplicate_single_rows(rows, non_migrated_rows):
             for r in group:
                 if r is not best:
                     print(
-                        f"DROPPED duplicate row: gene={r['gene']} pos={r['position']} "
+                        f"DROPPED duplicate row: feature={r['feature']} pos={r['position']} "
                         f"mutation={r['mutation']} drug={r['antiviral']} "
                         f"pmids={r['publication']!r} "
                         f"(kept pmids={best['publication']!r}, "
@@ -660,7 +660,7 @@ def deduplicate_single_rows(rows, non_migrated_rows):
                         non_migrated_rows,
                         reason="duplicate_rule_dropped_fewer_pmids",
                         sheet=r.get("sheet", ""),
-                        gene=r["gene"],
+                        feature=r["feature"],
                         drug=r["antiviral"],
                         aa_change=f"{r['reference']}{r['position']}{r['mutation']}",
                         aa_position=r["position"],
@@ -693,7 +693,7 @@ def sort_single_rows(rows):
         rows,
         key=lambda r: (
             r["reference_identifier"],
-            r["gene"],
+            r["feature"],
             r["antiviral"],
             int(r["position"]) if str(r["position"]).isdigit() else 0,
             r["mutation"],
@@ -717,7 +717,7 @@ def non_migrated_rows_to_text(rows) -> str:
         key=lambda r: (
             r["reason"],
             r["sheet"],
-            r["gene"],
+            r["feature"],
             r["drug"],
             r["aa_change"],
         ),
@@ -795,7 +795,7 @@ def main():
         "website": source_website_from_url(args.source_url),
         "description": (
             "HSV-1 and HSV-2 drug resistance mutation database curated from published literature. "
-            "Covers TK (UL23), DNA Polymerase (UL30), and Helicase-Primase Complex (UL5/UL52) genes. "
+            "Covers TK (UL23), DNA Polymerase (UL30), and Helicase-Primase Complex (UL5/UL52) features. "
         ),
         "maintainer_update": maintainer_update,
         "license": "CC-BY-4.0",

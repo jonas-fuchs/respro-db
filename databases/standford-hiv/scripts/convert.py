@@ -97,7 +97,7 @@ CANONICAL_AA: frozenset[str] = frozenset("ACDEFGHIKLMNPQRSTVWY")
 RESERVED_EXPR_WORDS: frozenset[str] = frozenset({"AND", "OR", "NOT", "XOR"})
 
 RULES_COLUMNS = [
-    "gene", "reference_identifier", "position", "reference", "mutation",
+    "feature", "reference_identifier", "position", "reference", "mutation",
     "antiviral", "member_id", "score",
     "ic50", "publication", "source", "comment",
 ]
@@ -689,7 +689,7 @@ def parse_lhs(
             mid = _make_member_id(gene_name, abs_pos, ref, mutation)
 
             members.append({
-                "gene": gene_name,
+                "feature": gene_name,
                 "reference_identifier": REFERENCE_IDENTIFIER,
                 "position": str(abs_pos),
                 "reference": ref,
@@ -786,13 +786,13 @@ def _emit_rule(
         mem = parsed.members[0]
         # Prefer an annotation from COMMENT_STRING over the generic fallback.
         comment = (
-            ctx.abs_comments.get((mem["gene"], int(mem["position"]), mem["mutation"]))
+            ctx.abs_comments.get((mem["feature"], int(mem["position"]), mem["mutation"]))
             or atomic_comment
             or "HIVDB ASI atomic score rule"
         )
         comment = sanitize_comment_text(comment)
         ctx.rules_rows.append({
-            "gene": mem["gene"],
+            "feature": mem["feature"],
             "reference_identifier": mem["reference_identifier"],
             "position": mem["position"],
             "reference": mem["reference"],
@@ -809,7 +809,7 @@ def _emit_rule(
         return
 
     # Formula rule: register members (shared across drugs) and emit a formula row.
-    group_id = _make_group_id(drug_code, parsed.members[0]["gene"], raw_rule, score)
+    group_id = _make_group_id(drug_code, parsed.members[0]["feature"], raw_rule, score)
 
     for mem in parsed.members:
         mid = mem["member_id"]
@@ -1071,7 +1071,7 @@ def convert(
     # member_id will be attached to the first scored occurrence of each mutation if it has one.
     mutation_to_member_id: dict[tuple, str] = {}
     for item in ctx.member_registry.values():
-        key = (norm(item["gene"]), norm(item["position"]), norm(item["reference"]), norm(item["mutation"]))
+        key = (norm(item["feature"]), norm(item["position"]), norm(item["reference"]), norm(item["mutation"]))
         if key not in mutation_to_member_id:
             mutation_to_member_id[key] = item["member_id"]
 
@@ -1082,17 +1082,17 @@ def convert(
     # Attach member_id to first occurrence of each formula-member mutation with a score.
     seen_mutations: set[tuple] = set()
     for row in rules_rows:
-        key = (norm(row["gene"]), norm(row["position"]), norm(row["reference"]), norm(row["mutation"]))
+        key = (norm(row["feature"]), norm(row["position"]), norm(row["reference"]), norm(row["mutation"]))
         if key in mutation_to_member_id and key not in seen_mutations and row["antiviral"]:
             row["member_id"] = mutation_to_member_id[key]
             seen_mutations.add(key)
 
     # Emit placeholder rows for formula members without any scored atomic rules.
     for item in ctx.member_registry.values():
-        key = (norm(item["gene"]), norm(item["position"]), norm(item["reference"]), norm(item["mutation"]))
+        key = (norm(item["feature"]), norm(item["position"]), norm(item["reference"]), norm(item["mutation"]))
         if key not in seen_mutations:
             rules_rows.append({
-                "gene": item["gene"],
+            "feature": item["feature"],
                 "reference_identifier": item["reference_identifier"],
                 "position": item["position"],
                 "reference": item["reference"],
@@ -1108,8 +1108,8 @@ def convert(
             })
 
     rules_rows.sort(key=lambda r: (
-        GENE_ORDER.get(norm(r["gene"]), 99),
-        norm(r["gene"]),
+        GENE_ORDER.get(norm(r["feature"]), 99),
+        norm(r["feature"]),
         int(norm(r.get("position")) or 0),
         norm(r["reference"]),
         norm(r["mutation"]),
@@ -1183,7 +1183,7 @@ def _non_migrated_text(rows: list[dict]) -> str:
         "\t".join(NON_MIGRATED_COLUMNS),
     ]
     for row in sorted(rows, key=lambda r: (
-        norm(r.get("reason")), norm(r.get("gene")),
+        norm(r.get("reason")), norm(r.get("feature")),
         norm(r.get("drug")), norm(r.get("raw_rule")),
     )):
         lines.append("\t".join(norm(row.get(c, "")) for c in NON_MIGRATED_COLUMNS))
@@ -1220,8 +1220,8 @@ def validate_outputs(rules_path: Path, formula_path: Path | None) -> None:
 
         member_ids: set[str] = set()
         for lineno, row in enumerate(reader, start=2):
-            if not row["gene"]:
-                raise ValueError(f"rules.tsv:{lineno} missing gene")
+            if not row["feature"]:
+                raise ValueError(f"rules.tsv:{lineno} missing feature")
             if not norm(row["position"]).isdigit():
                 raise ValueError(f"rules.tsv:{lineno} non-integer position")
             mid = row["member_id"]

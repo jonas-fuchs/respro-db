@@ -8,5 +8,5 @@
   "description": "Stanford HIVDB ASI drug-resistance scoring rules converted to ResPro TSV artifacts.",
   "maintainer_update": "2026-04-26",
   "license": "Unlicense",
-  "tsv_checksum": "sha256:7b137df1ebc22d07557b77f012f3ae7a94e941f2e436d7166150f51b184897aa"
+  "tsv_checksum": "sha256:3c9cdfee825022762ea9064feb92eb709105f33f0ed225d3e6ae0e3826630b39"
 }

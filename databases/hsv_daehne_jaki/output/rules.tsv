@@ -1,4 +1,4 @@
-gene	reference_identifier	position	reference	mutation	antiviral	member_id	phenotype	clinical_phenotype	publication	source	comment
+feature	reference_identifier	position	reference	mutation	antiviral	member_id	phenotype	clinical_phenotype	publication	source	comment
 UL23	NC_001798	19	A	V	aciclovir		sensitive	resistant	PMID:14670581	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001798	25	G	A	aciclovir		sensitive	unknown	PMID:29427675	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001798	26	R	H	aciclovir		sensitive	resistant	PMID:14670581	Dähne et al. 2025 (Zenodo 15149867)	

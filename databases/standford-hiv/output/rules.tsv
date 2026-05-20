@@ -1,4 +1,4 @@
-gene	reference_identifier	position	reference	mutation	antiviral	member_id	score	ic50	publication	source	comment
+feature	reference_identifier	position	reference	mutation	antiviral	member_id	score	ic50	publication	source	comment
 gag protein	MN919177	188	L	I	lenacapavir		60			Stanford HIVDB	L56I has been selected in vitro by LEN. It is associated with ~200-fold reduced LEN susceptibility. It has an RC of 3%-9%. It has not been selected in a patient.
 gag protein	MN919177	189	N	S	lenacapavir		20			Stanford HIVDB	N57S had been selected in vitro by GS-CA1 and is associated with ~25-fold reduced GS-CA1 susceptibility.
 gag protein	MN919177	198	M	I	lenacapavir		60			Stanford HIVDB	M66I has been selected in vitro by LEN. It is associated with >1000-fold reduced LEN susceptibility. It has an RC of 1%-6%. It occurred in 6 patients in the CAPELLA study usually in combination with other mutations.
