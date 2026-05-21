@@ -76,22 +76,25 @@ HIVFACTS_GENES_URL = (
 # ---------------------------------------------------------------------------
 
 # HIV-1 subtype B reference accession used throughout Stanford HIVDB.
-REFERENCE_IDENTIFIER = "MN919177"
+REFERENCE_IDENTIFIER = "NC_001802"
 
 SOURCE_LABEL = "Stanford HIVDB"
 
 # Stanford ASI uses short segment codes (CA, PR, RT, IN).
-# Maps each to (output gene name, parent gene abstractGene from hivfacts).
-# Position offsets (within-segment -> full-protein) are derived at
-# runtime from hivfacts genes_hiv1.json refRanges.
-SEGMENT_TO_GENE: dict[str, tuple[str, str]] = {
-    "CA": ("gag protein", "gag"),
-    "PR": ("pol protein", "pol"),
-    "RT": ("pol protein", "pol"),
-    "IN": ("pol protein", "pol"),
+# Maps each to output ResPro feature names.
+SEGMENT_TO_GENE: dict[str, str] = {
+    "CA": "capsid",
+    "PR": "aspartic peptidase",
+    "RT": "p66 subunit",
+    "IN": "integrase",
 }
 
-GENE_ORDER: dict[str, int] = {"gag protein": 0, "pol protein": 1}
+GENE_ORDER: dict[str, int] = {
+    "capsid": 0,
+    "aspartic peptidase": 1,
+    "p66 subunit": 2,
+    "integrase": 3,
+}
 
 CANONICAL_AA: frozenset[str] = frozenset("ACDEFGHIKLMNPQRSTVWY")
 RESERVED_EXPR_WORDS: frozenset[str] = frozenset({"AND", "OR", "NOT", "XOR"})
@@ -245,35 +248,22 @@ def load_drug_map(drugs_json: str) -> dict[str, str]:
     return mapping
 
 
-def load_gene_data(genes_json: str) -> dict[str, tuple[str, int, str]]:
-    """Build segment -> (gene_name, position_offset, refSequence) from hivfacts genes_hiv1.json.
-
-    Position offset converts a 1-based within-segment position to a 1-based
-    full-protein position, derived as:
-        offset = (segment_nt_start - parent_gene_nt_start) / 3
-
-    Example:
-        CA refRanges [1186, 1878], gag refRanges [790, 2289]
-        offset = (1186 - 790) / 3 = 132  ->  CA pos 1 = gag protein pos 133
-    """
+def load_gene_data(genes_json: str) -> dict[str, tuple[str, str]]:
+    """Build segment -> (gene_name, refSequence) from hivfacts genes_hiv1.json."""
     genes_list = json.loads(genes_json)
     by_abstract: dict[str, dict] = {
         g["abstractGene"]: g for g in genes_list if g.get("abstractGene")
     }
 
-    result: dict[str, tuple[str, int, str]] = {}
-    for segment, (gene_name, parent_abstract) in SEGMENT_TO_GENE.items():
+    result: dict[str, tuple[str, str]] = {}
+    for segment, gene_name in SEGMENT_TO_GENE.items():
         seg = by_abstract.get(segment)
-        par = by_abstract.get(parent_abstract)
-        if seg is None or par is None:
+        if seg is None:
             raise ValueError(
-                f"hivfacts genes_hiv1.json missing entry for {segment!r} or {parent_abstract!r}"
+                f"hivfacts genes_hiv1.json missing entry for {segment!r}"
             )
-        seg_start = seg["refRanges"][0][0]
-        par_start = par["refRanges"][0][0]
-        offset = (seg_start - par_start) // 3
         refseq = seg.get("refSequence", "").replace("\n", "").replace(" ", "")
-        result[segment] = (gene_name, offset, refseq)
+        result[segment] = (gene_name, refseq)
 
     return result
 
@@ -565,7 +555,7 @@ def resolve_reference(
     mutation: str,
     ref_hint: str,
     comment_hints: dict[tuple[str, int, str], CommentHint],
-    gene_data: dict[str, tuple[str, int, str]],
+    gene_data: dict[str, tuple[str, str]],
 ) -> str:
     """Determine the reference amino acid for a mutation.
 
@@ -582,7 +572,7 @@ def resolve_reference(
     if hint and hint.reference in CANONICAL_AA:
         return hint.reference
 
-    _, _, refseq = gene_data.get(segment, ("", 0, ""))
+    _, refseq = gene_data.get(segment, ("", ""))
     if refseq and 1 <= position <= len(refseq):
         return refseq[position - 1]
 
@@ -625,7 +615,7 @@ def parse_lhs(
     lhs: str,
     segment: str,
     comment_hints: dict[tuple[str, int, str], CommentHint],
-    gene_data: dict[str, tuple[str, int, str]],
+    gene_data: dict[str, tuple[str, str]],
 ) -> ParsedLHS | None:
     """Convert an ASI LHS mutation expression into a ParsedLHS.
 
@@ -648,7 +638,7 @@ def parse_lhs(
     if not matches:
         return None
 
-    gene_name, offset, _ = gene_data[segment]
+    gene_name, _ = gene_data[segment]
     pieces: list[str] = []
     members: list[dict] = []
     last = 0
@@ -683,7 +673,7 @@ def parse_lhs(
             if not ref:
                 return None  # unresolved reference -- skip rule
 
-            abs_pos = term.position + offset
+            abs_pos = term.position
             # Stanford ASI '-' (deletion) -> ResPro canonical {ref}{pos}del form.
             mutation = f"{ref}{abs_pos}del" if term.mutation == "-" else term.mutation
             mid = _make_member_id(gene_name, abs_pos, ref, mutation)
@@ -735,7 +725,7 @@ def parse_lhs(
 @dataclass
 class _Ctx:
     drug_map: dict[str, str]
-    gene_data: dict[str, tuple[str, int, str]]
+    gene_data: dict[str, tuple[str, str]]
     comment_hints: dict[tuple[str, int, str], CommentHint]
     # Absolute-position lookup: (gene_name, abs_pos, mutation) -> annotation text
     abs_comments: dict[tuple[str, int, str], str] = field(default_factory=dict)
@@ -747,14 +737,14 @@ class _Ctx:
 
 def _build_abs_comments(
     comment_hints: dict[tuple[str, int, str], CommentHint],
-    gene_data: dict[str, tuple[str, int, str]],
+    gene_data: dict[str, tuple[str, str]],
 ) -> dict[tuple[str, int, str], str]:
-    """Re-key COMMENT_STRING hints from segment-relative to full-protein coordinates."""
+    """Re-key COMMENT_STRING hints by segment feature names without coordinate offsets."""
     out: dict[tuple[str, int, str], str] = {}
     for (segment, pos, mut), ch in comment_hints.items():
         if segment in gene_data:
-            gene_name, offset, _ = gene_data[segment]
-            out[(gene_name, pos + offset, mut)] = ch.text
+            gene_name, _ = gene_data[segment]
+            out[(gene_name, pos, mut)] = ch.text
     return out
 
 
@@ -976,7 +966,7 @@ def convert(
     source_info: SourceInfo,
     xml_bytes: bytes,
     drug_map: dict[str, str],
-    gene_data: dict[str, tuple[str, int, str]],
+    gene_data: dict[str, tuple[str, str]],
     output_dir: Path,
 ) -> None:
     """Run the full conversion pipeline and write all output artifacts."""
