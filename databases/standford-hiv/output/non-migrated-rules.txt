@@ -1,0 +1,13 @@
+# Non-migrated Stanford HIVDB rules
+# Columns: reason	drug	gene	score	raw_rule	details
+
+reason	drug	gene	score	raw_rule	details
+non_portable_insertion_event	3TC	RT	30	69i => 30	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	ABC	RT	60	69i => 60	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	AZT	RT	60	69i => 60	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	D4T	RT	60	69i => 60	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	DDI	RT	60	69i => 60	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	FTC	RT	30	69i => 30	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	ISL	RT	60	69i => 60	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	TDF	RT	60	69i => 60	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence
+non_portable_insertion_event	TDF	RT	10	69i AND 184VI => 10	Stanford ASI insertion shorthand (e.g. 69i) has no explicit inserted sequence

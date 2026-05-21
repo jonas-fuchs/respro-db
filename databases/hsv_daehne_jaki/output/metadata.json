@@ -7,8 +7,8 @@
   "contact": "marcus.panning@uniklinik-freiburg.de",
   "publication_pmid": "40349973",
   "website": "https://zenodo.org/records/15149867",
-  "description": "HSV-1 and HSV-2 drug resistance mutation database curated from published literature. Covers TK (UL23), DNA Polymerase (UL30), and Helicase-Primase Complex (UL5/UL52) genes. ",
+  "description": "HSV-1 and HSV-2 drug resistance mutation database curated from published literature. Covers TK (UL23), DNA Polymerase (UL30), and Helicase-Primase Complex (UL5/UL52) features. ",
   "maintainer_update": "2025-05-05",
   "license": "CC-BY-4.0",
-  "tsv_checksum": "sha256:79afd11411feed127b9c0eb8bbf95144cb510179ddc77f7c0e3e0bb229884631"
+  "tsv_checksum": "sha256:d1fb1955a3a41cc2fd5b73654b1ed1bd117fbca0f8acacbf4af9bd487254b843"
 }

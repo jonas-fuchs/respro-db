@@ -29,13 +29,12 @@ from pathlib import Path
 SOURCE_URL = "https://raw.githubusercontent.com/ojcharles/herpesdrg-db/main/herpesdrg-db.tsv"
 
 RULES_COLUMNS = [
-    "gene",
+    "feature",
     "reference_identifier",
     "position",
     "reference",
     "mutation",
     "antiviral",
-    "group_id",
     "member_id",
     "phenotype",
     "ic50",
@@ -59,9 +58,9 @@ NON_MIGRATED_COLUMNS = [
     "reason",
     "mutation_id",
     "virus",
-    "gene",
+    "feature",
     "aa_change",
-    "co_gene",
+    "co_feature",
     "co_aa",
     "status",
     "note",
@@ -227,7 +226,7 @@ def non_migrated_text(rows: list[dict]) -> str:
     ]
     for row in sorted(
         rows,
-        key=lambda r: (norm(r.get("reason")), norm(r.get("virus")), norm(r.get("gene")), norm(r.get("aa_change"))),
+        key=lambda r: (norm(r.get("reason")), norm(r.get("virus")), norm(r.get("feature")), norm(r.get("aa_change"))),
     ):
         lines.append("\t".join(norm(row.get(col, "")) for col in NON_MIGRATED_COLUMNS))
     return "\n".join(lines) + "\n"
@@ -239,9 +238,9 @@ def add_non_migrated(bucket: list[dict], source_row: dict, reason: str, details:
             "reason": reason,
             "mutation_id": norm(source_row.get("mutation_id")),
             "virus": norm(source_row.get("virus")),
-            "gene": norm(source_row.get("gene")),
+            "feature": norm(source_row.get("gene")),
             "aa_change": norm(source_row.get("aa_change")),
-            "co_gene": norm(source_row.get("co_gene")),
+            "co_feature": norm(source_row.get("co_gene")),
             "co_aa": norm(source_row.get("co_aa")),
             "status": norm(source_row.get("status")),
             "note": norm(source_row.get("note")),
@@ -260,9 +259,9 @@ def split_combo_mutations(aa_change: str) -> list[str]:
     return [part.strip() for part in aa_change.split(";") if part.strip()]
 
 
-def make_member_id(group_id: str, gene: str, position: int, mutation: str, idx: int) -> str:
+def make_member_id(group_id: str, feature: str, position: int, mutation: str, idx: int) -> str:
     token = re.sub(r"[^A-Za-z0-9_]+", "_", mutation).strip("_") or "mut"
-    return f"{group_id}_{gene}_{position}_{token}_{idx}"
+    return f"{group_id}_{feature}_{position}_{token}_{idx}"
 
 
 def join_unique(values: list[str]) -> str:
@@ -281,9 +280,9 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
     rules_rows = []
     formula_rows = []
     non_migrated = []
-    # Dictionary to aggregate single-mutation rules: (gene, ref_id, position, mutation, antiviral) -> aggregation
+    # Dictionary to aggregate single-mutation rules: (feature, ref_id, position, mutation, antiviral) -> aggregation
     aggregated_rules = {}
-    # Dictionary to aggregate combo rules: (gene, ref_id, antiviral, parsed_mutations) -> aggregation
+    # Dictionary to aggregate combo rules: (feature, ref_id, antiviral, parsed_mutations) -> aggregation
     aggregated_combos = {}
     group_counter = 0
 
@@ -294,7 +293,7 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
 
     for row in source_rows:
         virus_raw = norm(row.get("virus"))
-        gene = norm(row.get("gene"))
+        feature = norm(row.get("gene"))
         aa_change = norm(row.get("aa_change"))
         note = norm(row.get("note"))
         status = norm(row.get("status"))
@@ -313,8 +312,8 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
             add_non_migrated(non_migrated, row, reason)
             continue
 
-        if not gene:
-            add_non_migrated(non_migrated, row, "missing_gene")
+        if not feature:
+            add_non_migrated(non_migrated, row, "missing_feature")
             continue
         if not aa_change:
             add_non_migrated(non_migrated, row, "missing_aa_change")
@@ -354,18 +353,17 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                 ref_aa, mutation_token, pos = parsed_mutations[0]
                 ref_id = REFERENCE_BY_VIRUS[virus_key]
 
-                # Aggregation key: (gene, ref_id, position, mutation, antiviral) without publication
-                aggr_key = (gene, ref_id, pos, mutation_token, antiviral_norm)
+                # Aggregation key: (feature, ref_id, position, mutation, antiviral) without publication
+                aggr_key = (feature, ref_id, pos, mutation_token, antiviral_norm)
                 
                 if aggr_key not in aggregated_rules:
                     aggregated_rules[aggr_key] = {
-                        "gene": gene,
+                        "feature": feature,
                         "reference_identifier": ref_id,
                         "position": pos,
                         "reference": ref_aa,
                         "mutation": mutation_token,
                         "antiviral": antiviral_norm,
-                        "group_id": "",
                         "member_id": "",
                         "source": source_label,
                         "publications": [],
@@ -388,10 +386,10 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
 
             ref_id = REFERENCE_BY_VIRUS[virus_key]
             combo_parts = tuple((ref_aa, mutation_token, pos) for ref_aa, mutation_token, pos in parsed_mutations)
-            combo_key = (gene, ref_id, antiviral_norm, combo_parts)
+            combo_key = (feature, ref_id, antiviral_norm, combo_parts)
             if combo_key not in aggregated_combos:
                 aggregated_combos[combo_key] = {
-                    "gene": gene,
+                    "feature": feature,
                     "reference_identifier": ref_id,
                     "antiviral": antiviral_norm,
                     "combo_parts": combo_parts,
@@ -449,13 +447,12 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
             comment = f"IC50 values: {values_str}; mean displayed"
 
         rule = {
-            "gene": aggr_data["gene"],
+            "feature": aggr_data["feature"],
             "reference_identifier": aggr_data["reference_identifier"],
             "position": aggr_data["position"],
             "reference": aggr_data["reference"],
             "mutation": aggr_data["mutation"],
             "antiviral": aggr_data["antiviral"],
-            "group_id": "",
             "member_id": "",
             "phenotype": phenotype,
             "ic50": ic50,
@@ -470,17 +467,16 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
         group_id = next_group_id()
         member_ids = []
         for idx, (ref_aa, mutation_token, pos) in enumerate(combo_data["combo_parts"], start=1):
-            member_id = make_member_id(group_id, combo_data["gene"], pos, mutation_token, idx)
+            member_id = make_member_id(group_id, combo_data["feature"], pos, mutation_token, idx)
             member_ids.append(member_id)
             rules_rows.append(
                 {
-                    "gene": combo_data["gene"],
+                    "feature": combo_data["feature"],
                     "reference_identifier": combo_data["reference_identifier"],
                     "position": pos,
                     "reference": ref_aa,
                     "mutation": mutation_token,
                     "antiviral": "",
-                    "group_id": group_id,
                     "member_id": member_id,
                     "phenotype": "",
                     "ic50": "",
@@ -527,7 +523,7 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
     rules_rows.sort(
         key=lambda r: (
             norm(r["reference_identifier"]),
-            norm(r["gene"]),
+            norm(r["feature"]),
             int(r["position"]),
             norm(r["mutation"]),
             norm(r["antiviral"]),
