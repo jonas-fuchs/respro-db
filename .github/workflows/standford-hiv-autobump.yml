@@ -1,0 +1,152 @@
+name: Stanford HIV Autobump
+
+"on":
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 1 * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-standford-hiv:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Resolve latest upstream source
+        id: source
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import re
+          import urllib.parse
+          import urllib.request
+
+          latest_pointer_url = "https://raw.githubusercontent.com/hivdb/hivfacts/main/data/algorithms/HIVDB_latest.xml"
+          versions_url = "https://raw.githubusercontent.com/hivdb/hivfacts/main/data/algorithms/versions.json"
+
+          with urllib.request.urlopen(latest_pointer_url) as response:
+              pointer = response.read().decode("utf-8-sig").strip()
+
+          if not re.fullmatch(r"HIVDB_.+\.xml", pointer):
+              raise SystemExit(f"Unexpected HIVDB latest pointer: {pointer!r}")
+
+          source_url = urllib.parse.urljoin(latest_pointer_url, pointer)
+          match = re.fullmatch(r"HIVDB_(.+)\.xml", pointer)
+          if not match:
+              raise SystemExit(f"Could not extract HIVDB version from {pointer!r}")
+          source_version = match.group(1)
+
+          with urllib.request.urlopen(versions_url) as response:
+              versions = json.load(response)
+
+          source_date = ""
+          for version, date_value, virus in versions.get("HIVDB", []):
+              if version == source_version and virus == "HIV1":
+                  source_date = str(date_value)
+                  break
+
+          if not source_date:
+              raise SystemExit(f"Could not resolve HIV1 source date for HIVDB {source_version}")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"source_url={source_url}\n")
+              fh.write(f"source_version={source_version}\n")
+              fh.write(f"source_date={source_date}\n")
+
+          print(f"Source URL: {source_url}")
+          print(f"Source version: {source_version}")
+          print(f"Source date: {source_date}")
+          PY
+
+      - name: Compare with current tracked source
+        id: update_check
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import sys
+
+          latest = "${{ steps.source.outputs.source_date }}"
+          metadata_path = "databases/standford-hiv/output/metadata.json"
+
+          current = ""
+          if os.path.exists(metadata_path):
+              with open(metadata_path, "r", encoding="utf-8") as fh:
+                  metadata = json.load(fh)
+              current = str(metadata.get("maintainer_update", "")).strip()
+          else:
+              print("Note: metadata.json does not exist (first run?)", file=sys.stderr)
+
+          print(f"Current source date: '{current}'", file=sys.stderr)
+          print(f"Latest source date:  '{latest}'", file=sys.stderr)
+
+          should_update = "true" if latest and latest != current else "false"
+
+          print(f"Update required: {should_update}", file=sys.stderr)
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"current_source_date={current}\n")
+              fh.write(f"should_update={should_update}\n")
+          PY
+
+      - name: Install converter dependencies
+        if: steps.update_check.outputs.should_update == 'true'
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f databases/standford-hiv/scripts/requirements.txt ]; then
+            python -m pip install -r databases/standford-hiv/scripts/requirements.txt
+          fi
+
+      - name: Run converter
+        if: steps.update_check.outputs.should_update == 'true'
+        run: |
+          python databases/standford-hiv/scripts/convert.py \
+            --source-url "${{ steps.source.outputs.source_url }}" \
+            --output-dir databases/standford-hiv/output
+
+      - name: Build global metadata manifest
+        if: steps.update_check.outputs.should_update == 'true'
+        run: |
+          python scripts/build_metadata_manifest.py
+
+      - name: No update detected
+        if: steps.update_check.outputs.should_update != 'true'
+        run: |
+          echo "No new Stanford HIVDB version detected; skipping converter and PR creation."
+
+      - name: Create pull request
+        if: steps.update_check.outputs.should_update == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: autobump/standford-hiv
+          delete-branch: true
+          commit-message: "chore(standford-hiv): autobump source outputs"
+          title: "chore: autobump standford hiv outputs"
+          body: |
+            Automated monthly update for Stanford HIVDB source data.
+
+            - Previous source date: ${{ steps.update_check.outputs.current_source_date }}
+            - Source date: ${{ steps.source.outputs.source_date }}
+            - Source version: ${{ steps.source.outputs.source_version }}
+            - Source URL: ${{ steps.source.outputs.source_url }}
+
+            This PR was generated by the autobump workflow.
+          labels: autobump
+          add-paths: |
+            databases/standford-hiv/output/rules.tsv
+            databases/standford-hiv/output/formula-rules.tsv
+            databases/standford-hiv/output/metadata.json
+            databases/standford-hiv/output/non-migrated-rules.txt
+            databases/manifest.json
