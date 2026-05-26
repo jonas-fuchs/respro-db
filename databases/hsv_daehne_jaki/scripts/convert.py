@@ -789,7 +789,7 @@ def main():
     # --- Write metadata.json ---
     checksum = tsv_checksum(rules_content)
     metadata = {
-        "maintainers": ["Dähne, Theo", "Gosert, Rainer", "Jaki, Lena"],
+        "maintainers": ["Daehne, Theo", "Gosert, Rainer", "Jaki, Lena"],
         "contact": "marcus.panning@uniklinik-freiburg.de",
         "publication_pmid": "40349973",
         "website": source_website_from_url(args.source_url),
@@ -800,6 +800,13 @@ def main():
         "maintainer_update": maintainer_update,
         "license": "CC-BY-4.0",
         "tsv_checksum": checksum,
+        "interpretation_algorithms": [
+            {
+                "name": "drug_interpretation",
+                "method": "by_phenotype",
+                "thresholds": {"resistant": 1, "intermediate": 1},
+            },
+        ],
     }
     metadata_path = out_dir / "metadata.json"
     metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")

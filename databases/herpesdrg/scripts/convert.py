@@ -629,6 +629,13 @@ def main() -> None:
         "maintainer_update": maintainer_update,
         "license": "MIT",
         "tsv_checksum": checksum(rules_content),
+        "interpretation_algorithms": [
+            {
+                "name": "drug_interpretation",
+                "method": "by_phenotype",
+                "thresholds": {"resistant": 1, "intermediate": 1},
+            },
+        ],
     }
     metadata_path = out_dir / "metadata.json"
     metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")

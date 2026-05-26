@@ -16,7 +16,7 @@
         "description": "Comprehensive resource for human herpesvirus antiviral drug resistance genotyping.",
         "maintainer_update": "2026-01-02",
         "license": "MIT",
-        "tsv_checksum": "sha256:6e737f17a20d2fade106a82fed9791361563f4ff317220a2b3699cffabbea1c6"
+        "tsv_checksum": "sha256:9f232adca29521fe91628f26016ae71dc3b60c86812b34b8861664c9c60ed4a9"
       }
     },
     {
@@ -26,17 +26,35 @@
       "formula_rules_path": "databases/hsv_daehne_jaki/output/formula-rules.tsv",
       "metadata": {
         "maintainers": [
-          "Dähne, Theo",
+          "Daehne, Theo",
           "Gosert, Rainer",
           "Jaki, Lena"
         ],
         "contact": "marcus.panning@uniklinik-freiburg.de",
         "publication_pmid": "40349973",
         "website": "https://zenodo.org/records/15149867",
-        "description": "HSV-1 and HSV-2 drug resistance mutation database curated from published literature. Covers TK (UL23), DNA Polymerase (UL30), and Helicase-Primase Complex (UL5/UL52) genes. ",
+        "description": "HSV-1 and HSV-2 drug resistance mutation database curated from published literature. Covers TK (UL23), DNA Polymerase (UL30), and Helicase-Primase Complex (UL5/UL52) features. ",
         "maintainer_update": "2025-05-05",
         "license": "CC-BY-4.0",
-        "tsv_checksum": "sha256:79afd11411feed127b9c0eb8bbf95144cb510179ddc77f7c0e3e0bb229884631"
+        "tsv_checksum": "sha256:d1fb1955a3a41cc2fd5b73654b1ed1bd117fbca0f8acacbf4af9bd487254b843"
+      }
+    },
+    {
+      "source_name": "standford-hiv",
+      "metadata_path": "databases/standford-hiv/output/metadata.json",
+      "rules_path": "databases/standford-hiv/output/rules.tsv",
+      "formula_rules_path": "databases/standford-hiv/output/formula-rules.tsv",
+      "metadata": {
+        "maintainers": [
+          "Stanford HIVDB Team"
+        ],
+        "contact": "hivdbteam@lists.stanford.edu",
+        "publication_pmid": "22286876",
+        "website": "https://hivdb.stanford.edu/",
+        "description": "Stanford HIVDB ASI drug-resistance scoring rules converted to ResPro TSV artifacts.",
+        "maintainer_update": "2026-04-26",
+        "license": "GNU General Public License v3.0",
+        "tsv_checksum": "sha256:eca53ce075a5e77566fd35b09642cd64e40805c8de90c65f011bc52ff4603d8c"
       }
     }
   ]

@@ -19,6 +19,12 @@ REQUIRED_METADATA_KEYS = (
     "tsv_checksum",
 )
 
+# Optional metadata key supported by ResPro init but intentionally excluded
+# from repository-level manifest entries.
+EXCLUDED_METADATA_KEYS = {
+    "interpretation_algorithms",
+}
+
 
 def load_metadata(metadata_path: Path) -> dict[str, Any]:
     with metadata_path.open("r", encoding="utf-8") as fh:
@@ -31,7 +37,7 @@ def load_metadata(metadata_path: Path) -> dict[str, Any]:
     required = set(REQUIRED_METADATA_KEYS)
 
     missing = sorted(required - keys)
-    unknown = sorted(keys - required)
+    unknown = sorted(keys - required - EXCLUDED_METADATA_KEYS)
     if missing or unknown:
         parts: list[str] = []
         if missing:
@@ -41,7 +47,7 @@ def load_metadata(metadata_path: Path) -> dict[str, Any]:
         details = "; ".join(parts)
         raise ValueError(f"Invalid metadata schema in {metadata_path}: {details}")
 
-    return metadata
+    return {k: metadata[k] for k in REQUIRED_METADATA_KEYS}
 
 
 def build_manifest(repo_root: Path) -> dict[str, Any]:

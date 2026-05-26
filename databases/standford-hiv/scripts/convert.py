@@ -1132,15 +1132,63 @@ def convert(
 
     metadata = {
         "maintainers": ["Stanford HIVDB Team"],
-        "contact": "",
-        "publication_pmid": "",
+        "contact": "hivdbteam@lists.stanford.edu",
+        "publication_pmid": "22286876",
         "website": "https://hivdb.stanford.edu/",
         "description": (
             "Stanford HIVDB ASI drug-resistance scoring rules converted to ResPro TSV artifacts."
         ),
         "maintainer_update": source_info.source_date,
-        "license": "Unlicense",
+        "license": "GNU General Public License v3.0",
         "tsv_checksum": checksum_text(rules_content),
+        "interpretation_algorithms": [
+            {
+                "name": "drug_groups",
+                "groups": {
+                    "Nucleoside Reverse Transcriptase Inhibitors": [
+                        "abacavir",
+                        "didanosine",
+                        "emtricitabine",
+                        "islatravir",
+                        "lamivudine",
+                        "stavudine",
+                        "tenofovir",
+                        "zidovudine",
+                    ],
+                    "Non-Nucleoside Reverse Transcriptase Inhibitors": [
+                        "dapivirine",
+                        "doravirine",
+                        "efavirenz",
+                        "etravirine",
+                        "nevirapine",
+                        "rilpivirine",
+                    ],
+                    "Protease Inhibitors": [
+                        "atazanavir",
+                        "darunavir",
+                        "fosamprenavir",
+                        "indinavir",
+                        "lopinavir",
+                        "nelfinavir",
+                        "saquinavir",
+                        "tipranavir",
+                    ],
+                    "Integrase Strand Transfer Inhibitors": [
+                        "bictegravir",
+                        "cabotegravir",
+                        "dolutegravir",
+                        "elvitegravir",
+                        "raltegravir",
+                    ],
+                    "Capsid Inhibitors": ["lenacapavir"],
+                },
+            },
+            {
+                "name": "drug_interpretation",
+                "method": "by_score",
+                "thresholds": {"resistant": 60, "intermediate": 15},
+            },
+        ],
     }
     metadata_path = output_dir / "metadata.json"
     metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
