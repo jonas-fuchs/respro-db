@@ -369,6 +369,8 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                         "publications": [],
                         "phenotypes": [],
                         "ic50_values": [],
+                        "test_methods": [],
+                        "created_dates": [],
                     }
                 
                 # Aggregate data from this row
@@ -381,6 +383,12 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                         aggregated_rules[aggr_key]["ic50_values"].append(float(ic50))
                     except ValueError:
                         pass
+                test_method = norm(row.get("test_method"))
+                if test_method:
+                    aggregated_rules[aggr_key]["test_methods"].append(test_method)
+                created_date = norm(row.get("created_date"))
+                if created_date:
+                    aggregated_rules[aggr_key]["created_dates"].append(created_date)
                 emitted_for_row += 1
                 continue
 
@@ -398,6 +406,8 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                     "phenotypes": [],
                     "ic50_values": [],
                     "comments": [],
+                    "test_methods": [],
+                    "created_dates": [],
                 }
             if publication:
                 aggregated_combos[combo_key]["publications"].append(publication)
@@ -410,6 +420,12 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                     pass
             if note:
                 aggregated_combos[combo_key]["comments"].append(note)
+            test_method = norm(row.get("test_method"))
+            if test_method:
+                aggregated_combos[combo_key]["test_methods"].append(test_method)
+            created_date = norm(row.get("created_date"))
+            if created_date:
+                aggregated_combos[combo_key]["created_dates"].append(created_date)
             emitted_for_row += 1
 
         if not has_antiviral_data:
@@ -445,6 +461,17 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
         if len(ic50_values) > 1:
             values_str = ", ".join(f"{v:g}" for v in ic50_values)
             comment = f"IC50 values: {values_str}; mean displayed"
+        
+        # Append test_method and created_date to comment
+        test_methods = join_unique(aggr_data["test_methods"])
+        created_dates = join_unique(aggr_data["created_dates"])
+        if test_methods or created_dates:
+            comment_parts = [comment] if comment else []
+            if test_methods:
+                comment_parts.append(f"Test method: {test_methods}")
+            if created_dates:
+                comment_parts.append(f"Rule created at: {created_dates}")
+            comment = ", ".join(comment_parts)
 
         rule = {
             "feature": aggr_data["feature"],
@@ -506,6 +533,17 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
         if len(ic50_values) > 1:
             values_str = ", ".join(f"{v:g}" for v in ic50_values)
             formula_comment = f"IC50 values: {values_str}; mean displayed"
+        
+        # Append test_method and created_date to formula comment
+        test_methods = join_unique(combo_data["test_methods"])
+        created_dates = join_unique(combo_data["created_dates"])
+        if test_methods or created_dates:
+            comment_parts = [formula_comment] if formula_comment else []
+            if test_methods:
+                comment_parts.append(f"Test method: {test_methods}")
+            if created_dates:
+                comment_parts.append(f"Rule created at: {created_dates}")
+            formula_comment = ", ".join(comment_parts)
 
         formula_rows.append(
             {
