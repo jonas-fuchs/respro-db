@@ -5,7 +5,7 @@
   "contact": "hivdbteam@lists.stanford.edu",
   "publication_pmid": "22286876",
   "website": "https://hivdb.stanford.edu/",
-  "description": "Stanford HIVDB ASI drug-resistance scoring rules converted to ResPro TSV artifacts.",
+  "description": "Stanford HIVDB ASI drug-resistance scoring rules.",
   "maintainer_update": "2026-04-26",
   "license": "GNU General Public License v3.0",
   "tsv_checksum": "sha256:eca53ce075a5e77566fd35b09642cd64e40805c8de90c65f011bc52ff4603d8c",
@@ -57,8 +57,8 @@
       "name": "drug_interpretation",
       "method": "by_score",
       "thresholds": {
-        "resistant": 60,
-        "intermediate": 15
+        "intermediate": 15,
+        "resistant": 60
       }
     },
     {

@@ -272,6 +272,63 @@ def load_gene_data(genes_json: str) -> dict[str, tuple[str, str]]:
 # XML extraction
 # ---------------------------------------------------------------------------
 
+def extract_score_thresholds(root: ET.Element) -> dict[str, int]:
+    """Parse DEFINITIONS/GLOBALRANGE and LEVEL_DEFINITION to derive score thresholds.
+
+    GLOBALRANGE contains score buckets mapped to level ORDER integers, e.g.:
+      (-INF TO 9 => 1,  10 TO 14 => 2,  15 TO 29 => 3,  30 TO 59 => 4,  60 TO INF => 5)
+    LEVEL_DEFINITION maps ORDER integers to SIR codes (S/I/R).
+
+    Returns a dict with the minimum score for each non-S level name used in
+    the ResPro drug_interpretation block, e.g. {"intermediate": 15, "resistant": 60}.
+    The threshold is the lowest finite lower-bound score whose level order maps to R or I.
+    """
+    defs = root.find("DEFINITIONS")
+    if defs is None:
+        raise ValueError("XML missing DEFINITIONS element")
+
+    # Build order -> SIR mapping from LEVEL_DEFINITION elements.
+    order_to_sir: dict[int, str] = {}
+    for ld in defs.findall("LEVEL_DEFINITION"):
+        order_text = text_of(ld, "ORDER")
+        sir = text_of(ld, "SIR").upper()
+        if order_text.isdigit() and sir in {"S", "I", "R"}:
+            order_to_sir[int(order_text)] = sir
+
+    if not order_to_sir:
+        raise ValueError("No LEVEL_DEFINITION entries found in DEFINITIONS")
+
+    # Parse GLOBALRANGE score-bucket strings: "LB TO UB => ORDER"
+    global_range_el = defs.find("GLOBALRANGE")
+    if global_range_el is None or not global_range_el.text:
+        raise ValueError("XML missing DEFINITIONS/GLOBALRANGE element")
+
+    range_text = global_range_el.text.strip().strip("()")
+    bucket_re = re.compile(
+        r"(-INF|\d+)\s+TO\s+(\d+|INF)\s*=>\s*(\d+)",
+        re.IGNORECASE,
+    )
+
+    # Collect lowest finite lower-bound for each SIR category.
+    sir_min: dict[str, int] = {}
+    for m in bucket_re.finditer(range_text):
+        lb_raw, _, order_raw = m.group(1), m.group(2), m.group(3)
+        order = int(order_raw)
+        sir = order_to_sir.get(order)
+        if sir is None or sir == "S":
+            continue
+        lb = None if lb_raw.upper() == "-INF" else int(lb_raw)
+        if lb is not None:
+            sir_key = "resistant" if sir == "R" else "intermediate"
+            if sir_key not in sir_min or lb < sir_min[sir_key]:
+                sir_min[sir_key] = lb
+
+    if not sir_min:
+        raise ValueError("Could not derive any non-susceptible thresholds from GLOBALRANGE")
+
+    return sir_min
+
+
 def build_drug_to_gene(root: ET.Element) -> dict[str, str]:
     """Parse DEFINITIONS element -> drug abbreviation -> segment code."""
     defs = root.find("DEFINITIONS")
@@ -989,6 +1046,7 @@ def convert(
 
     drug_to_gene = build_drug_to_gene(root)
     comment_hints = extract_comment_hints(root)
+    score_thresholds = extract_score_thresholds(root)
 
     ctx = _Ctx(
         drug_map=drug_map,
@@ -1136,7 +1194,7 @@ def convert(
         "publication_pmid": "22286876",
         "website": "https://hivdb.stanford.edu/",
         "description": (
-            "Stanford HIVDB ASI drug-resistance scoring rules converted to ResPro TSV artifacts."
+            "Stanford HIVDB ASI drug-resistance scoring rules."
         ),
         "maintainer_update": source_info.source_date,
         "license": "GNU General Public License v3.0",
@@ -1186,7 +1244,7 @@ def convert(
             {
                 "name": "drug_interpretation",
                 "method": "by_score",
-                "thresholds": {"resistant": 60, "intermediate": 15},
+                "thresholds": score_thresholds,
             },
             {
                 "name": "drug_alias",
