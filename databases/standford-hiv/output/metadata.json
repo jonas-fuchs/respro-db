@@ -60,6 +60,39 @@
         "resistant": 60,
         "intermediate": 15
       }
+    },
+    {
+      "name": "drug_alias",
+      "groups": {
+        "abacavir": "ABC",
+        "atazanavir": "ATV",
+        "bictegravir": "BIC",
+        "cabotegravir": "CAB",
+        "dapivirine": "DPV",
+        "darunavir": "DRV",
+        "didanosine": "DDI",
+        "dolutegravir": "DTG",
+        "doravirine": "DOR",
+        "efavirenz": "EFV",
+        "elvitegravir": "EVG",
+        "emtricitabine": "FTC",
+        "etravirine": "ETR",
+        "fosamprenavir": "FPV",
+        "indinavir": "IDV",
+        "islatravir": "ISL",
+        "lamivudine": "3TC",
+        "lenacapavir": "LEN",
+        "lopinavir": "LPV",
+        "nelfinavir": "NFV",
+        "nevirapine": "NVP",
+        "rilpivirine": "RPV",
+        "raltegravir": "RAL",
+        "saquinavir": "SQV",
+        "stavudine": "D4T",
+        "tenofovir": "TDF",
+        "tipranavir": "TPV",
+        "zidovudine": "AZT"
+      }
     }
   ]
 }

@@ -802,9 +802,41 @@ def main():
         "tsv_checksum": checksum,
         "interpretation_algorithms": [
             {
+                "name": "drug_groups",
+                "groups": {
+                    "Nucleoside analogs": [
+                        "aciclovir",
+                        "brivudine",
+                        "penciclovir",
+                    ],
+                    "Nucleotide analogs": [
+                        "cidofovir",
+                    ],
+                    "Pyrophosphate analog": [
+                        "foscarnet",
+                    ],
+                    "Helicase-Primase inhibitors": [
+                        "amenamevir",
+                        "pritelivir",
+                    ],
+                },
+            },
+            {
                 "name": "drug_interpretation",
                 "method": "by_phenotype",
                 "thresholds": {"resistant": 1, "intermediate": 1},
+            },
+            {
+                "name": "drug_alias",
+                "groups": {
+                    "aciclovir": "ACV",
+                    "amenamevir": "AMV",
+                    "brivudine": "BVDU",
+                    "cidofovir": "CDV",
+                    "foscarnet": "PFA",
+                    "penciclovir": "PCV",
+                    "pritelivir": "PTV",
+                },
             },
         ],
     }

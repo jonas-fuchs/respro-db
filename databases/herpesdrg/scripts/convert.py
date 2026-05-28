@@ -669,9 +669,59 @@ def main() -> None:
         "tsv_checksum": checksum(rules_content),
         "interpretation_algorithms": [
             {
+                "name": "drug_groups",
+                "groups": {
+                    "Nucleoside analogs": [
+                        "aciclovir",
+                        "brivudine",
+                        "ganciclovir",
+                        "penciclovir",
+                    ],
+                    "Nucleotide analogs": [
+                        "cidofovir",
+                        "brincidofovir",
+                    ],
+                    "Methylenecyclopropane nucleoside analog": [
+                        "cyclopropavir",
+                    ],
+                    "Pyrophosphate analog": [
+                        "foscarnet",
+                    ],
+                    "Helicase-Primase inhibitors": [
+                        "amenamevir",
+                        "pritelivir",
+                        "tomeglovir",
+                    ],
+                    "Terminase inhibitor": [
+                        "letermovir",
+                    ],
+                    "Viral kinase inhibitor": [
+                        "maribavir",
+                    ],
+                },
+            },
+            {
                 "name": "drug_interpretation",
                 "method": "by_phenotype",
                 "thresholds": {"resistant": 1, "intermediate": 1},
+            },
+            {
+                "name": "drug_alias",
+                "groups": {
+                    "aciclovir": "ACV",
+                    "amenamevir": "AMV",
+                    "brincidofovir": "BCV",
+                    "brivudine": "BVDU",
+                    "cidofovir": "CDV",
+                    "cyclopropavir": "CPV",
+                    "foscarnet": "PFA",
+                    "ganciclovir": "GCV",
+                    "letermovir": "LTV",
+                    "maribavir": "MBV",
+                    "penciclovir": "PCV",
+                    "pritelivir": "PTV",
+                    "tomeglovir": "TGVR",
+                },
             },
         ],
     }
