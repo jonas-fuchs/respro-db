@@ -744,6 +744,56 @@ def main() -> None:
                     "tomeglovir": "TGVR",
                 },
             },
+            {
+                "name": "frameshift_as_resistant",
+                "rules": [
+                    {
+                        "feature": "UL23",
+                        "reference": "NC_001806",
+                        "drug": "aciclovir",
+                    },
+                    {
+                        "feature": "UL23",
+                        "reference": "NC_001806",
+                        "drug": "penciclovir",
+                    },
+                    {
+                        "feature": "UL23",
+                        "reference": "NC_001806",
+                        "drug": "brivudine",
+                    },
+                    {
+                        "feature": "UL23",
+                        "reference": "NC_001798",
+                        "drug": "aciclovir",
+                    },
+                    {
+                        "feature": "UL23",
+                        "reference": "NC_001798",
+                        "drug": "penciclovir",
+                    },
+                    {
+                        "feature": "UL23",
+                        "reference": "NC_001798",
+                        "drug": "brivudine",
+                    },
+                    {
+                        "feature": "ORF36",
+                        "reference": "NC_001348",
+                        "drug": "aciclovir",
+                    },
+                    {
+                        "feature": "ORF36",
+                        "reference": "NC_001348",
+                        "drug": "penciclovir",
+                    },
+                    {
+                        "feature": "ORF36",
+                        "reference": "NC_001348",
+                        "drug": "brivudine",
+                    },
+                ],
+            },
         ],
     }
     metadata_path = out_dir / "metadata.json"

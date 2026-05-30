@@ -843,6 +843,41 @@ def main():
                     "pritelivir": "PTV",
                 },
             },
+            {
+                "name": "frameshift_as_resistant",
+                "rules": [
+                    {
+                        "feature": "UL23",
+                        "reference": "NC_001806",
+                        "drug": "aciclovir",
+                    },
+                    {
+                        "feature": "UL23",
+                        "reference": "NC_001806",
+                        "drug": "penciclovir",
+                    },
+                    {
+                        "feature": "UL23",
+                        "reference": "NC_001806",
+                        "drug": "brivudine",
+                    },
+                    {
+                        "feature": "UL23",
+                        "reference": "NC_001798",
+                        "drug": "aciclovir",
+                    },
+                    {
+                        "feature": "UL23",
+                        "reference": "NC_001798",
+                        "drug": "penciclovir",
+                    },
+                    {
+                        "feature": "UL23",
+                        "reference": "NC_001798",
+                        "drug": "brivudine",
+                    },
+                ],
+            },
         ],
     }
     metadata_path = out_dir / "metadata.json"
