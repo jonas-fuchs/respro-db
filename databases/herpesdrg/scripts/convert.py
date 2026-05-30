@@ -5,7 +5,7 @@ Convert HerpesDRG TSV into ResPro-compatible TSV artifacts.
 Strategy for handling multiple IC50 values and phenotypes from the same publication:
 - When a mutation-antiviral pair appears in multiple sources (by publication),
   the data is aggregated:
-  1. IC50 values: Calculate mean. Add comment about count only if N>1.
+    1. Fold-change values: Calculate mean. Add comment about count only if N>1.
   2. Phenotypes: Detect conflicts (resistant vs sensitive -> contradictory).
   3. Publications: Join with commas.
 
@@ -37,7 +37,7 @@ RULES_COLUMNS = [
     "antiviral",
     "member_id",
     "phenotype",
-    "ic50",
+    "fold_ic50",
     "publication",
     "source",
     "comment",
@@ -48,7 +48,7 @@ FORMULA_COLUMNS = [
     "antiviral",
     "expression",
     "phenotype",
-    "ic50",
+    "fold_ic50",
     "publication",
     "source",
     "comment",
@@ -185,7 +185,7 @@ def parse_mutation(aa_change: str) -> tuple[str, str, int]:
     raise ValueError("unparseable_mutation")
 
 
-def parse_ic50_and_phenotype(value: str) -> tuple[str, str]:
+def parse_fold_ic50_and_phenotype(value: str) -> tuple[str, str]:
     token = value.strip()
     if not token:
         return "", ""
@@ -348,8 +348,8 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
             if not raw_value:
                 continue
 
-            ic50, phenotype = parse_ic50_and_phenotype(raw_value)
-            if not ic50 and not phenotype:
+            fold_ic50, phenotype = parse_fold_ic50_and_phenotype(raw_value)
+            if not fold_ic50 and not phenotype:
                 continue
 
             has_antiviral_data = True
@@ -386,9 +386,9 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                     aggregated_rules[aggr_key]["publications"].append(publication)
                 if phenotype:
                     aggregated_rules[aggr_key]["phenotypes"].append(phenotype)
-                if ic50:
+                if fold_ic50:
                     try:
-                        aggregated_rules[aggr_key]["ic50_values"].append(float(ic50))
+                        aggregated_rules[aggr_key]["ic50_values"].append(float(fold_ic50))
                     except ValueError:
                         pass
                 test_method = norm(row.get("test_method"))
@@ -428,9 +428,9 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                 aggregated_combos[combo_key]["publications"].append(publication)
             if phenotype:
                 aggregated_combos[combo_key]["phenotypes"].append(phenotype)
-            if ic50:
+            if fold_ic50:
                 try:
-                    aggregated_combos[combo_key]["ic50_values"].append(float(ic50))
+                    aggregated_combos[combo_key]["ic50_values"].append(float(fold_ic50))
                 except ValueError:
                     pass
             if note:
@@ -448,13 +448,13 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
 
     # Finalize aggregated single-mutation rules
     for aggr_key, aggr_data in aggregated_rules.items():
-        # Calculate mean IC50 if present
+        # Calculate mean fold-change if present
         ic50_values = aggr_data["ic50_values"]
         if ic50_values:
             mean_ic50 = sum(ic50_values) / len(ic50_values)
-            ic50 = f"{mean_ic50:g}"
+            fold_ic50 = f"{mean_ic50:g}"
         else:
-            ic50 = ""
+            fold_ic50 = ""
 
         # Determine phenotype: check for conflicts
         phenotypes = aggr_data["phenotypes"]
@@ -471,11 +471,11 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
         # Join publications with comma and keep first-seen uniqueness.
         publication = join_unique(aggr_data["publications"])
 
-        # Add comment about IC50 values if multiple
+        # Add comment about fold-change values if multiple
         comment = ""
         if len(ic50_values) > 1:
             values_str = ", ".join(f"{v:g}" for v in ic50_values)
-            comment = f"IC50 values: {values_str}; mean displayed"
+            comment = f"Fold IC50 values: {values_str}; mean displayed"
         
         # Append test_method, created_date, and co-mutation context to comment
         test_methods = join_unique(aggr_data["test_methods"])
@@ -503,7 +503,7 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
             "antiviral": aggr_data["antiviral"],
             "member_id": "",
             "phenotype": phenotype,
-            "ic50": ic50,
+            "fold_ic50": fold_ic50,
             "publication": publication,
             "source": aggr_data["source"],
             "comment": comment,
@@ -527,7 +527,7 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                     "antiviral": "",
                     "member_id": member_id,
                     "phenotype": "",
-                    "ic50": "",
+                    "fold_ic50": "",
                     "publication": join_unique(combo_data["publications"]),
                     "source": combo_data["source"],
                     "comment": join_unique(combo_data["comments"]),
@@ -546,14 +546,14 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
         ic50_values = sorted(combo_data["ic50_values"])
         if ic50_values:
             mean_ic50 = sum(ic50_values) / len(ic50_values)
-            ic50 = f"{mean_ic50:g}"
+            fold_ic50 = f"{mean_ic50:g}"
         else:
-            ic50 = ""
+            fold_ic50 = ""
 
         formula_comment = ""
         if len(ic50_values) > 1:
             values_str = ", ".join(f"{v:g}" for v in ic50_values)
-            formula_comment = f"IC50 values: {values_str}; mean displayed"
+            formula_comment = f"Fold IC50 values: {values_str}; mean displayed"
         
         # Append test_method and created_date to formula comment
         test_methods = join_unique(combo_data["test_methods"])
@@ -572,7 +572,7 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                 "antiviral": combo_data["antiviral"],
                 "expression": "(" + " AND ".join(member_ids) + ")",
                 "phenotype": phenotype,
-                "ic50": ic50,
+                "fold_ic50": fold_ic50,
                 "publication": join_unique(combo_data["publications"]),
                 "source": combo_data["source"],
                 "comment": formula_comment,
