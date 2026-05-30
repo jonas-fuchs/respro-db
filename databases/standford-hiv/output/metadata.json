@@ -8,7 +8,7 @@
   "description": "Stanford HIVDB ASI drug-resistance scoring rules.",
   "maintainer_update": "2026-04-26",
   "license": "GNU General Public License v3.0",
-  "tsv_checksum": "sha256:eca53ce075a5e77566fd35b09642cd64e40805c8de90c65f011bc52ff4603d8c",
+  "tsv_checksum": "sha256:0f9362c8e25fc003ab6c1d2f023fdb821c1e3d65b38f37bb167f3ba835f3a82f",
   "interpretation_algorithms": [
     {
       "name": "drug_groups",

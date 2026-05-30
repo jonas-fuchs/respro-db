@@ -147,11 +147,11 @@ aspartic peptidase	NC_001802	73	G	C	fosamprenavir		10			Stanford HIVDB	G73S/T/C/
 aspartic peptidase	NC_001802	73	G	C	indinavir		15			Stanford HIVDB	G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs.
 aspartic peptidase	NC_001802	73	G	C	nelfinavir		15			Stanford HIVDB	G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs.
 aspartic peptidase	NC_001802	73	G	C	saquinavir		15			Stanford HIVDB	G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs.
-aspartic peptidase	NC_001802	73	G	D	atazanavir	M5F6385638DA0CB	5			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-aspartic peptidase	NC_001802	73	G	D	fosamprenavir		5			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-aspartic peptidase	NC_001802	73	G	D	indinavir		5			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-aspartic peptidase	NC_001802	73	G	D	nelfinavir		10			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-aspartic peptidase	NC_001802	73	G	D	saquinavir		10			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
+aspartic peptidase	NC_001802	73	G	D	atazanavir	M5F6385638DA0CB	5			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+aspartic peptidase	NC_001802	73	G	D	fosamprenavir		5			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+aspartic peptidase	NC_001802	73	G	D	indinavir		5			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+aspartic peptidase	NC_001802	73	G	D	nelfinavir		10			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+aspartic peptidase	NC_001802	73	G	D	saquinavir		10			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
 aspartic peptidase	NC_001802	73	G	S	atazanavir	MDA6F57A07E31D6	10			Stanford HIVDB	G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs.
 aspartic peptidase	NC_001802	73	G	S	fosamprenavir		10			Stanford HIVDB	G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs.
 aspartic peptidase	NC_001802	73	G	S	indinavir		15			Stanford HIVDB	G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs.
@@ -162,11 +162,11 @@ aspartic peptidase	NC_001802	73	G	T	fosamprenavir		10			Stanford HIVDB	G73S/T/C/
 aspartic peptidase	NC_001802	73	G	T	indinavir		15			Stanford HIVDB	G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs.
 aspartic peptidase	NC_001802	73	G	T	nelfinavir		15			Stanford HIVDB	G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs.
 aspartic peptidase	NC_001802	73	G	T	saquinavir		15			Stanford HIVDB	G73S/T/C/A are common non-polymorphic accessory mutations selected primarily by most PIs. They are associated with minimally reduced susceptibility to each of the PIs.
-aspartic peptidase	NC_001802	73	G	V	atazanavir	MCD518ED05C4836	5			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-aspartic peptidase	NC_001802	73	G	V	fosamprenavir		5			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-aspartic peptidase	NC_001802	73	G	V	indinavir		5			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-aspartic peptidase	NC_001802	73	G	V	nelfinavir		10			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-aspartic peptidase	NC_001802	73	G	V	saquinavir		10			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
+aspartic peptidase	NC_001802	73	G	V	atazanavir	MCD518ED05C4836	5			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+aspartic peptidase	NC_001802	73	G	V	fosamprenavir		5			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+aspartic peptidase	NC_001802	73	G	V	indinavir		5			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+aspartic peptidase	NC_001802	73	G	V	nelfinavir		10			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+aspartic peptidase	NC_001802	73	G	V	saquinavir		10			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
 aspartic peptidase	NC_001802	74	T	P	atazanavir		10			Stanford HIVDB	T74P is a nonpolymorphic PI-selected accessory mutation that occurs primarily in viruses from persons who have received multiple PIs. In combination with other mutations, It is associated with reduced susceptibility to ATV and DRV.
 aspartic peptidase	NC_001802	74	T	P	darunavir		5			Stanford HIVDB	T74P is a nonpolymorphic PI-selected accessory mutation that occurs primarily in viruses from persons who have received multiple PIs. In combination with other mutations, It is associated with reduced susceptibility to ATV and DRV.
 aspartic peptidase	NC_001802	74	T	P	fosamprenavir		10			Stanford HIVDB	T74P is a nonpolymorphic PI-selected accessory mutation that occurs primarily in viruses from persons who have received multiple PIs. In combination with other mutations, It is associated with reduced susceptibility to ATV and DRV.
@@ -298,13 +298,13 @@ p66 subunit	NC_001802	65	K	R	islatravir		-10			Stanford HIVDB	A62V is an accesso
 p66 subunit	NC_001802	65	K	R	stavudine		60			Stanford HIVDB	A62V is an accessory mutation that often occurs in combination with the NRTI-resistance mutations K65R or Q151M. A62V is widespread in subtype A6 as a result of a founder effect. But it is otherwise nonpolymorphic.
 p66 subunit	NC_001802	65	K	R	tenofovir		45			Stanford HIVDB	A62V is an accessory mutation that often occurs in combination with the NRTI-resistance mutations K65R or Q151M. A62V is widespread in subtype A6 as a result of a founder effect. But it is otherwise nonpolymorphic.
 p66 subunit	NC_001802	65	K	R	zidovudine		-10			Stanford HIVDB	A62V is an accessory mutation that often occurs in combination with the NRTI-resistance mutations K65R or Q151M. A62V is widespread in subtype A6 as a result of a founder effect. But it is otherwise nonpolymorphic.
-p66 subunit	NC_001802	67	D	D67del	abacavir		15			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-p66 subunit	NC_001802	67	D	D67del	didanosine		30			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
+p66 subunit	NC_001802	67	D	D67del	abacavir		15			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+p66 subunit	NC_001802	67	D	D67del	didanosine		30			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
 p66 subunit	NC_001802	67	D	D67del	emtricitabine		15			Stanford HIVDB	HIVDB ASI atomic score rule
 p66 subunit	NC_001802	67	D	D67del	lamivudine		15			Stanford HIVDB	HIVDB ASI atomic score rule
-p66 subunit	NC_001802	67	D	D67del	stavudine		30			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-p66 subunit	NC_001802	67	D	D67del	tenofovir		15			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-p66 subunit	NC_001802	67	D	D67del	zidovudine		30			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
+p66 subunit	NC_001802	67	D	D67del	stavudine		30			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+p66 subunit	NC_001802	67	D	D67del	tenofovir		15			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+p66 subunit	NC_001802	67	D	D67del	zidovudine		30			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
 p66 subunit	NC_001802	67	D	E	abacavir	M61100966E1C39E	5			Stanford HIVDB	D67N is a non-polymorphic TAM associated with low-level resistance to AZT. D67G/E/S/T/H are non-polymorphic NRTI-selected mutations that generally occur in viruses with multiple TAMs.
 p66 subunit	NC_001802	67	D	E	didanosine		5			Stanford HIVDB	D67N is a non-polymorphic TAM associated with low-level resistance to AZT. D67G/E/S/T/H are non-polymorphic NRTI-selected mutations that generally occur in viruses with multiple TAMs.
 p66 subunit	NC_001802	67	D	E	stavudine		10			Stanford HIVDB	D67N is a non-polymorphic TAM associated with low-level resistance to AZT. D67G/E/S/T/H are non-polymorphic NRTI-selected mutations that generally occur in viruses with multiple TAMs.
@@ -349,10 +349,10 @@ p66 subunit	NC_001802	69	T	G	abacavir	M3C4628385A0734	10			Stanford HIVDB	T69D i
 p66 subunit	NC_001802	69	T	G	didanosine		10			Stanford HIVDB	T69D is a nonpolymorphic mutation selected by early NRTIs that does not appear to reduce AZT, ABC, or TDF susceptibility. T69G is a rare non-polymorphic mutation that usually occurs in viruses with a deletion at codon 67 and multiple other NRTI-resistance mutations. T69N/S/A/I/E are relatively non-polymorphic mutations weakly selected in persons receiving NRTIs. They may minimally contribute reduced AZT susceptibility.
 p66 subunit	NC_001802	69	T	G	stavudine		10			Stanford HIVDB	T69D is a nonpolymorphic mutation selected by early NRTIs that does not appear to reduce AZT, ABC, or TDF susceptibility. T69G is a rare non-polymorphic mutation that usually occurs in viruses with a deletion at codon 67 and multiple other NRTI-resistance mutations. T69N/S/A/I/E are relatively non-polymorphic mutations weakly selected in persons receiving NRTIs. They may minimally contribute reduced AZT susceptibility.
 p66 subunit	NC_001802	69	T	G	tenofovir		5			Stanford HIVDB	T69D is a nonpolymorphic mutation selected by early NRTIs that does not appear to reduce AZT, ABC, or TDF susceptibility. T69G is a rare non-polymorphic mutation that usually occurs in viruses with a deletion at codon 67 and multiple other NRTI-resistance mutations. T69N/S/A/I/E are relatively non-polymorphic mutations weakly selected in persons receiving NRTIs. They may minimally contribute reduced AZT susceptibility.
-p66 subunit	NC_001802	69	T	T69del	abacavir	MB92A1F66AF7A73	15			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-p66 subunit	NC_001802	69	T	T69del	didanosine		30			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-p66 subunit	NC_001802	69	T	T69del	stavudine		30			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-p66 subunit	NC_001802	69	T	T69del	tenofovir		15			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
+p66 subunit	NC_001802	69	T	T69del	abacavir	MB92A1F66AF7A73	15			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+p66 subunit	NC_001802	69	T	T69del	didanosine		30			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+p66 subunit	NC_001802	69	T	T69del	stavudine		30			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+p66 subunit	NC_001802	69	T	T69del	tenofovir		15			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
 p66 subunit	NC_001802	70	K	E	abacavir	M8C7A956C78A030	15			Stanford HIVDB	K70R is a TAM that confers intermediate resistance to AZT and contributes to reduced ABC and TDF susceptibility in combination with other TAMs. K70/E/Q/N/T/S/G cause low-leve resistance to ABC and TDF.
 p66 subunit	NC_001802	70	K	E	didanosine		15			Stanford HIVDB	K70R is a TAM that confers intermediate resistance to AZT and contributes to reduced ABC and TDF susceptibility in combination with other TAMs. K70/E/Q/N/T/S/G cause low-leve resistance to ABC and TDF.
 p66 subunit	NC_001802	70	K	E	stavudine		15			Stanford HIVDB	K70R is a TAM that confers intermediate resistance to AZT and contributes to reduced ABC and TDF susceptibility in combination with other TAMs. K70/E/Q/N/T/S/G cause low-leve resistance to ABC and TDF.
@@ -361,10 +361,10 @@ p66 subunit	NC_001802	70	K	G	abacavir	MF9BFD98715B692	15			Stanford HIVDB	K70R i
 p66 subunit	NC_001802	70	K	G	didanosine		15			Stanford HIVDB	K70R is a TAM that confers intermediate resistance to AZT and contributes to reduced ABC and TDF susceptibility in combination with other TAMs. K70/E/Q/N/T/S/G cause low-leve resistance to ABC and TDF.
 p66 subunit	NC_001802	70	K	G	stavudine		15			Stanford HIVDB	K70R is a TAM that confers intermediate resistance to AZT and contributes to reduced ABC and TDF susceptibility in combination with other TAMs. K70/E/Q/N/T/S/G cause low-leve resistance to ABC and TDF.
 p66 subunit	NC_001802	70	K	G	tenofovir		15			Stanford HIVDB	K70R is a TAM that confers intermediate resistance to AZT and contributes to reduced ABC and TDF susceptibility in combination with other TAMs. K70/E/Q/N/T/S/G cause low-leve resistance to ABC and TDF.
-p66 subunit	NC_001802	70	K	K70del	abacavir	M7B05FECC308194	15			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-p66 subunit	NC_001802	70	K	K70del	didanosine		30			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-p66 subunit	NC_001802	70	K	K70del	stavudine		30			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
-p66 subunit	NC_001802	70	K	K70del	tenofovir		15			Stanford HIVDB	HIVDB ASI MAX branch (mutually exclusive in single-infection context)
+p66 subunit	NC_001802	70	K	K70del	abacavir	M7B05FECC308194	15			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+p66 subunit	NC_001802	70	K	K70del	didanosine		30			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+p66 subunit	NC_001802	70	K	K70del	stavudine		30			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
+p66 subunit	NC_001802	70	K	K70del	tenofovir		15			Stanford HIVDB	HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)
 p66 subunit	NC_001802	70	K	N	abacavir	M50824A4D59D1DF	15			Stanford HIVDB	K70R is a TAM that confers intermediate resistance to AZT and contributes to reduced ABC and TDF susceptibility in combination with other TAMs. K70/E/Q/N/T/S/G cause low-leve resistance to ABC and TDF.
 p66 subunit	NC_001802	70	K	N	didanosine		15			Stanford HIVDB	K70R is a TAM that confers intermediate resistance to AZT and contributes to reduced ABC and TDF susceptibility in combination with other TAMs. K70/E/Q/N/T/S/G cause low-leve resistance to ABC and TDF.
 p66 subunit	NC_001802	70	K	N	stavudine		15			Stanford HIVDB	K70R is a TAM that confers intermediate resistance to AZT and contributes to reduced ABC and TDF susceptibility in combination with other TAMs. K70/E/Q/N/T/S/G cause low-leve resistance to ABC and TDF.

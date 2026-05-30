@@ -241,9 +241,14 @@ def parse_aa_change(aa_change: str):
         kind = multi_indel.group(4).lower()
         ref_aa = ref_aas[0]
         if kind == "del":
-            return ref_aa, start, f"{ref_aas}{start}del"
+            # ResPro deletion notation: reference = full deleted span (anchor + deleted residues),
+            # mutation = anchor only (first residue survives, the rest are deleted).
+            # e.g. DD676-677Del → reference="DD", mutation="D", position=676
+            return ref_aas, start, ref_aa
         else:
-            return ref_aa, start, f"{ref_aa}{start}ins{ref_aas[1:]}"
+            # ResPro insertion notation: reference = anchor residue,
+            # mutation = anchor + inserted payload (e.g. "ED" means E is anchor, D is inserted).
+            return ref_aa, start, ref_aas
 
     # bare range deletion without leading AAs: e.g. 1-248Del
     bare_del = re.match(r"^(\d+)-(\d+)[Dd]el$", aa_change)

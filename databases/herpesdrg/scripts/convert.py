@@ -5,7 +5,7 @@ Convert HerpesDRG TSV into ResPro-compatible TSV artifacts.
 Strategy for handling multiple IC50 values and phenotypes from the same publication:
 - When a mutation-antiviral pair appears in multiple sources (by publication),
   the data is aggregated:
-  1. IC50 values: Calculate median. Add comment about count only if N>1.
+  1. IC50 values: Calculate mean. Add comment about count only if N>1.
   2. Phenotypes: Detect conflicts (resistant vs sensitive -> contradictory).
   3. Publications: Join with commas.
 
@@ -252,6 +252,12 @@ def add_non_migrated(bucket: list[dict], source_row: dict, reason: str, details:
 def build_publication(doi: str, link: str) -> str:
     if doi:
         return doi if doi.lower().startswith("doi:") else f"doi:{doi}"
+    if link:
+        # Fall back to extracting a PMID from a PubMed URL, e.g.
+        # https://pubmed.ncbi.nlm.nih.gov/15230476/
+        m = re.search(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)", link)
+        if m:
+            return f"PMID:{m.group(1)}"
     return ""
 
 
@@ -371,6 +377,8 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                         "ic50_values": [],
                         "test_methods": [],
                         "created_dates": [],
+                        "co_mutations": [],
+                        "notes": [],
                     }
                 
                 # Aggregate data from this row
@@ -389,6 +397,13 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
                 created_date = norm(row.get("created_date"))
                 if created_date:
                     aggregated_rules[aggr_key]["created_dates"].append(created_date)
+                co_gene_val = norm(row.get("co_gene"))
+                co_aa_val = norm(row.get("co_aa"))
+                if co_gene_val or co_aa_val:
+                    co_str = f"{co_gene_val}:{co_aa_val}" if co_gene_val else co_aa_val
+                    aggregated_rules[aggr_key]["co_mutations"].append(co_str)
+                if note:
+                    aggregated_rules[aggr_key]["notes"].append(note)
                 emitted_for_row += 1
                 continue
 
@@ -462,15 +477,21 @@ def convert(source_rows: list[dict]) -> tuple[list[dict], list[dict], list[dict]
             values_str = ", ".join(f"{v:g}" for v in ic50_values)
             comment = f"IC50 values: {values_str}; mean displayed"
         
-        # Append test_method and created_date to comment
+        # Append test_method, created_date, and co-mutation context to comment
         test_methods = join_unique(aggr_data["test_methods"])
         created_dates = join_unique(aggr_data["created_dates"])
-        if test_methods or created_dates:
+        co_mutations = join_unique(aggr_data.get("co_mutations", []))
+        notes = join_unique(aggr_data.get("notes", []))
+        if test_methods or created_dates or co_mutations or notes:
             comment_parts = [comment] if comment else []
             if test_methods:
                 comment_parts.append(f"Test method: {test_methods}")
             if created_dates:
                 comment_parts.append(f"Rule created at: {created_dates}")
+            if co_mutations:
+                comment_parts.append(f"Co-mutation context in source: {co_mutations}")
+            if notes:
+                comment_parts.append(notes)
             comment = ", ".join(comment_parts)
 
         rule = {

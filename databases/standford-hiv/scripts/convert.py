@@ -940,8 +940,38 @@ def _handle_max_scope(
         )
         return
 
-    # Mixed-score MAX: emit each branch as an independent rule.
-    branch_cmt = "HIVDB ASI MAX branch (mutually exclusive in single-infection context)"
+    # Mixed-score MAX: verify that all branches are mutually exclusive before splitting.
+    # Mutual exclusivity holds when every pair of branches shares at least one amino-acid
+    # position — two branches that overlap on at least one position cannot both be true at
+    # the same time in a single-infection context (only one allele can occupy a position).
+    # Branches at completely disjoint positions could co-occur and must not be split, because
+    # independent scoring would incorrectly add their scores instead of taking the maximum.
+    branch_positions = [
+        frozenset(int(mem["position"]) for mem in pb.members)
+        for pb, _ in parsed_branches
+    ]
+    can_co_occur = any(
+        p1.isdisjoint(p2)
+        for i, p1 in enumerate(branch_positions)
+        for p2 in branch_positions[i + 1 :]
+        if p1 and p2
+    )
+    if can_co_occur:
+        _add_non_migrated(
+            ctx, "mixed_score_max_branches_not_mutually_exclusive",
+            drug=drug_code, gene=segment, score="",
+            raw_rule="MAX:" + "|".join(i.raw for i in scope_items),
+            details=(
+                "Mixed-score MAX branches involve disjoint amino-acid positions and could "
+                "co-occur; splitting into independent rules would over-score additively."
+            ),
+        )
+        return
+
+    # All branches share at least one position, so they are mutually exclusive: only one
+    # branch can match at a time.  Emit each as an independent rule; only the matching
+    # branch contributes its score to the drug total.
+    branch_cmt = "HIVDB ASI MAX branch (verified mutually exclusive: branches share amino-acid positions)"
     for parsed, score in parsed_branches:
         _emit_rule(
             parsed,
