@@ -901,35 +901,41 @@ def main():
                 },
             },
             {
-                "name": "frameshift_as_resistant",
+                "name": "effect_as_resistant",
                 "rules": [
                     {
                         "feature": "UL23",
+                        "effect": ["frameshift", "stop_gained"],
                         "reference": "NC_001806",
                         "drug": "aciclovir",
                     },
                     {
                         "feature": "UL23",
+                        "effect": ["frameshift", "stop_gained"],
                         "reference": "NC_001806",
                         "drug": "penciclovir",
                     },
                     {
                         "feature": "UL23",
+                        "effect": ["frameshift", "stop_gained"],
                         "reference": "NC_001806",
                         "drug": "brivudine",
                     },
                     {
                         "feature": "UL23",
+                        "effect": ["frameshift", "stop_gained"],
                         "reference": "NC_001798",
                         "drug": "aciclovir",
                     },
                     {
                         "feature": "UL23",
+                        "effect": ["frameshift", "stop_gained"],
                         "reference": "NC_001798",
                         "drug": "penciclovir",
                     },
                     {
                         "feature": "UL23",
+                        "effect": ["frameshift", "stop_gained"],
                         "reference": "NC_001798",
                         "drug": "brivudine",
                     },
