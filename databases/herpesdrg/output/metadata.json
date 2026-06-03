@@ -51,6 +51,14 @@
       }
     },
     {
+      "name": "drug_interpretation",
+      "method": "by_fold_ic50",
+      "thresholds": {
+        "intermediate": 5.0,
+        "resistant": 15.0
+      }
+    },
+    {
       "name": "drug_alias",
       "groups": {
         "aciclovir": "ACV",
@@ -73,55 +81,82 @@
       "rules": [
         {
           "feature": "UL23",
-          "effect": ["frameshift", "stop_gained"],
+          "effect": [
+            "frameshift",
+            "stop_gained"
+          ],
           "reference": "NC_001806",
           "drug": "aciclovir"
         },
         {
           "feature": "UL23",
-          "effect": ["frameshift", "stop_gained"],
+          "effect": [
+            "frameshift",
+            "stop_gained"
+          ],
           "reference": "NC_001806",
           "drug": "penciclovir"
         },
         {
           "feature": "UL23",
-          "effect": ["frameshift", "stop_gained"],
+          "effect": [
+            "frameshift",
+            "stop_gained"
+          ],
           "reference": "NC_001806",
           "drug": "brivudine"
         },
         {
           "feature": "UL23",
-          "effect": ["frameshift", "stop_gained"],
+          "effect": [
+            "frameshift",
+            "stop_gained"
+          ],
           "reference": "NC_001798",
           "drug": "aciclovir"
         },
         {
           "feature": "UL23",
-          "effect": ["frameshift", "stop_gained"],
+          "effect": [
+            "frameshift",
+            "stop_gained"
+          ],
           "reference": "NC_001798",
           "drug": "penciclovir"
         },
         {
           "feature": "UL23",
-          "effect": ["frameshift", "stop_gained"],
+          "effect": [
+            "frameshift",
+            "stop_gained"
+          ],
           "reference": "NC_001798",
           "drug": "brivudine"
         },
         {
           "feature": "ORF36",
-          "effect": ["frameshift", "stop_gained"],
+          "effect": [
+            "frameshift",
+            "stop_gained"
+          ],
           "reference": "NC_001348",
           "drug": "aciclovir"
         },
         {
           "feature": "ORF36",
-          "effect": ["frameshift", "stop_gained"],
+          "effect": [
+            "frameshift",
+            "stop_gained"
+          ],
           "reference": "NC_001348",
           "drug": "penciclovir"
         },
         {
           "feature": "ORF36",
-          "effect": ["frameshift", "stop_gained"],
+          "effect": [
+            "frameshift",
+            "stop_gained"
+          ],
           "reference": "NC_001348",
           "drug": "brivudine"
         }

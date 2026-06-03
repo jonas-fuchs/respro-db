@@ -742,6 +742,11 @@ def main() -> None:
                 "thresholds": {"resistant": 1, "intermediate": 1},
             },
             {
+                "name": "drug_interpretation",
+                "method": "by_fold_ic50",
+                "thresholds": {"intermediate": 5.0, "resistant": 15.0},
+            },
+            {
                 "name": "drug_alias",
                 "groups": {
                     "aciclovir": "ACV",
