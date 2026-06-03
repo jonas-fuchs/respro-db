@@ -44,6 +44,7 @@ duplicate_rule_dropped_fewer_pmids	HSV-2 TK	UL23	aciclovir	T288M	288		PMID:96977
 missing_reference_amino_acid	HSV-1 TK	UL23	Aciclovir	144fsx	144	Resistant	PMID:37586184	Reference amino acid is required by rules.tsv schema.
 missing_reference_amino_acid	HSV-1 TK	UL23	Aciclovir	44Stop	44	Resistant	PMID:34980708	Reference amino acid is required by rules.tsv schema.
 missing_reference_amino_acid	HSV-1 TK	UL23	Aciclovir	8Stop	8	Sensitive	PMID:34980708	Reference amino acid is required by rules.tsv schema.
+missing_reference_amino_acid	HSV-2 Pol	UL30	Aciclovir	684Ins	684	Intermediate	PMID:26338148	Reference amino acid is required by rules.tsv schema.
 missing_reference_amino_acid	HSV-2 TK	UL23	Aciclovir	1-248Del	1	Resistant	PMID:24075863	Reference amino acid is required by rules.tsv schema.
 missing_reference_amino_acid	HSV-2 TK	UL23	Aciclovir	145fsx	145	Resistant	PMID:37586184	Reference amino acid is required by rules.tsv schema.
 nucleotide_only_row	HSV-1 Pol	DNA Polymerase	Aciclovir		683-688Del	Sensitive	PMID:37505438	No amino-acid change value provided in source row.
@@ -52,8 +53,3 @@ nucleotide_only_row	HSV-1 TK	Thymidine Kinase	Aciclovir		nt 540Del	Resistant	PMI
 nucleotide_only_row	HSV-1 TK	Thymidine Kinase	Aciclovir		nt 547InsG	Resistant	PMID:36309081	No amino-acid change value provided in source row.
 nucleotide_only_row	HSV-1 TK	Thymidine Kinase	Aciclovir		nt 613InsT	Resistant	PMID:36309081	No amino-acid change value provided in source row.
 nucleotide_only_row	HSV-1 TK	Thymidine Kinase	Aciclovir		nt 885Del	Resistant	PMID:36309081	No amino-acid change value provided in source row.
-unparseable_mutation	HSV-1 TK	UL23	Aciclovir	A301Ins	301	Resistant	PMID:11160674	Mutation syntax could not be converted to supported ResPro notation.
-unparseable_mutation	HSV-1 TK	UL23	Aciclovir	E43A/D	43	Sensitive	PMID:28576448	Mutation syntax could not be converted to supported ResPro notation.
-unparseable_mutation	HSV-1 TK	UL23	Brivudine	A301Ins	301	Resistant	PMID:11160674	Mutation syntax could not be converted to supported ResPro notation.
-unparseable_mutation	HSV-1 TK	UL23	Penciclovir	A301Ins	301	Resistant	PMID:11160674	Mutation syntax could not be converted to supported ResPro notation.
-unparseable_mutation	HSV-2 Pol	UL30	Aciclovir	684Ins	684	Intermediate	PMID:26338148	Mutation syntax could not be converted to supported ResPro notation.

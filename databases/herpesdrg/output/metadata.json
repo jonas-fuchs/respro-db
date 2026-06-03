@@ -8,7 +8,7 @@
   "description": "Comprehensive resource for human herpesvirus antiviral drug resistance genotyping.",
   "maintainer_update": "2026-01-02",
   "license": "MIT",
-  "tsv_checksum": "sha256:5319ae56d01953ef9e92d7241dc3afe763ddf56d6b2bfa3dfea5fbab472e29c2",
+  "tsv_checksum": "sha256:ae3303c26336782f4a0ef167e242ba81059e526d78b0a9bbdd15322c9c10e44d",
   "interpretation_algorithms": [
     {
       "name": "drug_groups",

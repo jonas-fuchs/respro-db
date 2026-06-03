@@ -412,6 +412,10 @@ UL30	NC_001798	682	E	G	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.201
 UL30	NC_001798	682	E	G	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
 UL30	NC_001798	682	E	K	aciclovir		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
 UL30	NC_001798	682	E	K	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
+UL30	NC_001798	684	G	INS_any	aciclovir		resistant		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
+UL30	NC_001798	684	G	INS_any	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
+UL30	NC_001798	686	E	INS_any	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
+UL30	NC_001798	686	E	INS_any	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
 UL30	NC_001798	708	D	N	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
 UL30	NC_001798	708	D	N	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
 UL30	NC_001798	716	D	N	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2003.08.018	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
@@ -532,6 +536,8 @@ UL30	NC_001798	1025	R	H	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.20
 UL30	NC_001798	1025	R	H	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
 UL30	NC_001798	1083	A	T	aciclovir		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
 UL30	NC_001798	1083	A	T	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
+UL30	NC_001798	1112	P	INS_any	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
+UL30	NC_001798	1112	P	INS_any	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
 UL30	NC_001798	1114	A	V	aciclovir		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
 UL30	NC_001798	1114	A	V	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
 UL30	NC_001798	1200	T	A	aciclovir			1	doi:doi.org/10.1016/j.jcv.2023.105554	HerpesDRG	Test method: PRA, Rule created at: 01/12/2023
@@ -1015,6 +1021,11 @@ UL23	NC_001806	298	L	R	foscarnet			2.5	doi:doi.org/10.1038/srep29903	HerpesDRG	T
 UL23	NC_001806	298	L	R	penciclovir			1.1	doi:doi.org/10.1038/srep29903	HerpesDRG	Test method: dye uptake assay, Rule created at: 04/02/2021
 UL23	NC_001806	299	A	S	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2014.08.013	HerpesDRG	Test method: dye uptake assay, Rule created at: 10/02/2021
 UL23	NC_001806	299	A	S	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2014.08.013	HerpesDRG	Test method: dye uptake assay, Rule created at: 10/02/2021
+UL23	NC_001806	301	N	INS_any	aciclovir		resistant		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
+UL23	NC_001806	301	N	INS_any	brivudine		resistant		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
+UL23	NC_001806	301	N	INS_any	cidofovir		sensitive		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
+UL23	NC_001806	301	N	INS_any	foscarnet		sensitive		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
+UL23	NC_001806	301	N	INS_any	penciclovir		resistant		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
 UL23	NC_001806	301	N	S	aciclovir			1	doi:doi.org/10.1016/j.antiviral.2019.05.012	HerpesDRG	Test method: dye uptake assay, Rule created at: 04/02/2021
 UL23	NC_001806	302	G	S	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2003.08.018	HerpesDRG	Test method: PRA, Rule created at: 11/02/2021
 UL23	NC_001806	302	G	S	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2003.08.018	HerpesDRG	Test method: PRA, Rule created at: 11/02/2021

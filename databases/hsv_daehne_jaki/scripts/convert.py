@@ -164,14 +164,20 @@ def parse_aa_change(aa_change: str):
       DD676-677Del   — multi-residue range deletion
       V813M*         — substitution with trailing asterisk annotation (strip *)
 
-    Returns (ref_aa_or_None, position_int_or_None, mutation_token_str).
-    Returns (None, None, None) when the mutation cannot be represented.
+    Returns a list of (ref_aa, position_int, mutation_token_str) tuples.
+    Returns an empty list when the mutation cannot be represented.
+    Dual-allele patterns like "E43A/D" are expanded into two separate entries.
     """
     aa_change = aa_change.strip().replace("\n", "")
 
-    # Dual allele like "E43A/D" — ambiguous, skip
-    if re.match(r"^[A-Z]\d+[A-Z]/[A-Z]$", aa_change, re.IGNORECASE):
-        return None, None, None
+    # Dual allele like "E43A/D" — split into two separate substitutions
+    dual_allele = re.match(r"^([A-Z])(\d+)([A-Z])/([A-Z])$", aa_change, re.IGNORECASE)
+    if dual_allele:
+        ref_aa = dual_allele.group(1).upper()
+        pos = int(dual_allele.group(2))
+        alt1 = dual_allele.group(3).upper()
+        alt2 = dual_allele.group(4).upper()
+        return [(ref_aa, pos, alt1), (ref_aa, pos, alt2)]
 
     # Strip spurious trailing asterisk that is not itself a stop notation
     # e.g. V813M* where * is an annotation marker
@@ -180,20 +186,20 @@ def parse_aa_change(aa_change: str):
         ref_aa = trailing_star.group(1).upper()
         pos = int(trailing_star.group(2))
         alt_aa = trailing_star.group(3).upper()
-        return ref_aa, pos, alt_aa
+        return [(ref_aa, pos, alt_aa)]
 
     # frameshift with ref AA: e.g. Y101fsx, K715fsATFF*, Y101fs
     fs_match = re.match(r"^([A-Z])(\d+)(fs.*)$", aa_change, re.IGNORECASE)
     if fs_match:
         ref_aa = fs_match.group(1).upper()
         pos = int(fs_match.group(2))
-        return ref_aa, pos, f"{ref_aa}fsX"
+        return [(ref_aa, pos, f"{ref_aa}fsX")]
 
     # frameshift without ref AA: e.g. 144fsx, 145fs
     fs_nore = re.match(r"^(\d+)(fs.*)$", aa_change, re.IGNORECASE)
     if fs_nore:
         pos = int(fs_nore.group(1))
-        return None, pos, "fsX"
+        return [(None, pos, "fsX")]
 
     # standard substitution / stop: A336V, A336*
     sub_match = re.match(r"^([A-Z])(\d+)([A-Z\*])$", aa_change, re.IGNORECASE)
@@ -202,33 +208,41 @@ def parse_aa_change(aa_change: str):
         pos = int(sub_match.group(2))
         alt_aa = sub_match.group(3).upper()
         if alt_aa == "*":
-            return ref_aa, pos, "*"
-        return ref_aa, pos, alt_aa
+            return [(ref_aa, pos, "*")]
+        return [(ref_aa, pos, alt_aa)]
 
     # stop with ref AA: N23Stop, M182Stop
     stop_re = re.match(r"^([A-Z])(\d+)[Ss]top$", aa_change, re.IGNORECASE)
     if stop_re:
         ref_aa = stop_re.group(1).upper()
         pos = int(stop_re.group(2))
-        return ref_aa, pos, "*"
+        return [(ref_aa, pos, "*")]
 
     # stop without ref AA: 8Stop, 44Stop
     stop_nore = re.match(r"^(\d+)[Ss]top$", aa_change, re.IGNORECASE)
     if stop_nore:
         pos = int(stop_nore.group(1))
-        return None, pos, "*"
+        return [(None, pos, "*")]
 
     # single-residue deletion: e.g. "I194Del"
     single_del = re.match(r"^([A-Z])(\d+)[Dd]el$", aa_change, re.IGNORECASE)
     if single_del:
         ref_aa = single_del.group(1).upper()
         pos = int(single_del.group(2))
-        return ref_aa, pos, f"{ref_aa}{pos}del"
+        return [(ref_aa, pos, f"{ref_aa}{pos}del")]
 
     # Single-position insertion without range: e.g. "A301Ins", "684Ins"
-    # Cannot determine inserted sequence — skip
-    if re.match(r"^[A-Z]?\d+[Ii]ns$", aa_change, re.IGNORECASE):
-        return None, None, None
+    # Cannot determine inserted sequence — emit INS_any wildcard per ResPro formatting spec.
+    ins_wildcard = re.match(r"^([A-Z])(\d+)[Ii]ns$", aa_change, re.IGNORECASE)
+    if ins_wildcard:
+        ref_aa = ins_wildcard.group(1).upper()
+        pos = int(ins_wildcard.group(2))
+        return [(ref_aa, pos, "INS_any")]
+
+    ins_wildcard_noref = re.match(r"^(\d+)[Ii]ns$", aa_change, re.IGNORECASE)
+    if ins_wildcard_noref:
+        pos = int(ins_wildcard_noref.group(1))
+        return [(None, pos, "INS_any")]
 
     # Multi-residue range deletion/insertion with leading AAs:
     # e.g. DD676-677Del, PGDEPA1106-1111Del, ED684-685Ins
@@ -244,20 +258,34 @@ def parse_aa_change(aa_change: str):
             # ResPro deletion notation: reference = full deleted span (anchor + deleted residues),
             # mutation = anchor only (first residue survives, the rest are deleted).
             # e.g. DD676-677Del → reference="DD", mutation="D", position=676
-            return ref_aas, start, ref_aa
+            return [(ref_aas, start, ref_aa)]
         else:
             # ResPro insertion notation: reference = anchor residue,
             # mutation = anchor + inserted payload (e.g. "ED" means E is anchor, D is inserted).
-            return ref_aa, start, ref_aas
+            return [(ref_aa, start, ref_aas)]
 
     # bare range deletion without leading AAs: e.g. 1-248Del
     bare_del = re.match(r"^(\d+)-(\d+)[Dd]el$", aa_change)
     if bare_del:
         start = int(bare_del.group(1))
-        return None, start, f"del{start}_{bare_del.group(2)}"
+        return [(None, start, f"del{start}_{bare_del.group(2)}")]
+
+    # Insertion wildcard with "+" suffix: e.g. N301+, E686+
+    # The "+" suffix indicates an insertion at this position with unknown sequence.
+    # Emit INS_any as the mutation token per ResPro formatting spec.
+    ins_plus = re.match(r"^([A-Z])(\d+)\+$", aa_change, re.IGNORECASE)
+    if ins_plus:
+        ref_aa = ins_plus.group(1).upper()
+        pos = int(ins_plus.group(2))
+        return [(ref_aa, pos, "INS_any")]
+
+    ins_plus_noref = re.match(r"^(\d+)\+$", aa_change, re.IGNORECASE)
+    if ins_plus_noref:
+        pos = int(ins_plus_noref.group(1))
+        return [(None, pos, "INS_any")]
 
     # unrecognised
-    return None, None, None
+    return []
 
 
 def determine_phenotypes(resistance: str, cell_culture: str, clinical: str):
@@ -443,13 +471,14 @@ def extract_rows(wb):
 
                 gid = next_group_id()
                 member_ids = []
+                combo_skip = False
 
                 for sub_feature, sub_aa, sub_pos_raw in zip(parts_feature, parts_aa, parts_pos):
                     mapped_feature = FEATURE_MAP.get(sub_feature, sub_feature)
-                    ref_aa, pos, mut_token = parse_aa_change(sub_aa)
-                    if mut_token is None or ref_aa is None:
+                    parsed_mutations = parse_aa_change(sub_aa)
+                    if not parsed_mutations:
                         print(
-                            f"WARNING: Cannot parse mutation '{sub_aa}' (or missing ref AA) in combo row "
+                            f"WARNING: Cannot parse mutation '{sub_aa}' in combo row "
                             f"(sheet={sheet_name}, feature={sub_feature}) — skipping entire combo.",
                             file=sys.stderr,
                         )
@@ -465,40 +494,65 @@ def extract_rows(wb):
                             pmids=pmids,
                             details="Combo row dropped because one member could not be represented.",
                         )
-                        member_ids = []
+                        combo_skip = True
                         break
-                    if pos is None:
-                        try:
-                            pos = int(sub_pos_raw)
-                        except (ValueError, TypeError):
-                            pos = 0
 
-                    member_key = (mapped_feature, ref_id, pos, mut_token)
-                    if member_key in combo_member_registry:
-                        mid = combo_member_registry[member_key]
-                    else:
-                        mid = f"{mapped_feature}_{pos}_{mut_token}"
-                        combo_member_registry[member_key] = mid
-                        # Emit member row once. No antiviral or group — the member
-                        # is shared across groups; drug context lives in formula-rules.tsv.
-                        single_rows.append({
-                            "feature": mapped_feature,
-                            "reference_identifier": ref_id,
-                            "position": pos,
-                            "reference": ref_aa or "",
-                            "mutation": mut_token,
-                            "antiviral": "",
-                            "member_id": mid,
-                            "phenotype": "",
-                            "clinical_phenotype": "",
-                            "publication": pmids,
-                            "source": "Dähne et al. 2025 (Zenodo 15149867)",
-                            "comment": comment,
-                            "sheet": sheet_name,
-                        })
-                    member_ids.append(mid)
+                    for ref_aa, pos, mut_token in parsed_mutations:
+                        if ref_aa is None:
+                            print(
+                                f"WARNING: Missing ref AA for mutation '{sub_aa}' in combo row "
+                                f"(sheet={sheet_name}, feature={sub_feature}) — skipping entire combo.",
+                                file=sys.stderr,
+                            )
+                            add_non_migrated(
+                                non_migrated_rows,
+                                reason="combo_member_unparseable_or_missing_ref",
+                                sheet=sheet_name,
+                                feature=sub_feature,
+                                drug=drug,
+                                aa_change=sub_aa,
+                                aa_position=sub_pos_raw,
+                                resistance=resistance,
+                                pmids=pmids,
+                                details="Combo row dropped because one member could not be represented.",
+                            )
+                            combo_skip = True
+                            break
+                        if pos is None:
+                            try:
+                                pos = int(sub_pos_raw)
+                            except (ValueError, TypeError):
+                                pos = 0
 
-                if len(member_ids) != len(parts_feature):
+                        member_key = (mapped_feature, ref_id, pos, mut_token)
+                        if member_key in combo_member_registry:
+                            mid = combo_member_registry[member_key]
+                        else:
+                            mid = f"{mapped_feature}_{pos}_{mut_token}"
+                            combo_member_registry[member_key] = mid
+                            # Emit member row once. No antiviral or group — the member
+                            # is shared across groups; drug context lives in formula-rules.tsv.
+                            single_rows.append({
+                                "feature": mapped_feature,
+                                "reference_identifier": ref_id,
+                                "position": pos,
+                                "reference": ref_aa or "",
+                                "mutation": mut_token,
+                                "antiviral": "",
+                                "member_id": mid,
+                                "phenotype": "",
+                                "clinical_phenotype": "",
+                                "publication": pmids,
+                                "source": "Dähne et al. 2025 (Zenodo 15149867)",
+                                "comment": comment,
+                                "sheet": sheet_name,
+                            })
+                        member_ids.append(mid)
+
+                    if combo_skip:
+                        break
+
+                if combo_skip or not member_ids:
                     # One member could not be parsed (logged above); skip this formula group.
                     # Already-registered member rows are kept — they are valid atomic mutations.
                     continue
@@ -540,8 +594,8 @@ def extract_rows(wb):
                     )
                     continue
 
-                ref_aa, pos, mut_token = parse_aa_change(aa_change)
-                if mut_token is None:
+                parsed_mutations = parse_aa_change(aa_change)
+                if not parsed_mutations:
                     print(
                         f"SKIPPED unparseable mutation: sheet={sheet_name} "
                         f"feature={mapped_feature} aa_change={aa_change!r} drug={drug}",
@@ -560,38 +614,19 @@ def extract_rows(wb):
                         details="Mutation syntax could not be converted to supported ResPro notation.",
                     )
                     continue
-                if ref_aa is None:
-                    print(
-                        f"SKIPPED mutation with no reference AA: sheet={sheet_name} "
-                        f"feature={mapped_feature} aa_change={aa_change!r} drug={drug} "
-                        f"(reference amino acid required by ResPro)",
-                        file=sys.stderr,
-                    )
-                    add_non_migrated(
-                        non_migrated_rows,
-                        reason="missing_reference_amino_acid",
-                        sheet=sheet_name,
-                        feature=mapped_feature,
-                        drug=drug,
-                        aa_change=aa_change,
-                        aa_position=aa_pos_raw,
-                        resistance=resistance,
-                        pmids=pmids,
-                        details="Reference amino acid is required by rules.tsv schema.",
-                    )
-                    continue
-                if pos is None:
-                    try:
-                        pos = int(aa_pos_raw)
-                    except (ValueError, TypeError):
+
+                # Process each parsed mutation (dual alleles like E43A/D produce two entries)
+                for ref_aa, pos, mut_token in parsed_mutations:
+                    if ref_aa is None:
                         print(
-                            f"SKIPPED row with unresolvable position: sheet={sheet_name} "
-                            f"feature={mapped_feature} aa_change={aa_change!r} pos_col={aa_pos_raw!r}",
+                            f"SKIPPED mutation with no reference AA: sheet={sheet_name} "
+                            f"feature={mapped_feature} aa_change={aa_change!r} drug={drug} "
+                            f"(reference amino acid required by ResPro)",
                             file=sys.stderr,
                         )
                         add_non_migrated(
                             non_migrated_rows,
-                            reason="unresolvable_position",
+                            reason="missing_reference_amino_acid",
                             sheet=sheet_name,
                             feature=mapped_feature,
                             drug=drug,
@@ -599,29 +634,51 @@ def extract_rows(wb):
                             aa_position=aa_pos_raw,
                             resistance=resistance,
                             pmids=pmids,
-                            details="Could not resolve amino-acid position to integer.",
+                            details="Reference amino acid is required by rules.tsv schema.",
                         )
                         continue
+                    if pos is None:
+                        try:
+                            pos = int(aa_pos_raw)
+                        except (ValueError, TypeError):
+                            print(
+                                f"SKIPPED row with unresolvable position: sheet={sheet_name} "
+                                f"feature={mapped_feature} aa_change={aa_change!r} pos_col={aa_pos_raw!r}",
+                                file=sys.stderr,
+                            )
+                            add_non_migrated(
+                                non_migrated_rows,
+                                reason="unresolvable_position",
+                                sheet=sheet_name,
+                                feature=mapped_feature,
+                                drug=drug,
+                                aa_change=aa_change,
+                                aa_position=aa_pos_raw,
+                                resistance=resistance,
+                                pmids=pmids,
+                                details="Could not resolve amino-acid position to integer.",
+                            )
+                            continue
 
-                phenotype, clinical_phenotype = determine_phenotypes(
-                    resistance, cell_culture, clinical
-                )
+                    phenotype, clinical_phenotype = determine_phenotypes(
+                        resistance, cell_culture, clinical
+                    )
 
-                single_rows.append({
-                    "feature": mapped_feature,
-                    "reference_identifier": ref_id,
-                    "position": pos,
-                    "reference": ref_aa or "",
-                    "mutation": mut_token,
-                    "antiviral": drug.lower(),
-                    "member_id": "",
-                    "phenotype": phenotype,
-                    "clinical_phenotype": clinical_phenotype,
-                    "publication": pmids,
-                    "source": "Dähne et al. 2025 (Zenodo 15149867)",
-                    "comment": comment,
-                    "sheet": sheet_name,
-                })
+                    single_rows.append({
+                        "feature": mapped_feature,
+                        "reference_identifier": ref_id,
+                        "position": pos,
+                        "reference": ref_aa or "",
+                        "mutation": mut_token,
+                        "antiviral": drug.lower(),
+                        "member_id": "",
+                        "phenotype": phenotype,
+                        "clinical_phenotype": clinical_phenotype,
+                        "publication": pmids,
+                        "source": "Dähne et al. 2025 (Zenodo 15149867)",
+                        "comment": comment,
+                        "sheet": sheet_name,
+                    })
 
     return single_rows, formula_rows, non_migrated_rows
 

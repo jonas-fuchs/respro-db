@@ -416,13 +416,13 @@ def _expand_muts(raw: str) -> list[str]:
       - Compressed alternatives: 'EGNHST' -> ['E','G','N','H','S','T']
       - Stop codon: '*' -> ['*']
       - Deletion shorthands: '-' or 'd' -> ['-']
-      - Insertion shorthands: '_' or 'i' -> ['_']  (non-portable; caller may warn)
+      - Insertion shorthands: '_' or 'i' -> ['INS_any']  (generic insertion wildcard per ResPro spec)
       - Slash separator: '/' -> ignored (e.g. 'F/Y' -> ['F','Y'])
       - Whole-word forms: 'insertion', 'del', etc.
     """
     lraw = raw.lower().strip()
     if lraw in {"insertion", "insert", "ins"}:
-        return ["_"]
+        return ["INS_any"]
     if lraw in {"deletion", "del"}:
         return ["-"]
 
@@ -435,7 +435,7 @@ def _expand_muts(raw: str) -> list[str]:
         elif ch == "d":
             out.append("-")
         elif ch == "i":
-            out.append("_")
+            out.append("INS_any")
         elif ch.isalpha() and ch.upper() in CANONICAL_AA:
             out.append(ch.upper())
         # "/" and other separators are silently skipped.
@@ -585,12 +585,11 @@ def _parse_token(text: str) -> tuple[list[MutTerm], bool]:
 
 
 def _has_insertion(lhs: str) -> bool:
-    """Return True if the LHS contains a Stanford ASI insertion shorthand ('_')."""
-    for regex in (_TERM_PAREN_RE, _TERM_SIMPLE_RE):
-        for m in regex.finditer(lhs):
-            terms, _ = _parse_token(m.group(0))
-            if any(t.mutation == "_" for t in terms):
-                return True
+    """Return True if the LHS contains a Stanford ASI insertion shorthand ('i' or 'ins').
+
+    Since insertion events are now emitted as INS_any wildcard rules, this
+    function is kept for compatibility but always returns False.
+    """
     return False
 
 

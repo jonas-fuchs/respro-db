@@ -440,6 +440,8 @@ UL23	NC_001806	37	A	V	aciclovir		sensitive	unknown	PMID:30507553	Dähne et al. 2
 UL23	NC_001806	39	E	K	aciclovir		sensitive	unknown	PMID:37453453	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	41	R	H	aciclovir		sensitive	resistant	PMID:14670581,PMID:22906425,PMID:27426251	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	42	L	P	aciclovir		sensitive	resistant	PMID:10882609,PMID:11238837,PMID:15456088	Dähne et al. 2025 (Zenodo 15149867)	
+UL23	NC_001806	43	E	A	aciclovir		sensitive	unknown	PMID:28576448	Dähne et al. 2025 (Zenodo 15149867)	
+UL23	NC_001806	43	E	D	aciclovir		sensitive	unknown	PMID:28576448	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	44	Q	H	aciclovir		sensitive	sensitive	PMID:22024514	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	47	P	S	aciclovir		sensitive	unknown	PMID:37453453	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	50	L	M	aciclovir		sensitive	unknown	PMID:31152759	Dähne et al. 2025 (Zenodo 15149867)	
@@ -660,6 +662,7 @@ UL23	NC_001806	298	L	P	aciclovir		resistant	unknown	PMID:36309081	Dähne et al. 
 UL23	NC_001806	298	L	R	aciclovir		sensitive	unknown	PMID:27426251	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	299	P	S	aciclovir		sensitive	unknown	PMID:25218782	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	300	P	P300del	aciclovir		resistant	resistant	PMID:35079057	Dähne et al. 2025 (Zenodo 15149867)	
+UL23	NC_001806	301	A	INS_any	aciclovir		resistant	unknown	PMID:11160674	Dähne et al. 2025 (Zenodo 15149867)	Codetection of several mutations in TK
 UL23	NC_001806	301	N	NfsX	aciclovir		resistant	resistant	PMID:14670581	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	301	N	S	aciclovir		sensitive	unknown	PMID:31152759	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	302	G	S	aciclovir		sensitive	resistant	PMID:14670581	Dähne et al. 2025 (Zenodo 15149867)	
@@ -760,6 +763,7 @@ UL23	NC_001806	276	S	R	brivudine		sensitive	unknown	PMID:27426251	Dähne et al. 
 UL23	NC_001806	287	T	M	brivudine		resistant	resistant	PMID:19795980,PMID:9697707,PMID:15827202,PMID:12406508,PMID:23246510	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	293	R	W	brivudine		sensitive	unknown	PMID:20211650	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	298	L	R	brivudine		sensitive	unknown	PMID:27426251	Dähne et al. 2025 (Zenodo 15149867)	
+UL23	NC_001806	301	A	INS_any	brivudine		resistant	unknown	PMID:11160674	Dähne et al. 2025 (Zenodo 15149867)	Codetection of several mutations in TK
 UL23	NC_001806	307	V	VfsX	brivudine		resistant	unknown	PMID:11160674	Dähne et al. 2025 (Zenodo 15149867)	Codetection of T287M
 UL23	NC_001806	348	V	I	brivudine		sensitive	sensitive	PMID:19795980,PMID:14670581,PMID:22906425,PMID:27426251	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	350	T	I	brivudine		sensitive	unknown	PMID:20211650	Dähne et al. 2025 (Zenodo 15149867)	
@@ -821,6 +825,7 @@ UL23	NC_001806	276	S	R	penciclovir		sensitive	unknown	PMID:22024514,PMID:2742625
 UL23	NC_001806	287	T	M	penciclovir		resistant	resistant	PMID:19795980,PMID:9697707,PMID:15827202,PMID:12406508,PMID:23246510	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	293	R	W	penciclovir		sensitive	unknown	PMID:20211650	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	298	L	R	penciclovir		sensitive	unknown	PMID:27426251	Dähne et al. 2025 (Zenodo 15149867)	
+UL23	NC_001806	301	A	INS_any	penciclovir		resistant	unknown	PMID:11160674	Dähne et al. 2025 (Zenodo 15149867)	Codetection of several mutations in TK
 UL23	NC_001806	301	N	NfsX	penciclovir		resistant	unknown	PMID:32417677	Dähne et al. 2025 (Zenodo 15149867)	
 UL23	NC_001806	306	N	*	penciclovir		resistant	unknown	PMID:11160674	Dähne et al. 2025 (Zenodo 15149867)	Codetection of several mutations in TK
 UL23	NC_001806	307	V	VfsX	penciclovir		resistant	unknown	PMID:11160674	Dähne et al. 2025 (Zenodo 15149867)	Codetection of T287M

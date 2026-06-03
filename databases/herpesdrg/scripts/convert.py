@@ -178,6 +178,21 @@ def parse_mutation(aa_change: str) -> tuple[str, str, int]:
         pos = int(alt_pref_del.group(2))
         return ref, f"{ref}{pos}del", pos
 
+    # Insertion wildcard: patterns like N301+, E686+, G684+, P1112+
+    # The "+" suffix indicates an insertion at this position with unknown sequence.
+    # Emit INS_any as the mutation token per ResPro formatting spec.
+    ins_wildcard = re.fullmatch(r"([A-Za-z])(\d+)\+", text, flags=re.IGNORECASE)
+    if ins_wildcard:
+        ref = ins_wildcard.group(1).upper()
+        pos = int(ins_wildcard.group(2))
+        return ref, "INS_any", pos
+
+    # Insertion wildcard without reference AA: patterns like 301+
+    ins_wildcard_noref = re.fullmatch(r"(\d+)\+", text, flags=re.IGNORECASE)
+    if ins_wildcard_noref:
+        pos = int(ins_wildcard_noref.group(1))
+        return "", "INS_any", pos
+
     numeric_only = re.fullmatch(r"\d+", text)
     if numeric_only:
         raise ValueError("numeric_only_mutation_not_supported")
