@@ -122,16 +122,35 @@ All converter scripts accept these standard arguments and produce consistent con
 
 ### Console Output Format
 
-Converters must write progress to `stderr` using this standardized format:
+All converter output must go to `stderr` (not `stdout`). Use an `eprint()` helper for consistent routing:
+
+```python
+def eprint(msg: str) -> None:
+    print(msg, file=sys.stderr)
+```
+
+Converters must follow this standardized output sequence:
 
 ```
+Source date: <YYYY-MM-DD>                     # as early as possible (before or after Downloading, depending on source)
 Downloading <url> …
-Written <path>/<rules.tsv> (N rows).
-Written <path>/<formula-rules.tsv> (N rows).
-Written <path>/<metadata.json>.
-Written <path>/<non-migrated-rules.txt> (N aggregated entries).
+Parsed <N> source rows                          # optional – omit for non-tabular sources
+Written <rules_path> (<N> rows).
+Written <formula_path> (<N> rows).              # only when formula rows exist; delete file if empty
+Written <metadata_path>.
+Written <non_migrated_path> (<N> aggregated entries).
 Done.
 ```
+
+**Rules:**
+
+- **All output to `stderr`** — never write progress messages to `stdout`.
+- **`Source date:`** — the date used for `maintainer_update` in metadata.json (fetched from upstream API, `--source-date` argument, or fallback). Print this as early as the date is known — ideally before `Downloading`, but after is acceptable when the date is derived from the downloaded content.
+- **`Downloading <url> …`** — emitted when the upstream source fetch begins (use `…` ellipsis, not `...`).
+- **`Written` lines** — emit one line per output file, in the order shown. The `(N rows)` / `(N aggregated entries)` count includes only data rows (not the header). Omit the formula-rules line entirely when there are no formula rows (and delete the file if it exists).
+- **`Done.`** — final line confirming successful completion.
+- **Diagnostic messages** — `WARNING:` and `SKIPPED:` / `DROPPED:` lines are allowed at any point before `Done.` but must also go to `stderr`. These are for per-row conversion notes and validation warnings.
+- **Auxiliary fetch messages** — converters that download additional resources (e.g., drug maps, gene data) may emit extra `Fetching <url> …` lines between `Downloading` and `Written`.
 
 ### Converter Responsibilities
 

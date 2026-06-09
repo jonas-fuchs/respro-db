@@ -1317,7 +1317,7 @@ def convert(
     nm_content = _non_migrated_text(ctx.non_migrated)
     nm_path = output_dir / "non-migrated-rules.txt"
     nm_path.write_text(nm_content, encoding="utf-8")
-    eprint(f"Written {nm_path} ({len(ctx.non_migrated)} entries).")
+    eprint(f"Written {nm_path} ({len(ctx.non_migrated)} aggregated entries).")
 
     validate_outputs(rules_path, formula_path if formula_rows else None)
 
@@ -1447,14 +1447,14 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    eprint(f"Resolving source from {args.source_url} ...")
+    eprint(f"Downloading {args.source_url} …")
     source_info, xml_bytes = resolve_source(args.source_url)
-    eprint(f"Source: HIVDB {source_info.source_version} ({source_info.source_date})")
+    eprint(f"Source date: {source_info.source_date}")
 
-    eprint(f"Fetching drug map from {HIVFACTS_DRUGS_URL} ...")
+    eprint(f"Fetching drug map from {HIVFACTS_DRUGS_URL} …")
     drug_map = load_drug_map(http_get_text(HIVFACTS_DRUGS_URL))
 
-    eprint(f"Fetching gene data from {HIVFACTS_GENES_URL} ...")
+    eprint(f"Fetching gene data from {HIVFACTS_GENES_URL} …")
     gene_data = load_gene_data(http_get_text(HIVFACTS_GENES_URL))
 
     convert(

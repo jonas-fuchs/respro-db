@@ -19,6 +19,11 @@ import urllib.request
 from collections import defaultdict
 from pathlib import Path
 
+
+def eprint(msg: str) -> None:
+    """Print a message to stderr."""
+    print(msg, file=sys.stderr)
+
 import openpyxl
 
 # ---------------------------------------------------------------------------
@@ -383,7 +388,7 @@ def extract_rows(wb):
 
     for sheet_name, virus in SHEET_VIRUS.items():
         if sheet_name not in wb.sheetnames:
-            print(f"WARNING: Sheet '{sheet_name}' not found, skipping.", file=sys.stderr)
+            eprint(f"WARNING: Sheet '{sheet_name}' not found, skipping.")
             continue
 
         ws = wb[sheet_name]
@@ -407,12 +412,10 @@ def extract_rows(wb):
 
             # Skip rows where AA change is absent (nucleotide-only entries)
             if not aa_change:
-                print(
+                eprint(
                     f"SKIPPED nucleotide-only row: sheet={sheet_name} "
                     f"pos_col={aa_pos_raw!r} drug={drug} "
-                    f"(no amino-acid change recorded)",
-                    file=sys.stderr,
-                )
+                    f"(no amino-acid change recorded)")
                 add_non_migrated(
                     non_migrated_rows,
                     reason="nucleotide_only_row",
@@ -447,11 +450,9 @@ def extract_rows(wb):
                     parts_pos = [str(aa_pos_raw)] * len(parts_aa)
 
                 if len(parts_feature) != len(parts_aa) or len(parts_pos) != len(parts_aa):
-                    print(
+                    eprint(
                         f"WARNING: Cannot parse combo row feature='{feature_raw}' "
-                        f"aa='{aa_change}' in sheet '{sheet_name}' — skipping.",
-                        file=sys.stderr,
-                    )
+                        f"aa='{aa_change}' in sheet '{sheet_name}' — skipping.")
                     add_non_migrated(
                         non_migrated_rows,
                         reason="invalid_combo_format",
@@ -477,11 +478,9 @@ def extract_rows(wb):
                     mapped_feature = FEATURE_MAP.get(sub_feature, sub_feature)
                     parsed_mutations = parse_aa_change(sub_aa)
                     if not parsed_mutations:
-                        print(
+                        eprint(
                             f"WARNING: Cannot parse mutation '{sub_aa}' in combo row "
-                            f"(sheet={sheet_name}, feature={sub_feature}) — skipping entire combo.",
-                            file=sys.stderr,
-                        )
+                            f"(sheet={sheet_name}, feature={sub_feature}) — skipping entire combo.")
                         add_non_migrated(
                             non_migrated_rows,
                             reason="combo_member_unparseable_or_missing_ref",
@@ -499,11 +498,9 @@ def extract_rows(wb):
 
                     for ref_aa, pos, mut_token in parsed_mutations:
                         if ref_aa is None:
-                            print(
+                            eprint(
                                 f"WARNING: Missing ref AA for mutation '{sub_aa}' in combo row "
-                                f"(sheet={sheet_name}, feature={sub_feature}) — skipping entire combo.",
-                                file=sys.stderr,
-                            )
+                                f"(sheet={sheet_name}, feature={sub_feature}) — skipping entire combo.")
                             add_non_migrated(
                                 non_migrated_rows,
                                 reason="combo_member_unparseable_or_missing_ref",
@@ -576,10 +573,8 @@ def extract_rows(wb):
                 # Regular single-feature row
                 mapped_feature = FEATURE_MAP.get(feature_raw)
                 if mapped_feature is None:
-                    print(
-                        f"WARNING: Unknown feature '{feature_raw}' in sheet '{sheet_name}' — skipping.",
-                        file=sys.stderr,
-                    )
+                    eprint(
+                        f"WARNING: Unknown feature '{feature_raw}' in sheet '{sheet_name}' — skipping.")
                     add_non_migrated(
                         non_migrated_rows,
                         reason="unknown_feature",
@@ -596,11 +591,9 @@ def extract_rows(wb):
 
                 parsed_mutations = parse_aa_change(aa_change)
                 if not parsed_mutations:
-                    print(
+                    eprint(
                         f"SKIPPED unparseable mutation: sheet={sheet_name} "
-                        f"feature={mapped_feature} aa_change={aa_change!r} drug={drug}",
-                        file=sys.stderr,
-                    )
+                        f"feature={mapped_feature} aa_change={aa_change!r} drug={drug}")
                     add_non_migrated(
                         non_migrated_rows,
                         reason="unparseable_mutation",
@@ -618,12 +611,10 @@ def extract_rows(wb):
                 # Process each parsed mutation (dual alleles like E43A/D produce two entries)
                 for ref_aa, pos, mut_token in parsed_mutations:
                     if ref_aa is None:
-                        print(
+                        eprint(
                             f"SKIPPED mutation with no reference AA: sheet={sheet_name} "
                             f"feature={mapped_feature} aa_change={aa_change!r} drug={drug} "
-                            f"(reference amino acid required by ResPro)",
-                            file=sys.stderr,
-                        )
+                            f"(reference amino acid required by ResPro)")
                         add_non_migrated(
                             non_migrated_rows,
                             reason="missing_reference_amino_acid",
@@ -641,11 +632,9 @@ def extract_rows(wb):
                         try:
                             pos = int(aa_pos_raw)
                         except (ValueError, TypeError):
-                            print(
+                            eprint(
                                 f"SKIPPED row with unresolvable position: sheet={sheet_name} "
-                                f"feature={mapped_feature} aa_change={aa_change!r} pos_col={aa_pos_raw!r}",
-                                file=sys.stderr,
-                            )
+                                f"feature={mapped_feature} aa_change={aa_change!r} pos_col={aa_pos_raw!r}")
                             add_non_migrated(
                                 non_migrated_rows,
                                 reason="unresolvable_position",
@@ -710,14 +699,12 @@ def deduplicate_single_rows(rows, non_migrated_rows):
             best = max(group, key=lambda r: count_pmids(r["publication"]))
             for r in group:
                 if r is not best:
-                    print(
+                    eprint(
                         f"DROPPED duplicate row: feature={r['feature']} pos={r['position']} "
                         f"mutation={r['mutation']} drug={r['antiviral']} "
                         f"pmids={r['publication']!r} "
                         f"(kept pmids={best['publication']!r}, "
-                        f"reason: fewer PMIDs than retained row)",
-                        file=sys.stderr,
-                    )
+                        f"reason: fewer PMIDs than retained row)")
                     add_non_migrated(
                         non_migrated_rows,
                         reason="duplicate_rule_dropped_fewer_pmids",
@@ -817,7 +804,8 @@ def main():
     # --- Download ---
     with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as tmp_file:
         tmp_path = Path(tmp_file.name)
-    print(f"Downloading {args.source_url} …", file=sys.stderr)
+    eprint(f"Source date: {maintainer_update}")
+    eprint(f"Downloading {args.source_url} …")
     urllib.request.urlretrieve(args.source_url, tmp_path)
 
     try:
@@ -825,6 +813,7 @@ def main():
         single_rows, formula_rows, non_migrated_rows = extract_rows(wb)
     finally:
         tmp_path.unlink(missing_ok=True)
+    eprint(f"Parsed {len(single_rows) + len(formula_rows) + len(non_migrated_rows)} source rows")
 
     # --- Deduplication ---
     single_rows = deduplicate_single_rows(single_rows, non_migrated_rows)
@@ -837,15 +826,16 @@ def main():
     rules_content = rows_to_tsv(single_rows, RULES_COLUMNS)
     rules_path = out_dir / "rules.tsv"
     rules_path.write_text(rules_content, encoding="utf-8")
-    print(f"Written {rules_path} ({len(single_rows)} rows).", file=sys.stderr)
+    eprint(f"Written {rules_path} ({len(single_rows)} rows).")
 
     # --- Write formula-rules.tsv (only if combo rows exist) ---
+    formula_path = out_dir / "formula-rules.tsv"
     if formula_rows:
         formula_content = rows_to_tsv(formula_rows, FORMULA_COLUMNS)
-        formula_path = out_dir / "formula-rules.tsv"
         formula_path.write_text(formula_content, encoding="utf-8")
-        print(f"Written {formula_path} ({len(formula_rows)} rows).", file=sys.stderr)
+        eprint(f"Written {formula_path} ({len(formula_rows)} rows).")
     else:
+        formula_path.unlink(missing_ok=True)
         formula_content = ""
 
     # --- Write metadata.json ---
@@ -945,18 +935,15 @@ def main():
     }
     metadata_path = out_dir / "metadata.json"
     metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
-    print(f"Written {metadata_path}.", file=sys.stderr)
+    eprint(f"Written {metadata_path}.")
 
     # --- Write non-migrated-rules.txt ---
     non_migrated_path = out_dir / "non-migrated-rules.txt"
     non_migrated_content = non_migrated_rows_to_text(non_migrated_rows)
     non_migrated_path.write_text(non_migrated_content, encoding="utf-8")
-    print(
-        f"Written {non_migrated_path} ({len(non_migrated_rows)} aggregated entries).",
-        file=sys.stderr,
-    )
+    eprint(f"Written {non_migrated_path} ({len(non_migrated_rows)} aggregated entries).")
 
-    print("Done.", file=sys.stderr)
+    eprint("Done.")
 
 
 if __name__ == "__main__":

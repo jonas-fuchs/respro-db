@@ -1,0 +1,43 @@
+{
+  "maintainers": [
+    "Robert J. Gifford"
+  ],
+  "contact": "Robert.Gifford@glasgow.ac.uk",
+  "publication_pmid": "30563445",
+  "website": "https://hbv-glue.cvr.gla.ac.uk/#/home",
+  "description": "HBV polymerase drug resistance mutations curated from the HBV-GLUE drug resistance extension mapped to reference NC_003977.",
+  "maintainer_update": "2019-08-29",
+  "license": "GNU General Public License v3.0",
+  "tsv_checksum": "sha256:f42a3b4f0c033b3397355ae738af5c287c3068fde405d2d4161ef71ca1d95cfd",
+  "interpretation_algorithms": [
+    {
+      "name": "drug_groups",
+      "groups": {
+        "Nucleoside Reverse Transcriptase Inhibitor": [
+          "lamivudine",
+          "adefovir",
+          "tenofovir",
+          "entecavir",
+          "telbivudine"
+        ]
+      }
+    },
+    {
+      "name": "drug_interpretation",
+      "method": "by_phenotype",
+      "thresholds": {
+        "resistant": 1
+      }
+    },
+    {
+      "name": "drug_alias",
+      "groups": {
+        "lamivudine": "LAM",
+        "adefovir": "ADV",
+        "tenofovir": "TDF",
+        "entecavir": "ETV",
+        "telbivudine": "LDT"
+      }
+    }
+  ]
+}

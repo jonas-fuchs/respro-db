@@ -1,0 +1,5 @@
+# Non-migrated HBV-GLUE rows
+# Columns: reason	drug	source_mutation	subdomain	genotypes	publications	details
+
+reason	drug	source_mutation	subdomain	genotypes	publications	details
+bare_position_no_known_alts	LAM	M250		B	28183162	P585 has no known alts for lamivudine

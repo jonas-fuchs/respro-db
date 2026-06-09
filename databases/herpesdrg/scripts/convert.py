@@ -26,6 +26,11 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+
+def eprint(msg: str) -> None:
+    """Print a message to stderr."""
+    print(msg, file=sys.stderr)
+
 SOURCE_URL = "https://raw.githubusercontent.com/ojcharles/herpesdrg-db/main/herpesdrg-db.tsv"
 
 RULES_COLUMNS = [
@@ -622,9 +627,8 @@ def fetch_source_commit_date(source_url: str) -> str:
         source_url,
     )
     if not match:
-        print(
-            f"WARNING: Cannot parse GitHub raw URL to fetch commit date: {source_url}",
-            file=sys.stderr,
+        eprint(
+            f"WARNING: Cannot parse GitHub raw URL to fetch commit date: {source_url}"
         )
         return datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
@@ -637,12 +641,10 @@ def fetch_source_commit_date(source_url: str) -> str:
         with urllib.request.urlopen(api_url) as response:
             commits = json.loads(response.read().decode("utf-8"))
         commit_date = commits[0]["commit"]["committer"]["date"][:10]
-        print(f"Source commit date: {commit_date}", file=sys.stderr)
         return commit_date
     except Exception as exc:
-        print(
-            f"WARNING: Could not fetch commit date from GitHub API ({exc}); using today.",
-            file=sys.stderr,
+        eprint(
+            f"WARNING: Could not fetch commit date from GitHub API ({exc}); using today."
         )
         return datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
@@ -673,24 +675,27 @@ def main() -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     maintainer_update = fetch_source_commit_date(args.source_url)
-    print(f"Downloading {args.source_url} …", file=sys.stderr)
+    eprint(f"Source date: {maintainer_update}")
+    eprint(f"Downloading {args.source_url} …")
     source_text = download_source(args.source_url)
 
     reader = csv.DictReader(source_text.splitlines(), delimiter="\t")
     validate_input_header(reader)
     source_rows = list(reader)
+    eprint(f"Parsed {len(source_rows)} source rows")
 
     rules_rows, formula_rows, non_migrated_rows = convert(source_rows)
 
     rules_content = tsv_from_rows(rules_rows, RULES_COLUMNS)
     rules_path = out_dir / "rules.tsv"
     rules_path.write_text(rules_content, encoding="utf-8")
+    eprint(f"Written {rules_path} ({len(rules_rows)} rows).")
 
     formula_path = out_dir / "formula-rules.tsv"
     if formula_rows:
         formula_content = tsv_from_rows(formula_rows, FORMULA_COLUMNS)
         formula_path.write_text(formula_content, encoding="utf-8")
-        print(f"Written {formula_path} ({len(formula_rows)} rows).", file=sys.stderr)
+        eprint(f"Written {formula_path} ({len(formula_rows)} rows).")
     else:
         formula_path.unlink(missing_ok=True)
 
@@ -827,18 +832,14 @@ def main() -> None:
     }
     metadata_path = out_dir / "metadata.json"
     metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+    eprint(f"Written {metadata_path}.")
 
     non_migrated_content = non_migrated_text(non_migrated_rows)
     non_migrated_path = out_dir / "non-migrated-rules.txt"
     non_migrated_path.write_text(non_migrated_content, encoding="utf-8")
+    eprint(f"Written {non_migrated_path} ({len(non_migrated_rows)} aggregated entries).")
 
-    print(f"Written {rules_path} ({len(rules_rows)} rows).", file=sys.stderr)
-    print(f"Written {metadata_path}.", file=sys.stderr)
-    print(
-        f"Written {non_migrated_path} ({len(non_migrated_rows)} aggregated entries).",
-        file=sys.stderr,
-    )
-    print("Done.", file=sys.stderr)
+    eprint("Done.")
 
 
 if __name__ == "__main__":
