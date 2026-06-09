@@ -2,24 +2,6 @@
   "manifest_version": 1,
   "databases": [
     {
-      "source_name": "hbv-glue",
-      "metadata_path": "databases/hbv-glue/output/metadata.json",
-      "rules_path": "databases/hbv-glue/output/rules.tsv",
-      "formula_rules_path": "databases/hbv-glue/output/formula-rules.tsv",
-      "metadata": {
-        "maintainers": [
-          "Robert J. Gifford"
-        ],
-        "contact": "Robert.Gifford@glasgow.ac.uk",
-        "publication_pmid": "30563445",
-        "website": "https://hbv-glue.cvr.gla.ac.uk/#/home",
-        "description": "HBV polymerase drug resistance mutations curated from the HBV-GLUE drug resistance extension mapped to reference NC_003977.",
-        "maintainer_update": "2019-08-29",
-        "license": "GNU General Public License v3.0",
-        "tsv_checksum": "sha256:e45cf664c532f4b196c29f8c91d94ca7ab470e20e024e51dfc9a0f277b49dd03"
-      }
-    },
-    {
       "source_name": "herpesdrg",
       "metadata_path": "databases/herpesdrg/output/metadata.json",
       "rules_path": "databases/herpesdrg/output/rules.tsv",
