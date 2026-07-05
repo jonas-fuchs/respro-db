@@ -175,7 +175,7 @@ status_not_active	476	HCMV	UL97	S108N			O	Anecdotal
 status_not_active	475	HCMV	UL97	T95S			O	Anecdotal	
 status_not_active	450	HCMV	UL97	V244I			O	occurs with many other mutations unable to establish its solo phenotype	
 status_not_active	1626	HHV6b	U38	A961V			O	cannot infer	
-status_not_active	1627	HHV6b	U69	M318V			O	cannot infer	
+status_not_active	1627	HHV6b	U69	M317V			O	cannot infer	
 status_not_active	1568	HSV1	UL23	A136N			O	A is not the tk wt AA have emailed author	
 status_not_active	732	HSV1	UL23	A167V			O	frameshift in tested strain	
 status_not_active	733	HSV1	UL23	A168T			E	ref wrong	
@@ -207,7 +207,7 @@ status_not_active	1570	HSV1	UL23	P154S			O	co-occurs with known resmut or other 
 status_not_active	736	HSV1	UL23	P173L			O	frameshift in tested strain	
 status_not_active	1446	HSV1	UL23	P173L			O	many co occuring mutations	
 status_not_active	737	HSV1	UL23	P173R			E	ref wrong	
-status_not_active	796	HSV1	UL23	P334+			O	cannot see in paper	
+status_not_active	796	HSV1	UL23	P334*			O	cannot see in paper	
 status_not_active	710	HSV1	UL23	P84L			O	Only occurs with other resistant mutation R163H and deletion	
 status_not_active	711	HSV1	UL23	P84L			E	ref wrong	
 status_not_active	712	HSV1	UL23	P84S			E	ref wrong	
@@ -340,6 +340,7 @@ status_not_active	1072	HSV2	UL30	T144P			O	co occurs with unknown mut
 status_not_active	1084	HSV2	UL30	T347M			O	co occurs with unknown mut	
 status_not_active	1066	HSV2	UL30	T53A			O	co occurs with unknown mut	
 status_not_active	1653	VZV	ORF36	K186R			O	Co-occurs with D545Y , needs to be tested indep	
+status_not_active	2060	VZV	ORF36	N479I			O	would this method have found stop codons?  Also table 3 lists the mutation as both pol and tk (to my reading) so I am unsure and will make inactive	
 unparseable_mutation	294	HCMV	UL27	del218			A		failed_part=del218
 unparseable_mutation	297	HCMV	UL27	del301-311			A		failed_part=del301-311
 unparseable_mutation	1681	HCMV	UL54	D981del2			A		failed_part=D981del2
