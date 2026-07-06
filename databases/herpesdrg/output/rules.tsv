@@ -181,7 +181,6 @@ ORF36	NC_001348	334	N	*	brivudine			133	doi:doi.org/10.1128/AAC.05115-14	HerpesD
 ORF36	NC_001348	334	N	*	cidofovir			0.8	doi:doi.org/10.1128/AAC.05115-14	HerpesDRG	Test method: PRA, Rule created at: 01/12/2020
 ORF36	NC_001348	334	N	*	foscarnet			0.6	doi:doi.org/10.1128/AAC.05115-14	HerpesDRG	Test method: PRA, Rule created at: 01/12/2020
 ORF36	NC_001348	334	N	*	penciclovir			10	doi:doi.org/10.1128/AAC.05115-14	HerpesDRG	Test method: PRA, Rule created at: 01/12/2020
-ORF36	NC_001348	479	N	I	aciclovir			80	doi:doi.org/10.1007/s00430-011-0191-4	HerpesDRG	Test method: PRA, Rule created at: 18/08/2025, would this method have found stop codons?
 ORF55	NC_001348	350	K	N	aciclovir			0.8	doi:doi.org/10.1002/jmv.70080	HerpesDRG	Test method: PRA, Rule created at: 18/08/2025
 ORF55	NC_001348	350	K	N	amenamevir			2500	doi:doi.org/10.1002/jmv.70080	HerpesDRG	Test method: PRA, Rule created at: 18/08/2025
 U38	NC_001664	292	F	S	cidofovir			6	doi:doi.org/10.1177/135965350701200608	HerpesDRG	Test method: Functional enzyme kinetic assay, Rule created at: 18/08/2025
@@ -202,14 +201,14 @@ U38	NC_001664	798	R	I	ganciclovir			4	doi:doi.org/10.1016/j.antiviral.2007.12.00
 U38	NC_001664	961	A	V	cidofovir			0.7	doi:doi.org/10.1177/135965350701200608	HerpesDRG	Test method: Functional enzyme kinetic assay, Rule created at: 18/08/2025
 U38	NC_001664	961	A	V	foscarnet			0.7	doi:doi.org/10.1177/135965350701200608	HerpesDRG	Test method: Functional enzyme kinetic assay, Rule created at: 18/08/2025
 U38	NC_001664	961	A	V	ganciclovir			0.7	doi:doi.org/10.1177/135965350701200608	HerpesDRG	Test method: Functional enzyme kinetic assay, Rule created at: 18/08/2025
-U69	NC_001664	202	L	I	ganciclovir		sensitive	1	doi:doi.org/10.1016/j.jviromet.2009.06.016,doi:doi.org/10.1016/j.jcv.2008.09.002	HerpesDRG	Test method: qPCR,PCR DNA hybridization assay, Rule created at: 04/02/2021,11/08/2025
-U69	NC_001664	213	L	I	ganciclovir		sensitive	1	doi:doi.org/10.1002/jmv.10510,doi:doi.org/10.1016/j.jviromet.2009.06.016,doi:doi.org/10.1016/j.jcv.2008.09.002	HerpesDRG	Test method: PRA,qPCR,PCR DNA hybridization assay, Rule created at: 04/02/2021,11/08/2025
-U69	NC_001664	318	M	V	ganciclovir		resistant		doi:doi.org/10.1002/jmv.10510,doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	Test method: PRA,qPCR, Rule created at: 04/02/2021
-U69	NC_001664	447	A	D	ganciclovir		resistant		doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	Test method: qPCR, Rule created at: 04/02/2021
-U69	NC_001664	448	C	G	ganciclovir		resistant		doi:doi.org/10.1002/jmv.10510,doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	Test method: PRA,qPCR, Rule created at: 04/02/2021
-U69	NC_001664	450	L	S	ganciclovir		resistant		doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	Test method: qPCR, Rule created at: 04/02/2021
+U69	NC_001664	201	L	I	ganciclovir		sensitive	1	doi:doi.org/10.1016/j.jviromet.2009.06.016,doi:doi.org/10.1016/j.jcv.2008.09.002	HerpesDRG	Test method: qPCR,PCR DNA hybridization assay, Rule created at: 04/02/2021,11/08/2025
+U69	NC_001664	212	L	I	ganciclovir		sensitive	1	doi:doi.org/10.1002/jmv.10510,doi:doi.org/10.1016/j.jviromet.2009.06.016,doi:doi.org/10.1016/j.jcv.2008.09.002	HerpesDRG	Test method: PRA,qPCR,PCR DNA hybridization assay, Rule created at: 04/02/2021,11/08/2025
+U69	NC_001664	317	M	V	ganciclovir		resistant		doi:doi.org/10.1002/jmv.10510,doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	Test method: PRA,qPCR, Rule created at: 04/02/2021
+U69	NC_001664	446	A	D	ganciclovir		resistant		doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	Test method: qPCR, Rule created at: 04/02/2021
+U69	NC_001664	447	C	G	ganciclovir		resistant		doi:doi.org/10.1002/jmv.10510,doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	Test method: PRA,qPCR, Rule created at: 04/02/2021
+U69	NC_001664	449	L	S	ganciclovir		resistant		doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	Test method: qPCR, Rule created at: 04/02/2021
 U69	NC_001664	462	A	D	ganciclovir		resistant		doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	Test method: qPCR, Rule created at: 04/02/2021
-U69	NC_001664	463	C	Y	ganciclovir		resistant		doi:doi.org/10.1002/jmv.10510,doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	Test method: PRA,qPCR, Rule created at: 04/02/2021
+U69	NC_001664	462	C	Y	ganciclovir		resistant		doi:doi.org/10.1002/jmv.10510,doi:doi.org/10.1016/j.jviromet.2009.06.016	HerpesDRG	Test method: PRA,qPCR, Rule created at: 04/02/2021
 UL23	NC_001798	25	G	A	aciclovir			1.45	doi:doi.org/10.1016/j.antiviral.2018.02.004	HerpesDRG	Fold IC50 values: 1.1, 1.8; mean displayed, Test method: PRA,dye uptake assay, Rule created at: 04/02/2021
 UL23	NC_001798	25	G	A	penciclovir			1.35	doi:doi.org/10.1016/j.antiviral.2018.02.004	HerpesDRG	Fold IC50 values: 0.3, 2.4; mean displayed, Test method: PRA,dye uptake assay, Rule created at: 04/02/2021
 UL23	NC_001798	26	R	H	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2003.08.018	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
@@ -412,10 +411,10 @@ UL30	NC_001798	682	E	G	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.201
 UL30	NC_001798	682	E	G	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
 UL30	NC_001798	682	E	K	aciclovir		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
 UL30	NC_001798	682	E	K	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
-UL30	NC_001798	684	G	INS_any	aciclovir		resistant		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
-UL30	NC_001798	684	G	INS_any	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
-UL30	NC_001798	686	E	INS_any	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
-UL30	NC_001798	686	E	INS_any	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
+UL30	NC_001798	684	G	*	aciclovir		resistant		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
+UL30	NC_001798	684	G	*	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
+UL30	NC_001798	686	E	*	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
+UL30	NC_001798	686	E	*	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
 UL30	NC_001798	708	D	N	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
 UL30	NC_001798	708	D	N	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
 UL30	NC_001798	716	D	N	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2003.08.018	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
@@ -536,8 +535,8 @@ UL30	NC_001798	1025	R	H	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.20
 UL30	NC_001798	1025	R	H	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
 UL30	NC_001798	1083	A	T	aciclovir		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
 UL30	NC_001798	1083	A	T	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
-UL30	NC_001798	1112	P	INS_any	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
-UL30	NC_001798	1112	P	INS_any	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
+UL30	NC_001798	1112	P	*	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
+UL30	NC_001798	1112	P	*	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: dye uptake assay, Rule created at: 01/11/2020
 UL30	NC_001798	1114	A	V	aciclovir		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
 UL30	NC_001798	1114	A	V	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 01/11/2020
 UL30	NC_001798	1200	T	A	aciclovir			1	doi:doi.org/10.1016/j.jcv.2023.105554	HerpesDRG	Test method: PRA, Rule created at: 01/12/2023
@@ -599,8 +598,8 @@ UL23	NC_001806	35	Q	Q35del	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00977-1
 UL23	NC_001806	36	K	D	aciclovir		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 12/12/2020
 UL23	NC_001806	36	K	D	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 12/12/2020
 UL23	NC_001806	36	K	E	aciclovir		sensitive	1	doi:doi.org/10.1016/j.antiviral.2010.03.002,doi:doi.org/10.1002/(SICI)1096-9071(199810)56:2<151::AID-JMV9>3.0.CO;2-7,doi:doi.org/10.1002/jmv.28985	HerpesDRG	Test method: dye uptake assay,PRA, Rule created at: 14/04/2021,01/12/2023
-UL23	NC_001806	36	E	E36del	aciclovir		sensitive		doi:doi.org/10.1128/AAC.00977-15	HerpesDRG	Test method: PRA, Rule created at: 13/12/2020, mutations not resolved by sequence
-UL23	NC_001806	36	E	E36del	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00977-15	HerpesDRG	Test method: PRA, Rule created at: 13/12/2020, mutations not resolved by sequence
+UL23	NC_001806	36	K	K36del	aciclovir		sensitive		doi:doi.org/10.1128/AAC.00977-15	HerpesDRG	Test method: PRA, Rule created at: 13/12/2020, mutations not resolved by sequence
+UL23	NC_001806	36	K	K36del	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00977-15	HerpesDRG	Test method: PRA, Rule created at: 13/12/2020, mutations not resolved by sequence
 UL23	NC_001806	37	A	V	aciclovir		sensitive		doi:doi.org/10.3851/IMP3279	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL23	NC_001806	41	R	H	aciclovir		sensitive	0.9	doi:doi.org/10.1016/j.antiviral.2003.08.018,doi:doi.org/10.1038/srep29903,doi:doi.org/10.7883/yoken.JJID.2018.176	HerpesDRG	Fold IC50 values: 1, 0.8; mean displayed, Test method: PRA,dye uptake assay, Rule created at: 15/12/2020,04/02/2021
 UL23	NC_001806	41	R	H	brivudine			1	doi:doi.org/10.1038/srep29903	HerpesDRG	Test method: dye uptake assay, Rule created at: 04/02/2021
@@ -808,7 +807,7 @@ UL23	NC_001806	172	Y	C	penciclovir		resistant		doi:doi.org/10.1016/j.antiviral.2
 UL23	NC_001806	174	A	P	aciclovir		resistant		doi:doi.org/10.1016/j.jviromet.2012.12.001	HerpesDRG	Test method: indirect ELISA, Rule created at: 04/02/2021
 UL23	NC_001806	175	A	V	aciclovir			10	doi:doi.org/10.1128/AAC.49.3.1055-1059.2005	HerpesDRG	Test method: TK functional kinetic assay, Rule created at: 04/02/2021, inferred fc
 UL23	NC_001806	176	R	*	aciclovir		resistant		doi:doi.org/10.1016/j.antiviral.2013.09.012	HerpesDRG	Test method: PRA, Rule created at: 10/05/2021
-UL23	NC_001806	176	R	Q	aciclovir		resistant	6.5	doi:doi.org/10.1016/j.antiviral.2003.08.018,doi:doi.org/10.1128/JVI.75.7.3105-3110.2001,doi:doi.org/10.1016/j.jcv.2004.04.002	HerpesDRG	Fold IC50 values: 8.9, 4.1; mean displayed, Test method: PRA,yield reduction assay (ELVIRA), Rule created at: 09/05/2021,04/02/2021
+UL23	NC_001806	176	R	Q	aciclovir		resistant	71	doi:doi.org/10.1016/j.antiviral.2003.08.018,doi:doi.org/10.1128/JVI.75.7.3105-3110.2001,doi:doi.org/10.1016/j.jcv.2004.04.002,doi:doi.org/10.1177/095632029100200504	HerpesDRG	Fold IC50 values: 8.9, 4.1, 200; mean displayed, Test method: PRA,yield reduction assay (ELVIRA), Rule created at: 09/05/2021,04/02/2021,01/12/2023, polymerase was not sequenced
 UL23	NC_001806	176	R	Q	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2003.08.018	HerpesDRG	Test method: PRA, Rule created at: 09/05/2021
 UL23	NC_001806	176	R	W	aciclovir		resistant		doi:doi.org/10.1016/j.antiviral.2012.09.016	HerpesDRG	Test method: TK functional kinetic assay, Rule created at: 11/05/2021
 UL23	NC_001806	178	L	R	aciclovir		resistant		doi:doi.org/10.1086/590668	HerpesDRG	Test method: PRA, Rule created at: 12/05/2021
@@ -1021,11 +1020,11 @@ UL23	NC_001806	298	L	R	foscarnet			2.5	doi:doi.org/10.1038/srep29903	HerpesDRG	T
 UL23	NC_001806	298	L	R	penciclovir			1.1	doi:doi.org/10.1038/srep29903	HerpesDRG	Test method: dye uptake assay, Rule created at: 04/02/2021
 UL23	NC_001806	299	A	S	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2014.08.013	HerpesDRG	Test method: dye uptake assay, Rule created at: 10/02/2021
 UL23	NC_001806	299	A	S	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2014.08.013	HerpesDRG	Test method: dye uptake assay, Rule created at: 10/02/2021
-UL23	NC_001806	301	N	INS_any	aciclovir		resistant		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
-UL23	NC_001806	301	N	INS_any	brivudine		resistant		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
-UL23	NC_001806	301	N	INS_any	cidofovir		sensitive		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
-UL23	NC_001806	301	N	INS_any	foscarnet		sensitive		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
-UL23	NC_001806	301	N	INS_any	penciclovir		resistant		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
+UL23	NC_001806	301	N	*	aciclovir		resistant		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
+UL23	NC_001806	301	N	*	brivudine		resistant		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
+UL23	NC_001806	301	N	*	cidofovir		sensitive		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
+UL23	NC_001806	301	N	*	foscarnet		sensitive		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
+UL23	NC_001806	301	N	*	penciclovir		resistant		doi:doi.org/10.1128/JVI.75.4.1761-1769.2001	HerpesDRG	Test method: PRA, Rule created at: 03/07/2021
 UL23	NC_001806	301	N	S	aciclovir			1	doi:doi.org/10.1016/j.antiviral.2019.05.012	HerpesDRG	Test method: dye uptake assay, Rule created at: 04/02/2021
 UL23	NC_001806	302	G	S	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2003.08.018	HerpesDRG	Test method: PRA, Rule created at: 11/02/2021
 UL23	NC_001806	302	G	S	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2003.08.018	HerpesDRG	Test method: PRA, Rule created at: 11/02/2021
@@ -1139,7 +1138,6 @@ UL23	NC_001806	376	N	H	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.200
 UL23	NC_001806	376	N	H	penciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.2010.03.002	HerpesDRG	Test method: dye uptake assay, Rule created at: 11/03/2021
 UL23	NC_001806	376	N	P	aciclovir		sensitive		doi:doi.org/10.1128/AAC.00669-10,doi:doi.org/10.1002/(SICI)1096-9071(199810)56:2<151::AID-JMV9>3.0.CO;2-7	HerpesDRG	Test method: PRA, Rule created at: 10/03/2021,01/12/2023
 UL23	NC_001806	376	N	P	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 10/03/2021
-UL23	NC_001806	527	R	Q	aciclovir			200	doi:doi.org/10.1177/09563202910020050	HerpesDRG	Test method: PRA, Rule created at: 01/12/2023, polymerase was not sequenced
 UL29	NC_001806	597	P	L	aciclovir			0.7	doi:doi.org/10.3390/v16121813	HerpesDRG	Test method: PRA, Rule created at: 31/12/2025, The strain is a chimera - ignoring
 UL29	NC_001806	597	P	L	brivudine			1.5	doi:doi.org/10.3390/v16121813	HerpesDRG	Test method: PRA, Rule created at: 31/12/2025, The strain is a chimera - ignoring
 UL29	NC_001806	597	P	L	cidofovir			1	doi:doi.org/10.3390/v16121813	HerpesDRG	Test method: PRA, Rule created at: 31/12/2025, The strain is a chimera - ignoring
@@ -1366,10 +1364,10 @@ UL30	NC_001806	605	A	V	cidofovir			0.95	doi:doi.org/10.1128/AAC.49.2.606-611.200
 UL30	NC_001806	605	A	V	foscarnet			7.55	doi:doi.org/10.1128/AAC.49.2.606-611.2005,doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1016/S0166-3542(97)00054-5,doi:doi.org/10.1093/infdis/jix042	HerpesDRG	Fold IC50 values: 10, 6.7, 10, 3.5; mean displayed, Test method: PRA, Rule created at: 04/02/2021,01/12/2023
 UL30	NC_001806	605	A	V	ganciclovir			0.1	doi:doi.org/10.1093/infdis/jix042	HerpesDRG	Test method: PRA, Rule created at: 01/12/2023
 UL30	NC_001806	605	A	V	penciclovir			1.45	doi:doi.org/10.1128/AAC.49.2.606-611.2005,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Fold IC50 values: 1.7, 1.2; mean displayed, Test method: PRA, Rule created at: 04/02/2021
-UL30	NC_001806	618	Q	H	aciclovir			6.2	doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Fold IC50 values: 9, 3.4; mean displayed, Test method: Cytopathic effect,PRA, Rule created at: 27/02/2022,04/02/2021
-UL30	NC_001806	618	Q	H	brivudine		sensitive	0.3	doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 27/02/2022,04/02/2021
-UL30	NC_001806	618	Q	H	cidofovir		sensitive	0.6	doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 27/02/2022,04/02/2021
-UL30	NC_001806	618	Q	H	foscarnet			1.45	doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Fold IC50 values: 1.9, 1; mean displayed, Test method: Cytopathic effect,PRA, Rule created at: 27/02/2022,04/02/2021
+UL30	NC_001806	618	Q	H	aciclovir			6.2	doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Fold IC50 values: 9, 3.4; mean displayed, Test method: Cytopathic effect,PRA, Rule created at: 27/02/2022,04/02/2021
+UL30	NC_001806	618	Q	H	brivudine		sensitive	0.3	doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 27/02/2022,04/02/2021
+UL30	NC_001806	618	Q	H	cidofovir		sensitive	0.6	doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 27/02/2022,04/02/2021
+UL30	NC_001806	618	Q	H	foscarnet			1.45	doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Fold IC50 values: 1.9, 1; mean displayed, Test method: Cytopathic effect,PRA, Rule created at: 27/02/2022,04/02/2021
 UL30	NC_001806	618	Q	H	penciclovir			2.9	doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	618	Q	I	aciclovir			1.5	doi:doi.org/10.1128/AAC.00390-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
 UL30	NC_001806	618	Q	I	foscarnet			0.2	doi:doi.org/10.1128/AAC.00390-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
@@ -1472,10 +1470,10 @@ UL30	NC_001806	711	N	K	aciclovir		sensitive		doi:doi.org/10.1128/AAC.00669-10	He
 UL30	NC_001806	711	N	K	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 14/11/2021
 UL30	NC_001806	712	P	Y	aciclovir			3.7	doi:doi.org/10.1128/AAC.00390-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
 UL30	NC_001806	712	P	Y	foscarnet			0.6	doi:doi.org/10.1128/AAC.00390-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
-UL30	NC_001806	714	V	M	aciclovir			2.7	doi:doi.org/10.1177/1359653507012005	HerpesDRG	Test method: Cytopathic effect, Rule created at: 07/03/2022
-UL30	NC_001806	714	V	M	brivudine		sensitive		doi:doi.org/10.1177/1359653507012005	HerpesDRG	Test method: Cytopathic effect, Rule created at: 07/03/2022
-UL30	NC_001806	714	V	M	cidofovir		sensitive		doi:doi.org/10.1177/1359653507012005	HerpesDRG	Test method: Cytopathic effect, Rule created at: 07/03/2022
-UL30	NC_001806	714	V	M	foscarnet			3.8	doi:doi.org/10.1177/1359653507012005	HerpesDRG	Test method: Cytopathic effect, Rule created at: 07/03/2022
+UL30	NC_001806	714	V	M	aciclovir			2.7	doi:doi.org/10.1177/135965350701200502	HerpesDRG	Test method: Cytopathic effect, Rule created at: 07/03/2022
+UL30	NC_001806	714	V	M	brivudine		sensitive		doi:doi.org/10.1177/135965350701200502	HerpesDRG	Test method: Cytopathic effect, Rule created at: 07/03/2022
+UL30	NC_001806	714	V	M	cidofovir		sensitive		doi:doi.org/10.1177/135965350701200502	HerpesDRG	Test method: Cytopathic effect, Rule created at: 07/03/2022
+UL30	NC_001806	714	V	M	foscarnet			3.8	doi:doi.org/10.1177/135965350701200502	HerpesDRG	Test method: Cytopathic effect, Rule created at: 07/03/2022
 UL30	NC_001806	715	V	G	aciclovir		resistant	4.6	doi:doi.org/10.1002/jmv.10175,doi:doi.org/10.1016/j.antiviral.2021.105046	HerpesDRG	Test method: PRA, Rule created at: 08/03/2022,01/12/2023
 UL30	NC_001806	715	V	G	cidofovir		sensitive		doi:doi.org/10.1002/jmv.10175	HerpesDRG	Test method: PRA, Rule created at: 08/03/2022
 UL30	NC_001806	715	V	G	foscarnet		resistant	3.4	doi:doi.org/10.1002/jmv.10175,doi:doi.org/10.1016/j.antiviral.2021.105046	HerpesDRG	Test method: PRA, Rule created at: 08/03/2022,01/12/2023
@@ -1494,16 +1492,16 @@ UL30	NC_001806	719	A	T	brivudine			1	doi:doi.org/10.1093/infdis/jix605	HerpesDRG
 UL30	NC_001806	719	A	T	cidofovir			1.425	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/JVI.77.14.7820-7829.2003	HerpesDRG	Fold IC50 values: 1, 1.85; mean displayed, Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	719	A	T	foscarnet			2.09333	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1128/AAC.00390-21	HerpesDRG	Fold IC50 values: 2.1, 2.18, 2; mean displayed, Test method: PRA, Rule created at: 04/02/2021,22/12/2021
 UL30	NC_001806	719	A	T	penciclovir			1.4	doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
-UL30	NC_001806	719	A	V	aciclovir			8.58333	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1002/j.1460-2075.1987.tb04735.x,doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1128/AAC.49.2.606-611.2005,doi:doi.org/10.1093/infdis/jix042,doi:doi.org/10.1016/j.jcv.2023.105554	HerpesDRG	Fold IC50 values: 7, 19, 4.2, 5.5, 2.8, 13; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 04/02/2021,01/12/2023,02/06/2024
+UL30	NC_001806	719	A	V	aciclovir			8.58333	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1002/j.1460-2075.1987.tb04735.x,doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1128/AAC.49.2.606-611.2005,doi:doi.org/10.1093/infdis/jix042,doi:doi.org/10.1016/j.jcv.2023.105554	HerpesDRG	Fold IC50 values: 7, 19, 4.2, 5.5, 2.8, 13; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 04/02/2021,01/12/2023,02/06/2024
 UL30	NC_001806	719	A	V	brivudine			0.5	doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	719	A	V	cidofovir			0.5	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/AAC.49.2.606-611.2005	HerpesDRG	Fold IC50 values: 0.7, 0.3; mean displayed, Test method: PRA, Rule created at: 04/02/2021
-UL30	NC_001806	719	A	V	foscarnet			5.04	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1002/j.1460-2075.1987.tb04735.x,doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1128/AAC.49.2.606-611.2005,doi:doi.org/10.1093/infdis/jix042	HerpesDRG	Fold IC50 values: 3.6, 10, 2.3, 8, 1.3; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 04/02/2021,01/12/2023
+UL30	NC_001806	719	A	V	foscarnet			5.04	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1002/j.1460-2075.1987.tb04735.x,doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1128/AAC.49.2.606-611.2005,doi:doi.org/10.1093/infdis/jix042	HerpesDRG	Fold IC50 values: 3.6, 10, 2.3, 8, 1.3; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 04/02/2021,01/12/2023
 UL30	NC_001806	719	A	V	ganciclovir			0.5	doi:doi.org/10.1093/infdis/jix042	HerpesDRG	Test method: PRA, Rule created at: 01/12/2023
 UL30	NC_001806	719	A	V	penciclovir			2.65	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/AAC.49.2.606-611.2005	HerpesDRG	Fold IC50 values: 2.8, 2.5; mean displayed, Test method: PRA, Rule created at: 04/02/2021
-UL30	NC_001806	724	S	N	aciclovir			14.0062	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1016/j.jcv.2012.09.004,doi:doi.org/10.1099/0022-1317-81-3-639,doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1016/S0166-3542(97)00054-5,doi:doi.org/10.1128/AAC.49.2.606-611.2005,doi:doi.org/10.1128/AAC.00977-15,doi:doi.org/10.1016/j.antiviral.2021.105166,doi:doi.org/10.1093/infdis/jix042,doi:doi.org/10.1177/135965350400900107	HerpesDRG	Fold IC50 values: 4.1, 8.6, 9.87, 11.61, 72, 11, 6, 8, 3, 5, 22, 3.9, 17; mean displayed, Test method: PRA,Cytopathic effect,GFP fluorescence reduction assay, Rule created at: 04/02/2021,22/12/2021,01/12/2023
+UL30	NC_001806	724	S	N	aciclovir			14.0062	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1016/j.jcv.2012.09.004,doi:doi.org/10.1099/0022-1317-81-3-639,doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1016/S0166-3542(97)00054-5,doi:doi.org/10.1128/AAC.49.2.606-611.2005,doi:doi.org/10.1128/AAC.00977-15,doi:doi.org/10.1016/j.antiviral.2021.105166,doi:doi.org/10.1093/infdis/jix042,doi:doi.org/10.1177/135965350400900107	HerpesDRG	Fold IC50 values: 4.1, 8.6, 9.87, 11.61, 72, 11, 6, 8, 3, 5, 22, 3.9, 17; mean displayed, Test method: PRA,Cytopathic effect,GFP fluorescence reduction assay, Rule created at: 04/02/2021,22/12/2021,01/12/2023
 UL30	NC_001806	724	S	N	brivudine			0.3	doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Fold IC50 values: 0.4, 0.2; mean displayed, Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	724	S	N	cidofovir			2.48833	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1128/AAC.49.2.606-611.2005,doi:doi.org/10.1016/j.antiviral.2021.105166	HerpesDRG	Fold IC50 values: 2.8, 2.6, 2.05, 2.38, 1, 4.1; mean displayed, Test method: PRA,GFP fluorescence reduction assay, Rule created at: 04/02/2021,22/12/2021
-UL30	NC_001806	724	S	N	foscarnet			5.31091	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1016/j.jcv.2012.09.004,doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1016/S0166-3542(97)00054-5,doi:doi.org/10.1128/AAC.49.2.606-611.2005,doi:doi.org/10.1016/j.antiviral.2021.105166,doi:doi.org/10.1093/infdis/jix042,doi:doi.org/10.1177/135965350400900107	HerpesDRG	Fold IC50 values: 3.1, 4.9, 2.69, 2.53, 4, 4.7, 6, 10, 11.2, 5, 4.3; mean displayed, Test method: PRA,Cytopathic effect,GFP fluorescence reduction assay, Rule created at: 04/02/2021,22/12/2021,01/12/2023
+UL30	NC_001806	724	S	N	foscarnet			5.31091	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1016/j.jcv.2012.09.004,doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1016/S0166-3542(97)00054-5,doi:doi.org/10.1128/AAC.49.2.606-611.2005,doi:doi.org/10.1016/j.antiviral.2021.105166,doi:doi.org/10.1093/infdis/jix042,doi:doi.org/10.1177/135965350400900107	HerpesDRG	Fold IC50 values: 3.1, 4.9, 2.69, 2.53, 4, 4.7, 6, 10, 11.2, 5, 4.3; mean displayed, Test method: PRA,Cytopathic effect,GFP fluorescence reduction assay, Rule created at: 04/02/2021,22/12/2021,01/12/2023
 UL30	NC_001806	724	S	N	ganciclovir			0.3	doi:doi.org/10.1093/infdis/jix042	HerpesDRG	Test method: PRA, Rule created at: 01/12/2023
 UL30	NC_001806	724	S	N	penciclovir			4.3	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/AAC.49.2.606-611.2005	HerpesDRG	Fold IC50 values: 6.6, 2.3, 4; mean displayed, Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	727	Q	R	aciclovir		resistant		doi:doi.org/10.1093/infdis/jiad184	HerpesDRG	Test method: Cytopathic effect, Rule created at: 05/08/2023
@@ -1543,10 +1541,10 @@ UL30	NC_001806	782	L	I	foscarnet			2.29	doi:doi.org/10.1128/JVI.77.14.7820-7829.
 UL30	NC_001806	794	Q	H	aciclovir		sensitive		doi:doi.org/10.1128/AAC.00977-15	HerpesDRG	Test method: PRA, Rule created at: 21/11/2021, mutations not resolved by sequence
 UL30	NC_001806	794	Q	H	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00977-15	HerpesDRG	Test method: PRA, Rule created at: 21/11/2021, mutations not resolved by sequence
 UL30	NC_001806	798	E	K	aciclovir			3	doi:doi.org/10.1128/AAC.49.2.606-611.2005	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
-UL30	NC_001806	802	L	F	aciclovir			4.9	doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Fold IC50 values: 7.4, 2.4; mean displayed, Test method: Cytopathic effect,PRA, Rule created at: 25/03/2022,04/02/2021
-UL30	NC_001806	802	L	F	brivudine		sensitive	0.9	doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 25/03/2022,04/02/2021
-UL30	NC_001806	802	L	F	cidofovir		resistant	2.2	doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 25/03/2022,04/02/2021
-UL30	NC_001806	802	L	F	foscarnet		resistant	2.2	doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 25/03/2022,04/02/2021
+UL30	NC_001806	802	L	F	aciclovir			4.9	doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Fold IC50 values: 7.4, 2.4; mean displayed, Test method: Cytopathic effect,PRA, Rule created at: 25/03/2022,04/02/2021
+UL30	NC_001806	802	L	F	brivudine		sensitive	0.9	doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 25/03/2022,04/02/2021
+UL30	NC_001806	802	L	F	cidofovir		resistant	2.2	doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 25/03/2022,04/02/2021
+UL30	NC_001806	802	L	F	foscarnet		resistant	2.2	doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 25/03/2022,04/02/2021
 UL30	NC_001806	802	L	F	penciclovir			2.8	doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	805	K	Q	aciclovir			0.64	doi:doi.org/10.1128/JVI.77.14.7820-7829.2003	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	805	K	Q	cidofovir			1.82	doi:doi.org/10.1128/JVI.77.14.7820-7829.2003	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
@@ -1576,10 +1574,10 @@ UL30	NC_001806	818	Y	C	brivudine			0.8	doi:doi.org/10.7883/yoken.66.404	HerpesDR
 UL30	NC_001806	818	Y	C	cidofovir			2.3	doi:doi.org/10.7883/yoken.66.404	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	818	Y	C	foscarnet			2.3	doi:doi.org/10.7883/yoken.66.404	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	818	Y	C	penciclovir			2.9	doi:doi.org/10.7883/yoken.66.404	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
-UL30	NC_001806	821	T	M	aciclovir			4.5625	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1016/j.jcv.2023.105554	HerpesDRG	Fold IC50 values: 3.3, 6.25, 4.7, 4; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 04/02/2021,02/06/2024
+UL30	NC_001806	821	T	M	aciclovir			4.5625	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1016/j.jcv.2023.105554	HerpesDRG	Fold IC50 values: 3.3, 6.25, 4.7, 4; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 04/02/2021,02/06/2024
 UL30	NC_001806	821	T	M	brivudine			1	doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	821	T	M	cidofovir			1.805	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/JVI.77.14.7820-7829.2003	HerpesDRG	Fold IC50 values: 1.5, 2.11; mean displayed, Test method: PRA, Rule created at: 04/02/2021
-UL30	NC_001806	821	T	M	foscarnet			2.32667	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1177/1359653507012005	HerpesDRG	Fold IC50 values: 2.6, 1.48, 2.9; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 04/02/2021
+UL30	NC_001806	821	T	M	foscarnet			2.32667	doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1177/135965350701200502	HerpesDRG	Fold IC50 values: 2.6, 1.48, 2.9; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 04/02/2021
 UL30	NC_001806	821	T	M	penciclovir			2.9	doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	829	P	S	aciclovir			1.5	doi:doi.org/10.1016/j.antiviral.2021.105166	HerpesDRG	Test method: GFP fluorescence reduction assay, Rule created at: 22/12/2021
 UL30	NC_001806	829	P	S	cidofovir			1.2	doi:doi.org/10.1016/j.antiviral.2021.105166	HerpesDRG	Test method: GFP fluorescence reduction assay, Rule created at: 22/12/2021
@@ -1680,15 +1678,15 @@ UL30	NC_001806	958	V	L	aciclovir		resistant	12	doi:doi.org/10.1128/AAC.49.2.606-
 UL30	NC_001806	958	V	L	cidofovir		sensitive		doi:doi.org/10.1128/AAC.49.2.606-611.2005	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	958	V	L	foscarnet		resistant		doi:doi.org/10.1128/AAC.49.2.606-611.2005	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	958	V	L	penciclovir		resistant		doi:doi.org/10.1128/AAC.49.2.606-611.2005	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
-UL30	NC_001806	959	R	H	aciclovir			3.76667	doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/AAC.49.2.606-611.2005	HerpesDRG	Fold IC50 values: 3.4, 3.3, 4.6; mean displayed, Test method: Cytopathic effect,PRA, Rule created at: 12/04/2022,04/02/2021
-UL30	NC_001806	959	R	H	brivudine		sensitive	1	doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 12/04/2022,04/02/2021
-UL30	NC_001806	959	R	H	cidofovir		resistant	1.8	doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 12/04/2022,04/02/2021
-UL30	NC_001806	959	R	H	foscarnet		resistant	3.5	doi:doi.org/10.1177/1359653507012005,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 12/04/2022,04/02/2021
+UL30	NC_001806	959	R	H	aciclovir			3.76667	doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1093/infdis/jix605,doi:doi.org/10.1128/AAC.49.2.606-611.2005	HerpesDRG	Fold IC50 values: 3.4, 3.3, 4.6; mean displayed, Test method: Cytopathic effect,PRA, Rule created at: 12/04/2022,04/02/2021
+UL30	NC_001806	959	R	H	brivudine		sensitive	1	doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 12/04/2022,04/02/2021
+UL30	NC_001806	959	R	H	cidofovir		resistant	1.8	doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 12/04/2022,04/02/2021
+UL30	NC_001806	959	R	H	foscarnet		resistant	3.5	doi:doi.org/10.1177/135965350701200502,doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: Cytopathic effect,PRA, Rule created at: 12/04/2022,04/02/2021
 UL30	NC_001806	959	R	H	penciclovir			2.6	doi:doi.org/10.1093/infdis/jix605	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
-UL30	NC_001806	960	K	R	aciclovir			2.5	doi:doi.org/10.1177/1359653507012005	HerpesDRG	Test method: Cytopathic effect, Rule created at: 13/04/2022
-UL30	NC_001806	960	K	R	brivudine		sensitive		doi:doi.org/10.1177/1359653507012005	HerpesDRG	Test method: Cytopathic effect, Rule created at: 13/04/2022
-UL30	NC_001806	960	K	R	cidofovir		resistant		doi:doi.org/10.1177/1359653507012005	HerpesDRG	Test method: Cytopathic effect, Rule created at: 13/04/2022
-UL30	NC_001806	960	K	R	foscarnet		sensitive		doi:doi.org/10.1177/1359653507012005	HerpesDRG	Test method: Cytopathic effect, Rule created at: 13/04/2022
+UL30	NC_001806	960	K	R	aciclovir			2.5	doi:doi.org/10.1177/135965350701200502	HerpesDRG	Test method: Cytopathic effect, Rule created at: 13/04/2022
+UL30	NC_001806	960	K	R	brivudine		sensitive		doi:doi.org/10.1177/135965350701200502	HerpesDRG	Test method: Cytopathic effect, Rule created at: 13/04/2022
+UL30	NC_001806	960	K	R	cidofovir		resistant		doi:doi.org/10.1177/135965350701200502	HerpesDRG	Test method: Cytopathic effect, Rule created at: 13/04/2022
+UL30	NC_001806	960	K	R	foscarnet		sensitive		doi:doi.org/10.1177/135965350701200502	HerpesDRG	Test method: Cytopathic effect, Rule created at: 13/04/2022
 UL30	NC_001806	961	N	K	aciclovir			4.67	doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1016/S0166-3542(97)00054-5	HerpesDRG	Fold IC50 values: 5.34, 4; mean displayed, Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	961	N	K	cidofovir			1.41	doi:doi.org/10.1128/JVI.77.14.7820-7829.2003	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	961	N	K	foscarnet			0.83	doi:doi.org/10.1128/JVI.77.14.7820-7829.2003	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
@@ -1698,13 +1696,13 @@ UL30	NC_001806	993	R	L	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.201
 UL30	NC_001806	993	R	L	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2013.09.012	HerpesDRG	Test method: PRA, Rule created at: 17/12/2021
 UL30	NC_001806	995	A	T	aciclovir		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 18/12/2021
 UL30	NC_001806	995	A	T	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00669-10	HerpesDRG	Test method: PRA, Rule created at: 18/12/2021
-UL30	NC_001806	998	W	L	aciclovir			1.5	doi:doi.org/10.1177/1359653507012005	HerpesDRG	Test method: Cytopathic effect, Rule created at: 15/04/2022
-UL30	NC_001806	998	W	L	brivudine		sensitive		doi:doi.org/10.1177/1359653507012005	HerpesDRG	Test method: Cytopathic effect, Rule created at: 15/04/2022
-UL30	NC_001806	998	W	L	cidofovir		resistant		doi:doi.org/10.1177/1359653507012005	HerpesDRG	Test method: Cytopathic effect, Rule created at: 15/04/2022
-UL30	NC_001806	998	W	L	foscarnet		sensitive		doi:doi.org/10.1177/1359653507012005	HerpesDRG	Test method: Cytopathic effect, Rule created at: 15/04/2022
+UL30	NC_001806	998	W	L	aciclovir			1.5	doi:doi.org/10.1177/135965350701200502	HerpesDRG	Test method: Cytopathic effect, Rule created at: 15/04/2022
+UL30	NC_001806	998	W	L	brivudine		sensitive		doi:doi.org/10.1177/135965350701200502	HerpesDRG	Test method: Cytopathic effect, Rule created at: 15/04/2022
+UL30	NC_001806	998	W	L	cidofovir		resistant		doi:doi.org/10.1177/135965350701200502	HerpesDRG	Test method: Cytopathic effect, Rule created at: 15/04/2022
+UL30	NC_001806	998	W	L	foscarnet		sensitive		doi:doi.org/10.1177/135965350701200502	HerpesDRG	Test method: Cytopathic effect, Rule created at: 15/04/2022
 UL30	NC_001806	1005	E	K	aciclovir			0.5	doi:doi.org/10.1177/135965350400900413	HerpesDRG	Test method: yield reduction assay (ELVIRA), Rule created at: 19/12/2021, unkown co-mutations
 UL30	NC_001806	1005	E	K	foscarnet			0.7	doi:doi.org/10.1177/135965350400900413	HerpesDRG	Test method: yield reduction assay (ELVIRA), Rule created at: 19/12/2021, unkown co-mutations
-UL30	NC_001806	1007	L	M	aciclovir			2.34667	doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1099/0022-1317-81-3-639,doi:doi.org/10.1177/1359653507012005	HerpesDRG	Fold IC50 values: 1.84, 3.2, 2; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 04/02/2021
+UL30	NC_001806	1007	L	M	aciclovir			2.34667	doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1099/0022-1317-81-3-639,doi:doi.org/10.1177/135965350701200502	HerpesDRG	Fold IC50 values: 1.84, 3.2, 2; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 04/02/2021
 UL30	NC_001806	1007	L	M	cidofovir			1.22	doi:doi.org/10.1128/JVI.77.14.7820-7829.2003	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	1007	L	M	foscarnet			0.59	doi:doi.org/10.1128/JVI.77.14.7820-7829.2003	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	1012	A	V	aciclovir		sensitive		doi:doi.org/10.3851/IMP1852	HerpesDRG	Test method: dye uptake assay, Rule created at: 20/12/2021, unkown co-mutations
@@ -1720,7 +1718,7 @@ UL30	NC_001806	1020	R	H	aciclovir		sensitive		doi:doi.org/10.1016/j.antiviral.20
 UL30	NC_001806	1020	R	H	foscarnet		sensitive		doi:doi.org/10.1016/j.antiviral.2013.09.012	HerpesDRG	Test method: PRA, Rule created at: 23/12/2021
 UL30	NC_001806	1022	T	A	aciclovir		sensitive		doi:doi.org/10.1128/AAC.00977-15	HerpesDRG	Test method: PRA, Rule created at: 24/12/2021, mutations not resolved by sequence
 UL30	NC_001806	1022	T	A	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00977-15	HerpesDRG	Test method: PRA, Rule created at: 24/12/2021, mutations not resolved by sequence
-UL30	NC_001806	1028	I	T	aciclovir			1.61333	doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1099/0022-1317-81-3-639,doi:doi.org/10.1177/1359653507012005	HerpesDRG	Fold IC50 values: 1.74, 1.6, 1.5; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 04/02/2021
+UL30	NC_001806	1028	I	T	aciclovir			1.61333	doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1099/0022-1317-81-3-639,doi:doi.org/10.1177/135965350701200502	HerpesDRG	Fold IC50 values: 1.74, 1.6, 1.5; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 04/02/2021
 UL30	NC_001806	1028	I	T	cidofovir			2.28	doi:doi.org/10.1128/JVI.77.14.7820-7829.2003	HerpesDRG	Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	1028	I	T	foscarnet			1.04	doi:doi.org/10.1128/JVI.77.14.7820-7829.2003,doi:doi.org/10.1099/0022-1317-81-3-639	HerpesDRG	Fold IC50 values: 0.58, 1.5; mean displayed, Test method: PRA, Rule created at: 04/02/2021
 UL30	NC_001806	1067	S	F	aciclovir			0.3	doi:doi.org/10.1128/aac.00110-24	HerpesDRG	Test method: Cytopathic effect, Rule created at: 18/08/2025
@@ -1831,7 +1829,7 @@ UL30	NC_001806	1235	A	T	foscarnet		sensitive		doi:doi.org/10.1128/AAC.00977-15	H
 UL5	NC_001806	34	E	K	aciclovir			1	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
 UL5	NC_001806	34	E	K	amenamevir			1.5	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
 UL5	NC_001806	34	E	K	foscarnet			1	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
-UL5	NC_001806	199	A	T	pritelivir			50	doi:doi.org/10.1177/0956320207018001	HerpesDRG	Test method: PRA, Rule created at: 01/12/2023, my concern with this paper is that they do not cover other important genes eg BAY-Pr1 is 50fold resistance with no ul5 mutations discard all?
+UL5	NC_001806	199	A	T	pritelivir			50	doi:doi.org/10.1177/095632020701800102	HerpesDRG	Test method: PRA, Rule created at: 01/12/2023, my concern with this paper is that they do not cover other important genes eg BAY-Pr1 is 50fold resistance with no ul5 mutations discard all?
 UL5	NC_001806	341	I	S	aciclovir			1	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
 UL5	NC_001806	341	I	S	amenamevir			1.5	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
 UL5	NC_001806	341	I	S	foscarnet			1	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
@@ -1839,7 +1837,7 @@ UL5	NC_001806	342	N	K	pritelivir			40	doi:doi.org/10.1016/j.drup.2010.11.002	Her
 UL5	NC_001806	352	G	C	aciclovir			1	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
 UL5	NC_001806	352	G	C	amenamevir			25	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
 UL5	NC_001806	352	G	C	foscarnet			1	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
-UL5	NC_001806	352	G	R	pritelivir			3444.33	doi:doi.org/10.1093/jac/dkn057,doi:doi.org/10.1177/0956320207018001,doi:doi.org/10.1016/j.drup.2010.11.002	HerpesDRG	Fold IC50 values: 3333, 4000, 3000; mean displayed, Test method: PRA, Rule created at: 01/12/2023, my concern with this paper is that they do not cover other important genes eg BAY-Pr1 is 50fold resistance with no ul5 mutations discard all?
+UL5	NC_001806	352	G	R	pritelivir			3444.33	doi:doi.org/10.1093/jac/dkn057,doi:doi.org/10.1177/095632020701800102,doi:doi.org/10.1016/j.drup.2010.11.002	HerpesDRG	Fold IC50 values: 3333, 4000, 3000; mean displayed, Test method: PRA, Rule created at: 01/12/2023, my concern with this paper is that they do not cover other important genes eg BAY-Pr1 is 50fold resistance with no ul5 mutations discard all?
 UL5	NC_001806	352	G	V	aciclovir			1	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
 UL5	NC_001806	352	G	V	amenamevir			3	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
 UL5	NC_001806	352	G	V	foscarnet			1	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
@@ -1853,7 +1851,7 @@ UL5	NC_001806	355	M	I	pritelivir			6.8	doi:doi.org/10.1093/ve/veae101	HerpesDRG	
 UL5	NC_001806	355	M	T	aciclovir			1	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
 UL5	NC_001806	355	M	T	amenamevir			6	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
 UL5	NC_001806	355	M	T	foscarnet			1	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
-UL5	NC_001806	355	M	T	pritelivir			10	doi:doi.org/10.1177/0956320207018001,doi:doi.org/10.1016/j.drup.2010.11.002	HerpesDRG	Fold IC50 values: 15, 5; mean displayed, Test method: PRA, Rule created at: 01/12/2023, my concern with this paper is that they do not cover other important genes eg BAY-Pr1 is 50fold resistance with no ul5 mutations discard all?
+UL5	NC_001806	355	M	T	pritelivir			10	doi:doi.org/10.1177/095632020701800102,doi:doi.org/10.1016/j.drup.2010.11.002	HerpesDRG	Fold IC50 values: 15, 5; mean displayed, Test method: PRA, Rule created at: 01/12/2023, my concern with this paper is that they do not cover other important genes eg BAY-Pr1 is 50fold resistance with no ul5 mutations discard all?
 UL5	NC_001806	356	K	N	aciclovir			0.95	doi:doi.org/10.1128/AAC.00494-21,doi:doi.org/10.1093/ve/veae101	HerpesDRG	Fold IC50 values: 1, 0.9; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 22/12/2021,18/08/2025
 UL5	NC_001806	356	K	N	amenamevir			371.5	doi:doi.org/10.1128/AAC.00494-21,doi:doi.org/10.1093/ve/veae101	HerpesDRG	Fold IC50 values: 261, 482; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 22/12/2021,18/08/2025
 UL5	NC_001806	356	K	N	cidofovir			1	doi:doi.org/10.1093/ve/veae101	HerpesDRG	Test method: Cytopathic effect, Rule created at: 18/08/2025
@@ -1866,7 +1864,7 @@ UL5	NC_001806	356	K	Q	cidofovir			0.9	doi:doi.org/10.1093/ve/veae101	HerpesDRG	T
 UL5	NC_001806	356	K	Q	foscarnet			0.7	doi:doi.org/10.1093/ve/veae101	HerpesDRG	Test method: Cytopathic effect, Rule created at: 18/08/2025
 UL5	NC_001806	356	K	Q	ganciclovir			1	doi:doi.org/10.1093/ve/veae101	HerpesDRG	Test method: Cytopathic effect, Rule created at: 18/08/2025
 UL5	NC_001806	356	K	Q	pritelivir			94.3333	doi:doi.org/10.1093/jac/dkn057,doi:doi.org/10.1016/j.drup.2010.11.002,doi:doi.org/10.1093/ve/veae101	HerpesDRG	Fold IC50 values: 100, 150, 33; mean displayed, Test method: PRA,Cytopathic effect, Rule created at: 01/12/2023,18/08/2025
-UL5	NC_001806	356	K	T	pritelivir			587.25	doi:doi.org/10.1093/jac/dkn057,doi:doi.org/10.1177/0956320207018001	HerpesDRG	Fold IC50 values: 100, 124, 125, 2000; mean displayed, Test method: PRA, Rule created at: 01/12/2023, my concern with this paper is that they do not cover other important genes eg BAY-Pr1 is 50fold resistance with no ul5 mutations discard all?
+UL5	NC_001806	356	K	T	pritelivir			587.25	doi:doi.org/10.1093/jac/dkn057,doi:doi.org/10.1177/095632020701800102	HerpesDRG	Fold IC50 values: 100, 124, 125, 2000; mean displayed, Test method: PRA, Rule created at: 01/12/2023, my concern with this paper is that they do not cover other important genes eg BAY-Pr1 is 50fold resistance with no ul5 mutations discard all?
 UL5	NC_001806	477	C	D	aciclovir			1	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
 UL5	NC_001806	477	C	D	amenamevir			1.5	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
 UL5	NC_001806	477	C	D	foscarnet			1	doi:doi.org/10.1128/AAC.00494-21	HerpesDRG	Test method: PRA, Rule created at: 22/12/2021
@@ -2030,9 +2028,9 @@ UL54	NC_006273	476	V	G	ganciclovir			0.9	doi:doi.org/10.1093/infdis/jit654	Herpe
 UL54	NC_006273	488	P	R	cidofovir			7.65	doi:doi.org/10.1128/AAC.00334-11,doi:doi.org/10.1128/aac.00334-11	HerpesDRG	Fold IC50 values: 7.9, 7.4; mean displayed, Test method: PRA, Rule created at: 17/11/2019
 UL54	NC_006273	488	P	R	foscarnet			0.8	doi:doi.org/10.1128/AAC.00334-11,doi:doi.org/10.1128/aac.00334-11	HerpesDRG	Fold IC50 values: 0.6, 1; mean displayed, Test method: PRA, Rule created at: 17/11/2019
 UL54	NC_006273	488	P	R	ganciclovir			5.5	doi:doi.org/10.1128/AAC.00334-11,doi:doi.org/10.1128/aac.00334-11	HerpesDRG	Fold IC50 values: 3.5, 7.5; mean displayed, Test method: PRA, Rule created at: 17/11/2019
-UL54	NC_006273	495	N	K	cidofovir			1.45	doi:doi.org/10.1177/1359653506011004,doi:doi.org/10.1016/j.antiviral.2016.12.003,doi:doi.org/10.1016/j.antiviral.2008.09.009	HerpesDRG	Fold IC50 values: 1.1, 1, 1.2, 2.5; mean displayed, Test method: PRA or SEAP,SEAP,PRA, Rule created at: 17/11/2019,16/03/2020,14/08/2023, Co-mutation context in source: UL54:Q738R
-UL54	NC_006273	495	N	K	foscarnet			4.02	doi:doi.org/10.1177/1359653506011004,doi:doi.org/10.1016/j.antiviral.2016.12.003,doi:doi.org/10.1016/j.antiviral.2008.09.009,doi:doi.org/10.1016/j.jviromet.2005.01.005	HerpesDRG	Fold IC50 values: 3.4, 2.6, 3.5, 5.6, 5; mean displayed, Test method: PRA or SEAP,SEAP,PRA,Functional enzyme kinetic assay, Rule created at: 17/11/2019,16/03/2020,14/08/2023,18/08/2025, Co-mutation context in source: UL54:Q738R
-UL54	NC_006273	495	N	K	ganciclovir			1.275	doi:doi.org/10.1177/1359653506011004,doi:doi.org/10.1016/j.antiviral.2016.12.003,doi:doi.org/10.1016/j.antiviral.2008.09.009	HerpesDRG	Fold IC50 values: 1.1, 1.3, 1.7, 1; mean displayed, Test method: PRA or SEAP,SEAP,PRA, Rule created at: 17/11/2019,16/03/2020,14/08/2023, Co-mutation context in source: UL54:Q738R
+UL54	NC_006273	495	N	K	cidofovir			1.45	doi:doi.org/10.1177/135965350601100416,doi:doi.org/10.1016/j.antiviral.2016.12.003,doi:doi.org/10.1016/j.antiviral.2008.09.009	HerpesDRG	Fold IC50 values: 1.1, 1, 1.2, 2.5; mean displayed, Test method: PRA or SEAP,SEAP,PRA, Rule created at: 17/11/2019,16/03/2020,14/08/2023, Co-mutation context in source: UL54:Q738R
+UL54	NC_006273	495	N	K	foscarnet			4.02	doi:doi.org/10.1177/135965350601100416,doi:doi.org/10.1016/j.antiviral.2016.12.003,doi:doi.org/10.1016/j.antiviral.2008.09.009,doi:doi.org/10.1016/j.jviromet.2005.01.005	HerpesDRG	Fold IC50 values: 3.4, 2.6, 3.5, 5.6, 5; mean displayed, Test method: PRA or SEAP,SEAP,PRA,Functional enzyme kinetic assay, Rule created at: 17/11/2019,16/03/2020,14/08/2023,18/08/2025, Co-mutation context in source: UL54:Q738R
+UL54	NC_006273	495	N	K	ganciclovir			1.275	doi:doi.org/10.1177/135965350601100416,doi:doi.org/10.1016/j.antiviral.2016.12.003,doi:doi.org/10.1016/j.antiviral.2008.09.009	HerpesDRG	Fold IC50 values: 1.1, 1.3, 1.7, 1; mean displayed, Test method: PRA or SEAP,SEAP,PRA, Rule created at: 17/11/2019,16/03/2020,14/08/2023, Co-mutation context in source: UL54:Q738R
 UL54	NC_006273	500	K	N	cidofovir			3.5	doi:doi.org/10.1128/aac.00334-11,doi:doi.org/10.1016/j.antiviral.2022.105328	HerpesDRG	Fold IC50 values: 3, 2.4, 5.8, 2.8; mean displayed, Test method: PRA, Rule created at: 17/11/2019,16/03/2020,11/08/2025, Co-mutation context in source: UL54:S585A
 UL54	NC_006273	500	K	N	foscarnet			1.975	doi:doi.org/10.1128/aac.00334-11,doi:doi.org/10.1016/j.antiviral.2022.105328	HerpesDRG	Fold IC50 values: 1.2, 2.7, 1.2, 2.8; mean displayed, Test method: PRA, Rule created at: 17/11/2019,16/03/2020,11/08/2025, Co-mutation context in source: UL54:S585A
 UL54	NC_006273	500	K	N	ganciclovir			2.7	doi:doi.org/10.1128/aac.00334-11,doi:doi.org/10.1016/j.antiviral.2022.105328	HerpesDRG	Fold IC50 values: 3.2, 2.4, 2.9, 2.3; mean displayed, Test method: PRA, Rule created at: 17/11/2019,16/03/2020,11/08/2025, Co-mutation context in source: UL54:S585A
@@ -2254,11 +2252,11 @@ UL54	NC_006273	756	E	D	ganciclovir			1.2	doi:doi.org/10.1086/375743	HerpesDRG	Te
 UL54	NC_006273	756	E	G	cidofovir			1.8	doi:doi.org/10.3389/fmicb.2022.771978	HerpesDRG	Test method: PRA, Rule created at: 04/03/2022
 UL54	NC_006273	756	E	G	foscarnet			8.8	doi:doi.org/10.3389/fmicb.2022.771978	HerpesDRG	Test method: PRA, Rule created at: 04/03/2022
 UL54	NC_006273	756	E	G	ganciclovir			1	doi:doi.org/10.3389/fmicb.2022.771978	HerpesDRG	Test method: PRA, Rule created at: 04/03/2022
-UL54	NC_006273	756	E	K	brincidofovir			2.8	doi:doi.org/10.1128/aac.01044-17	HerpesDRG	Test method: Gluc reporter assay, Rule created at: 46022
-UL54	NC_006273	756	E	K	cidofovir			2.6	doi:doi.org/10.1128/jcm.02205-14,doi:doi.org/10.1128/jcm.01275-13,doi:doi.org/10.1128/aac.01044-17	HerpesDRG	Fold IC50 values: 2.7, 2.9, 3, 1.8; mean displayed, Test method: GLuc reporter assay,GLuc,Gluc reporter assay, Rule created at: 23/11/2020,11/08/2025,46022, Co-mutation context in source: UL54:A594V
-UL54	NC_006273	756	E	K	foscarnet			10.34	doi:doi.org/10.1128/jcm.02205-14,doi:doi.org/10.1128/jcm.01275-13,doi:doi.org/10.1016/j.jviromet.2005.01.005,doi:doi.org/10.1128/aac.01044-17	HerpesDRG	Fold IC50 values: 8, 5.3, 3.9, 31, 3.5; mean displayed, Test method: GLuc reporter assay,GLuc,Functional enzyme kinetic assay,Gluc reporter assay, Rule created at: 23/11/2020,11/08/2025,18/08/2025,46022, Co-mutation context in source: UL54:A594V
-UL54	NC_006273	756	E	K	ganciclovir			7.45	doi:doi.org/10.1128/jcm.02205-14,doi:doi.org/10.1128/jcm.01275-13,doi:doi.org/10.1128/aac.01044-17	HerpesDRG	Fold IC50 values: 8.1, 12.7, 1.9, 7.1; mean displayed, Test method: GLuc reporter assay,GLuc,Gluc reporter assay, Rule created at: 23/11/2020,11/08/2025,46022, Co-mutation context in source: UL54:A594V
-UL54	NC_006273	756	E	K	letermovir			1.4	doi:doi.org/10.1128/aac.01044-17	HerpesDRG	Test method: Gluc reporter assay, Rule created at: 46022
+UL54	NC_006273	756	E	K	brincidofovir			2.8	doi:doi.org/10.1128/aac.01044-17	HerpesDRG	Test method: Gluc reporter assay, Rule created at: 31/12/2025
+UL54	NC_006273	756	E	K	cidofovir			2.6	doi:doi.org/10.1128/jcm.02205-14,doi:doi.org/10.1128/jcm.01275-13,doi:doi.org/10.1128/aac.01044-17	HerpesDRG	Fold IC50 values: 2.7, 2.9, 3, 1.8; mean displayed, Test method: GLuc reporter assay,GLuc,Gluc reporter assay, Rule created at: 23/11/2020,11/08/2025,31/12/2025, Co-mutation context in source: UL54:A594V
+UL54	NC_006273	756	E	K	foscarnet			10.34	doi:doi.org/10.1128/jcm.02205-14,doi:doi.org/10.1128/jcm.01275-13,doi:doi.org/10.1016/j.jviromet.2005.01.005,doi:doi.org/10.1128/aac.01044-17	HerpesDRG	Fold IC50 values: 8, 5.3, 3.9, 31, 3.5; mean displayed, Test method: GLuc reporter assay,GLuc,Functional enzyme kinetic assay,Gluc reporter assay, Rule created at: 23/11/2020,11/08/2025,18/08/2025,31/12/2025, Co-mutation context in source: UL54:A594V
+UL54	NC_006273	756	E	K	ganciclovir			7.45	doi:doi.org/10.1128/jcm.02205-14,doi:doi.org/10.1128/jcm.01275-13,doi:doi.org/10.1128/aac.01044-17	HerpesDRG	Fold IC50 values: 8.1, 12.7, 1.9, 7.1; mean displayed, Test method: GLuc reporter assay,GLuc,Gluc reporter assay, Rule created at: 23/11/2020,11/08/2025,31/12/2025, Co-mutation context in source: UL54:A594V
+UL54	NC_006273	756	E	K	letermovir			1.4	doi:doi.org/10.1128/aac.01044-17	HerpesDRG	Test method: Gluc reporter assay, Rule created at: 31/12/2025
 UL54	NC_006273	756	E	Q	cidofovir			1	doi:doi.org/10.1086/368385	HerpesDRG	Test method: PRA, Rule created at: 23/11/2020
 UL54	NC_006273	756	E	Q	foscarnet			4.3	doi:doi.org/10.1086/368385	HerpesDRG	Test method: PRA, Rule created at: 23/11/2020
 UL54	NC_006273	756	E	Q	ganciclovir			1.7	doi:doi.org/10.1086/368385	HerpesDRG	Test method: PRA, Rule created at: 23/11/2020
@@ -2314,11 +2312,11 @@ UL54	NC_006273	802	L	M	letermovir			0.7	doi:doi.org/10.1016/j.antiviral.2022.105
 UL54	NC_006273	802	L	V	cidofovir			1.1	doi:doi.org/10.1128/aac.00334-11	HerpesDRG	Test method: PRA, Rule created at: 17/11/2019
 UL54	NC_006273	802	L	V	foscarnet			0.9	doi:doi.org/10.1128/aac.00334-11	HerpesDRG	Test method: PRA, Rule created at: 17/11/2019
 UL54	NC_006273	802	L	V	ganciclovir			1.8	doi:doi.org/10.1128/aac.00334-11	HerpesDRG	Test method: PRA, Rule created at: 17/11/2019
-UL54	NC_006273	805	K	Q	brincidofovir			2	doi:doi.org/10.3851/IMP156	HerpesDRG	Test method: Functional enzyme kinetic assay, Rule created at: 18/08/2025
-UL54	NC_006273	805	K	Q	cidofovir			2.1	doi:doi.org/10.1128/jvi.72.7.5927-5936.1998,doi:doi.org/10.3851/IMP156	HerpesDRG	Fold IC50 values: 2.2, 2.1, 2; mean displayed, Test method: PRA,Functional enzyme kinetic assay, Rule created at: 17/11/2019,16/03/2020,18/08/2025, Co-mutation context in source: UL54:T821I
-UL54	NC_006273	805	K	Q	foscarnet			2.554	doi:doi.org/10.1128/jvi.72.7.5927-5936.1998,doi:doi.org/10.1128/AAC.01910-19,doi:doi.org/10.3851/IMP156	HerpesDRG	Fold IC50 values: 0.18, 10.1, 0.19, 0.3, 2; mean displayed, Test method: PRA,GLuc reporter assay,Functional enzyme kinetic assay, Rule created at: 17/11/2019,16/03/2020,22/07/2020,18/08/2025, Co-mutation context in source: UL54:T821I
-UL54	NC_006273	805	K	Q	ganciclovir			1.82	doi:doi.org/10.1128/jvi.72.7.5927-5936.1998,doi:doi.org/10.1128/AAC.01910-19,doi:doi.org/10.3851/IMP156	HerpesDRG	Fold IC50 values: 1, 4.3, 1, 0.8, 2; mean displayed, Test method: PRA,GLuc reporter assay,Functional enzyme kinetic assay, Rule created at: 17/11/2019,16/03/2020,22/07/2020,18/08/2025, Co-mutation context in source: UL54:T821I
-UL54	NC_006273	805	K	Q	maribavir			2	doi:doi.org/10.3851/IMP156	HerpesDRG	Test method: Functional enzyme kinetic assay, Rule created at: 18/08/2025
+UL54	NC_006273	805	K	Q	brincidofovir			2	doi:doi.org/10.3851/IMP1565	HerpesDRG	Test method: Functional enzyme kinetic assay, Rule created at: 18/08/2025
+UL54	NC_006273	805	K	Q	cidofovir			2.1	doi:doi.org/10.1128/jvi.72.7.5927-5936.1998,doi:doi.org/10.3851/IMP1565	HerpesDRG	Fold IC50 values: 2.2, 2.1, 2; mean displayed, Test method: PRA,Functional enzyme kinetic assay, Rule created at: 17/11/2019,16/03/2020,18/08/2025, Co-mutation context in source: UL54:T821I
+UL54	NC_006273	805	K	Q	foscarnet			2.554	doi:doi.org/10.1128/jvi.72.7.5927-5936.1998,doi:doi.org/10.1128/AAC.01910-19,doi:doi.org/10.3851/IMP1565	HerpesDRG	Fold IC50 values: 0.18, 10.1, 0.19, 0.3, 2; mean displayed, Test method: PRA,GLuc reporter assay,Functional enzyme kinetic assay, Rule created at: 17/11/2019,16/03/2020,22/07/2020,18/08/2025, Co-mutation context in source: UL54:T821I
+UL54	NC_006273	805	K	Q	ganciclovir			1.82	doi:doi.org/10.1128/jvi.72.7.5927-5936.1998,doi:doi.org/10.1128/AAC.01910-19,doi:doi.org/10.3851/IMP1565	HerpesDRG	Fold IC50 values: 1, 4.3, 1, 0.8, 2; mean displayed, Test method: PRA,GLuc reporter assay,Functional enzyme kinetic assay, Rule created at: 17/11/2019,16/03/2020,22/07/2020,18/08/2025, Co-mutation context in source: UL54:T821I
+UL54	NC_006273	805	K	Q	maribavir			2	doi:doi.org/10.3851/IMP1565	HerpesDRG	Test method: Functional enzyme kinetic assay, Rule created at: 18/08/2025
 UL54	NC_006273	809	A	V	aciclovir			5.2	doi:doi.org/10.1016/j.antiviral.2021.105181	HerpesDRG	Test method: SEAP, Rule created at: 21/12/2021
 UL54	NC_006273	809	A	V	cidofovir			1.9	doi:doi.org/10.1128/AAC.00736-07,doi:doi.org/10.1016/j.antiviral.2021.105181,doi:doi.org/10.1016/j.jcv.2006.07.010	HerpesDRG	Fold IC50 values: 1.9, 2, 1.8; mean displayed, Test method: SEAP, Rule created at: 23/11/2020,21/12/2021,18/08/2025
 UL54	NC_006273	809	A	V	foscarnet		resistant	3.8	doi:doi.org/10.1128/AAC.00736-07,doi:doi.org/10.1093/infdis/jit654,doi:doi.org/10.1128/AAC.00214-16,doi:doi.org/10.1016/j.antiviral.2021.105181,doi:doi.org/10.1016/j.jcv.2006.07.010	HerpesDRG	Fold IC50 values: 3.3, 3.6, 4.3, 4; mean displayed, Test method: SEAP,PRA, Rule created at: 23/11/2020,16/03/2020,21/12/2021,18/08/2025
@@ -2332,12 +2330,12 @@ UL54	NC_006273	812	V	L	letermovir			1.9	doi:doi.org/10.1016/j.antiviral.2022.105
 UL54	NC_006273	813	T	S	cidofovir			2.7	doi:doi.org/10.1128/AAC.00736-07	HerpesDRG	Test method: SEAP, Rule created at: 23/11/2020
 UL54	NC_006273	813	T	S	foscarnet			4.9	doi:doi.org/10.1128/AAC.00736-07	HerpesDRG	Test method: SEAP, Rule created at: 23/11/2020
 UL54	NC_006273	813	T	S	ganciclovir			2.5	doi:doi.org/10.1128/AAC.00736-07	HerpesDRG	Test method: SEAP, Rule created at: 23/11/2020
-UL54	NC_006273	821	T	I	brincidofovir			5.5	doi:doi.org/10.3851/IMP156	HerpesDRG	Test method: Functional enzyme kinetic assay, Rule created at: 18/08/2025
-UL54	NC_006273	821	T	I	cidofovir			2.96667	doi:doi.org/10.1128/jvi.72.7.5927-5936.1998,doi:doi.org/10.1016/j.antiviral.2022.105328,doi:doi.org/10.3851/IMP156	HerpesDRG	Fold IC50 values: 1.9, 1.5, 5.5; mean displayed, Test method: PRA,Functional enzyme kinetic assay, Rule created at: 17/11/2019,11/08/2025,18/08/2025
-UL54	NC_006273	821	T	I	foscarnet			13.175	doi:doi.org/10.1128/jvi.72.7.5927-5936.1998,doi:doi.org/10.1016/j.antiviral.2022.105328,doi:doi.org/10.3851/IMP156	HerpesDRG	Fold IC50 values: 21, 2.9, 23.3, 5.5; mean displayed, Test method: PRA,Functional enzyme kinetic assay, Rule created at: 17/11/2019,11/08/2025,18/08/2025
-UL54	NC_006273	821	T	I	ganciclovir			4.5	doi:doi.org/10.1128/jvi.72.7.5927-5936.1998,doi:doi.org/10.1016/j.antiviral.2022.105328,doi:doi.org/10.3851/IMP156	HerpesDRG	Fold IC50 values: 4.5, 2.7, 5.3, 5.5; mean displayed, Test method: PRA,Functional enzyme kinetic assay, Rule created at: 17/11/2019,11/08/2025,18/08/2025
+UL54	NC_006273	821	T	I	brincidofovir			5.5	doi:doi.org/10.3851/IMP1565	HerpesDRG	Test method: Functional enzyme kinetic assay, Rule created at: 18/08/2025
+UL54	NC_006273	821	T	I	cidofovir			2.96667	doi:doi.org/10.1128/jvi.72.7.5927-5936.1998,doi:doi.org/10.1016/j.antiviral.2022.105328,doi:doi.org/10.3851/IMP1565	HerpesDRG	Fold IC50 values: 1.9, 1.5, 5.5; mean displayed, Test method: PRA,Functional enzyme kinetic assay, Rule created at: 17/11/2019,11/08/2025,18/08/2025
+UL54	NC_006273	821	T	I	foscarnet			13.175	doi:doi.org/10.1128/jvi.72.7.5927-5936.1998,doi:doi.org/10.1016/j.antiviral.2022.105328,doi:doi.org/10.3851/IMP1565	HerpesDRG	Fold IC50 values: 21, 2.9, 23.3, 5.5; mean displayed, Test method: PRA,Functional enzyme kinetic assay, Rule created at: 17/11/2019,11/08/2025,18/08/2025
+UL54	NC_006273	821	T	I	ganciclovir			4.5	doi:doi.org/10.1128/jvi.72.7.5927-5936.1998,doi:doi.org/10.1016/j.antiviral.2022.105328,doi:doi.org/10.3851/IMP1565	HerpesDRG	Fold IC50 values: 4.5, 2.7, 5.3, 5.5; mean displayed, Test method: PRA,Functional enzyme kinetic assay, Rule created at: 17/11/2019,11/08/2025,18/08/2025
 UL54	NC_006273	821	T	I	letermovir			1.1	doi:doi.org/10.1016/j.antiviral.2022.105328	HerpesDRG	Test method: PRA, Rule created at: 11/08/2025
-UL54	NC_006273	821	T	I	maribavir			5.5	doi:doi.org/10.3851/IMP156	HerpesDRG	Test method: Functional enzyme kinetic assay, Rule created at: 18/08/2025
+UL54	NC_006273	821	T	I	maribavir			5.5	doi:doi.org/10.3851/IMP1565	HerpesDRG	Test method: Functional enzyme kinetic assay, Rule created at: 18/08/2025
 UL54	NC_006273	829	P	S	cidofovir			1.4	doi:doi.org/10.1128/aac.00334-11,doi:doi.org/10.1016/j.antiviral.2022.105328	HerpesDRG	Fold IC50 values: 1.6, 1.2; mean displayed, Test method: PRA, Rule created at: 17/11/2019,11/08/2025
 UL54	NC_006273	829	P	S	foscarnet			1	doi:doi.org/10.1128/aac.00334-11,doi:doi.org/10.1016/j.antiviral.2022.105328	HerpesDRG	Fold IC50 values: 1.1, 0.9; mean displayed, Test method: PRA, Rule created at: 17/11/2019,11/08/2025
 UL54	NC_006273	829	P	S	ganciclovir			2.85	doi:doi.org/10.1128/aac.00334-11,doi:doi.org/10.1016/j.antiviral.2022.105328	HerpesDRG	Fold IC50 values: 2, 3.7; mean displayed, Test method: PRA, Rule created at: 17/11/2019,11/08/2025
